@@ -6,7 +6,7 @@ cffi==1.14.0
 chardet==3.0.4
 contentful-management==2.10.0
 coverage==5.0.4
-cryptography==2.9.2
+cryptography==3.3.2
 decorator==4.4.2
 docutils==0.15.2
 entrypoints==0.3
