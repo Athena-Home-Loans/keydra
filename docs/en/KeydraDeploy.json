@@ -1,0 +1,98 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "cloudformation:CreateChangeSet",
+            "Resource": [
+                "arn:aws:s3:::aws-sam-cli-managed-default-samclisourcebucket-*",
+                "arn:aws:lambda:ap-southeast-2:*:function:keydra*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "events:DeleteRule",
+                "events:PutTargets",
+                "events:DescribeRule",
+                "events:PutRule",
+                "events:RemoveTargets"
+            ],
+            "Resource": [
+                "arn:aws:cloudformation:ap-southeast-2:*:stack/keydra/*",
+                "arn:aws:cloudformation:ap-southeast-2:*:stack/aws-sam-cli-managed-default/*",
+                "arn:aws:lambda:ap-southeast-2:*:function:keydra*",
+                "arn:aws:events:ap-southeast-2:*:rule/keydra-*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:PutRetentionPolicy"
+            ],
+            "Resource": [
+                "arn:aws:logs:ap-southeast-2:*:log-group:/aws/lambda/keydra*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "lambda:CreateFunction",
+                "lambda:TagResource",
+                "iam:UntagRole",
+                "iam:TagRole",
+                "iam:CreateRole",
+                "s3:CreateBucket",
+                "iam:AttachRolePolicy",
+                "cloudformation:DescribeStackResource",
+                "lambda:GetFunctionConfiguration",
+                "iam:PutRolePolicy",
+                "cloudformation:CreateChangeSet",
+                "s3:GetBucketPolicy",
+                "lambda:UntagResource",
+                "iam:PassRole",
+                "iam:DetachRolePolicy",
+                "cloudformation:DescribeStackEvents",
+                "s3:PutBucketTagging",
+                "lambda:ListTags",
+                "iam:DeleteRolePolicy",
+                "lambda:DeleteFunction",
+                "cloudformation:DescribeChangeSet",
+                "s3:DeleteBucket",
+                "cloudformation:ExecuteChangeSet",
+                "s3:PutBucketVersioning",
+                "cloudformation:ListStackResources",
+                "iam:GetRole",
+                "lambda:UpdateEventSourceMapping",
+                "lambda:GetEventSourceMapping",
+                "lambda:GetFunction",
+                "iam:DeleteRole",
+                "cloudformation:GetTemplateSummary",
+                "cloudformation:DescribeStacks",
+                "s3:PutObject",
+                "s3:GetObject",
+                "lambda:UpdateFunctionCode",
+                "lambda:AddPermission",
+                "s3:PutBucketPolicy",
+                "lambda:DeleteEventSourceMapping",
+                "iam:GetRolePolicy",
+                "lambda:RemovePermission",
+                "lambda:CreateEventSourceMapping",
+                "cloudwatch:DescribeAlarms",
+                "cloudwatch:PutMetricAlarm",
+                "cloudwatch:DeleteAlarms",
+                "lambda:UpdateFunctionConfiguration"
+            ],
+            "Resource": [
+                "arn:aws:iam::*:role/batch-keydra",
+                "arn:aws:s3:::aws-sam-cli-managed-default-samclisourcebucket-*",
+                "arn:aws:cloudformation:ap-southeast-2:*:stack/keydra*",
+                "arn:aws:cloudformation:ap-southeast-2:*:stack/aws-sam-cli-managed-default/*",
+                "arn:aws:cloudformation:ap-southeast-2:aws:transform/Serverless-2016-10-31",
+                "arn:aws:lambda:ap-southeast-2:*:function:keydra*",
+                "arn:aws:cloudwatch:ap-southeast-2:*:alarm:Keydra*"
+            ]
+        }
+    ]
+}

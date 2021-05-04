@@ -1,0 +1,16 @@
+[report]
+show_missing=True
+omit = 
+    */python?.?/*
+    */site-packages/nose/*
+exclude_lines =
+    pragma: no cover
+    @abc.abstractmethod
+    def __str__
+    def __repr__
+    if self.debug:
+    if settings.DEBUG
+    raise AssertionError
+    raise NotImplementedError
+    if 0:
+    if __name__ == .__main__.:

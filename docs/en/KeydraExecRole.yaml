@@ -1,0 +1,112 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::Serverless-2016-10-31'
+
+Resources:
+  BatchKeydra:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: batch-keydra 
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+              - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+  
+      Policies:
+        -
+          PolicyName: runtime.minimal
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - cloudwatch:PutMetricData
+                  - secretsmanager:GetRandomPassword
+                  - secretsmanager:CreateSecret
+                  - secretsmanager:TagResource
+                Resource: '*'
+  
+        -
+          PolicyName: runtime.tagged.sm
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
+                  - secretsmanager:DescribeSecret
+                  - secretsmanager:ListSecretVersionIds
+                  - secretsmanager:ListSecrets
+                  - secretsmanager:PutSecretValue
+                  - secretsmanager:UpdateSecret
+                  - secretsmanager:DeleteSecret
+                Condition:
+                  StringEquals:
+                    secretsmanager:ResourceTag/managedby: keydra
+                Resource: '*'
+  
+        -
+          PolicyName: runtime.tagged.iam
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - iam:DeleteAccessKey
+                  - iam:GetAccessKeyLastUsed
+                  - iam:UpdateAccessKey
+                  - iam:GetUser
+                  - iam:CreateUser
+                  - iam:TagUser
+                  - iam:ListAccessKeys
+                  - iam:CreateAccessKey
+                  - iam:AddUserToGroup
+                  - iam:ListGroupsForUser
+                  - iam:RemoveUserFromGroup
+                Condition:
+                  StringEquals:
+                    iam:ResourceTag/managedby: keydra
+                Resource: '*'
+  
+        -
+          PolicyName: runtime.scoped.iam
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - iam:ListGroupsForUser
+                  - iam:AddUserToGroup
+                  - iam:RemoveUserFromGroup
+                Resource: 'arn:aws:iam::*:group/*'
+  
+        -
+          PolicyName: runtime.appsync
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - appsync:CreateApiKey
+                  - appsync:DeleteApiKey
+                  - appsync:ListApiKeys
+                  - appsync:UpdateApiKey
+                  - appsync:GetGraphqlApi
+                Resource: "*"
+
+Outputs:
+  KeydraExecRole:
+    Description: "Keydra Exec Role ARN"
+    Value: !GetAtt BatchKeydra.Arn

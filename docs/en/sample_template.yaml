@@ -1,0 +1,99 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Keydra - safe and lightweight management of secrets
+
+Globals:
+  Function:
+    Timeout: 900
+
+Resources:
+  KeydraLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: [ Keydra ]
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${Keydra}
+      RetentionInDays: 90
+
+  Keydra:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: keydra
+      Description: Keydra - safe and lightweight management of secrets
+      CodeUri: src/
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      MemorySize: 256
+      Role: !Sub "<IAM Role Arn>"
+      Environment:
+        Variables:
+          KEYDRA_CFG_PROVIDER: bitbucket
+          KEYDRA_CFG_CONFIG_ACCOUNTUSERNAME: <bb account name>
+          KEYDRA_CFG_CONFIG_SECRETS_REPOSITORY: <secrets repo name>
+          KEYDRA_CFG_CONFIG_SECRETS_PATH: <path to secrets.yaml>
+          KEYDRA_CFG_CONFIG_SECRETS_FILETYPE: yaml
+          KEYDRA_CFG_CONFIG_ENVIRONMENTS_REPOSITORY: <environments repo name>
+          KEYDRA_CFG_CONFIG_ENVIRONMENTS_PATH: <path to environments.yaml>
+          KEYDRA_CFG_CONFIG_ENVIRONMENTS_FILETYPE: yaml
+      Events:
+        KeydraNightly:
+          Type: Schedule
+          Properties:
+            Schedule: 'cron(0 12 ? * * *)'
+            Name: keydra-nightly
+            Description: Keydra nightly key rotation
+            Input: '{"trigger": "nightly"}'
+            Enabled: true
+
+        KeydraMonthly:
+          Type: Schedule
+          Properties:
+            Schedule: 'cron(30 12 1 * ? *)'
+            Name: keydra-monthly
+            Description: Keydra monthly key rotation
+            Input: '{"trigger": "monthly"}'
+            Enabled: true
+
+  KeydraAlarmsFailedRotations:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: Keydra - Failed rotations
+      AlarmDescription: One or more rotations have failed and need attention!
+      ActionsEnabled: true
+      MetricName: NumberOfFailedRotations
+      Namespace: Keydra
+      Statistic: Sum
+      Dimensions:
+        -
+          Name: action
+          Value: rotate_secret
+      Period: 86400
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 0.0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: breaching
+
+  KeydraAlarmsFailedDistributions:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: Keydra - Failed distributions
+      AlarmDescription: One or more distributions have failed and need attention!
+      ActionsEnabled: true
+      MetricName: NumberOfFailedDistributions
+      Namespace: Keydra
+      Statistic: Sum
+      Dimensions:
+        -
+          Name: action
+          Value: distribute_secret
+      Period: 86400
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 0.0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: breaching
+
+Outputs:
+  Keydra:
+    Description: "Keydra ARN"
+    Value: !GetAtt Keydra.Arn
