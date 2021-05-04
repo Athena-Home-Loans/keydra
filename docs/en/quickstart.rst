@@ -71,7 +71,7 @@ Setup a configuration repository
           provider: IAM
           rotate: nightly
           config:
-          groups:
+            groups:
               - MyDeploymentGroup
           distribute:
           - config:
