@@ -9,7 +9,7 @@ You will need
 
 * An AWS account. Don't have one, free tier is fine! Go get a free one at https://aws.amazon.com/free !
 
-* An Atlassian Bitucket account, to host your Keydra configuration. We only support Bitbucket right now, but expect to add other code repository providers in the future. 
+* An Atlassian Bitbucket account, to host your Keydra configuration. We only support Bitbucket right now, but expect to add other code repository providers in the future. 
 You can `create a free account here. <https://id.atlassian.com/signup?application=bitbucket>`_
 
 ==================
