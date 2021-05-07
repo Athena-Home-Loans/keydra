@@ -27,17 +27,18 @@ class Client(BaseProvider):
             region_name=region_name
         )
 
-        operator_creds = json.loads(smclient.get_secret_value(credentials['rotatewith']))
+        operator_creds = json.loads(
+            smclient.get_secret_value(credentials['rotatewith'])
+        )
 
         self._operator = operator_creds['username']
         self._credentials = credentials
-        
+
         self._client = QualysClient(
             platform=operator_creds['platform'],
             username=operator_creds['username'],
             password=operator_creds['password']
         )
-
 
     def _rotate_secret(self, secret):
         '''
