@@ -7,31 +7,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Getting Started &#8212; Keydra 0.1 documentation</title>
     
-  <link href="_static/css/theme.css" rel="stylesheet" />
-  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+  <link href="static/css/theme.css" rel="stylesheet" />
+  <link href="static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
 
     
   <link rel="stylesheet"
-    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    href="static/vendor/fontawesome/5.13.0/css/all.min.css">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    href="static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+    href="static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     
       
 
     
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
     
-  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+  <link rel="preload" as="script" href="static/js/index.1c5a1a01449ed65a7b51.js">
 
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script id="documentation_options" data-url_root="./" src="static/documentation_options.js"></script>
+    <script src="static/jquery.js"></script>
+    <script src="static/underscore.js"></script>
+    <script src="static/doctools.js"></script>
+    <script src="static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -49,7 +49,7 @@
           
 <div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
     
-        <img src='_static/keydra.png'><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+        <img src='static/keydra.png'><form class="bd-search d-flex align-items-center" action="search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><ul>
@@ -208,7 +208,7 @@
 <ol class="arabic simple">
 <li><p>Create a new private repository in Bitbucket. Let’s call it <cite>KeydraConfiguration</cite>.</p></li>
 </ol>
-<a class="reference internal image-reference" href="_images/create_repo.png"><img alt="Create a Bitbucket repository" src="_images/create_repo.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="static/create_repo.png"><img alt="Create a Bitbucket repository" src="static/create_repo.png" style="width: 400px;" /></a>
 <ol class="arabic" start="2">
 <li><p>Clone your new repo locally. Click the <em>Clone</em> button at the top right of your new repo’s <cite>Source</cite> page, and paste into your terminal.</p>
 <p>Note: You may need to setup an SSH key for this, <a class="reference external" href="https://support.atlassian.com/bitbucket-cloud/docs/set-up-an-ssh-key/">see here for help if needed.</a></p>
@@ -346,16 +346,16 @@ sam deploy --stack-name keydra --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXP
 <li><p>Create App password for your Bitbucket user. Click your user avatar in the bottom left corner, then <cite>Personal settings</cite> &gt; <cite>App passwords</cite>.
 Click the blue <cite>Create app password</cite> button.</p></li>
 </ol>
-<a class="reference internal image-reference" href="_images/create_app_password.png"><img alt="Create a App password" src="_images/create_app_password.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="static/create_app_password.png"><img alt="Create a App password" src="static/create_app_password.png" style="width: 400px;" /></a>
 <ol class="arabic simple" start="2">
 <li><p>Call the App password <cite>keydra</cite>, and minimum permissions. Click <cite>Create</cite>.</p></li>
 </ol>
-<a class="reference internal image-reference" href="_images/perms_app_password.png"><img alt="Configure App password permissions" src="_images/perms_app_password.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="static/perms_app_password.png"><img alt="Configure App password permissions" src="static/perms_app_password.png" style="width: 400px;" /></a>
 <ol class="arabic simple" start="3">
 <li><p>You’ll be shown a password, which you’ll only see once! In another tab, login to the AWS Console and navigate to the <cite>Secrets Manager</cite> service.</p></li>
 <li><p>Click the orange <cite>Store a new secret</cite> button.</p></li>
 </ol>
-<a class="reference internal image-reference" href="_images/store_secret.png"><img alt="Store a secret" src="_images/store_secret.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="static/store_secret.png"><img alt="Store a secret" src="static/store_secret.png" style="width: 400px;" /></a>
 <ol class="arabic simple" start="5">
 <li><p>Choose a secret type of <cite>Other type of secrets</cite>, and add a plaintext secret as follows (substituting your details).</p></li>
 </ol>
@@ -380,17 +380,17 @@ with debug enabled. Click the <cite>Test</cite> button to run Keydra.</p></li>
 <span class="p">}</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="_images/test_function.png"><img alt="Test Keydra!" src="_images/test_function.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="static/test_function.png"><img alt="Test Keydra!" src="static/test_function.png" style="width: 400px;" /></a>
 <ol class="arabic simple" start="12">
 <li><p>With a little luck, you should see something like this!</p></li>
 </ol>
-<a class="reference internal image-reference" href="_images/success.png"><img alt="Success!" src="_images/success.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="static/success.png"><img alt="Success!" src="static/success.png" style="width: 400px;" /></a>
 <ol class="arabic simple" start="13">
 <li><p>What just happened? Keydra created an IAM user in AWS, and then stored the IAM username and password in two separate
 repository variables in Bitbucket. You can see the results in Bitbucket under your repo; browse to <cite>Repository settings</cite> &gt;
 <cite>Repository variables</cite></p></li>
 </ol>
-<a class="reference internal image-reference" href="_images/repo_vars.png"><img alt="Our new vars" src="_images/repo_vars.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="static/repo_vars.png"><img alt="Our new vars" src="static/repo_vars.png" style="width: 400px;" /></a>
 <p>You can now use these values to deploy your code to AWS, and Keydra will kindly rotate them automagically every night, without
 you needing to do a thing!</p>
 </div>
@@ -423,7 +423,7 @@ you needing to do a thing!</p>
       </div>
     </div>
   
-  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+  <script src="static/js/index.1c5a1a01449ed65a7b51.js"></script>
 
   
   </body>
