@@ -27,6 +27,7 @@ s3transfer==0.3.3
 simple-salesforce==1.0.0
 six==1.14.0
 Sphinx==3.5.4
+sphinx-book-theme==0.1.0
 splunk-sdk==1.6.12
 urllib3==1.25.8
 validators==0.14.3

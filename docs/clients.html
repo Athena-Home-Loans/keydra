@@ -1,0 +1,1370 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clients &#8212; Keydra 0.1 documentation</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <img src='_static/keydra.png'><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><ul>
+    <li>
+        <a href='index.html'>Home</a>
+    </li>
+    <li>
+        <a href='quickstart.html'>Getting Started</a>
+    </li>
+    <li>
+        <a href='providers.html'>Supported Providers</a>
+    </li>
+    <li>
+        <a href='developing.html'>Developing</a>
+    </li>
+</ul>
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/clients.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/Athena-Home-Loans/keydra"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/Athena-Home-Loans/keydra/issues/new?title=Issue%20on%20page%20%2Fclients.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-keydra.clients.aws.appsync">
+   AWS AppSync
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#aws-iam">
+   AWS IAM
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-keydra.clients.aws.secretsmanager">
+   AWS Secrets Manager
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-keydra.clients.bitbucket">
+   Bitbucket
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-keydra.clients.cloudflare">
+   Cloudflare
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-keydra.clients.contentful">
+   Contentful
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-keydra.clients.qualys">
+   Qualys
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-keydra.clients.salesforce">
+   Salesforce
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-keydra.clients.splunk">
+   Splunk
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="toctree-wrapper compound" id="clients">
+</div>
+<div class="section" id="id1">
+<h1>Clients<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-keydra.clients.aws.appsync">
+<span id="aws-appsync"></span><span id="client-appsync"></span><h2>AWS AppSync<a class="headerlink" href="#module-keydra.clients.aws.appsync" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="keydra.clients.aws.appsync.AppSyncClient">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.aws.appsync.</span></code><code class="sig-name descname"><span class="pre">AppSyncClient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.appsync.AppSyncClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="keydra.clients.aws.appsync.AppSyncClient.create_api_key">
+<code class="sig-name descname"><span class="pre">create_api_key</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expires</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.appsync.AppSyncClient.create_api_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an api key for an existing app sync api</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>api_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ID (ARN or friendly api name) for the api</p></li>
+<li><p><strong>expires</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Time after which the key expires</p></li>
+<li><p><strong>description</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Key purpose description</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The newly created key</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+<p>Sample response:
+{</p>
+<blockquote>
+<div><dl class="simple">
+<dt>‘apiKey’: {</dt><dd><p>‘id’: ‘string’,
+‘description’: ‘string’,
+‘expires’: 123</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.aws.appsync.AppSyncClient.delete_api_key">
+<code class="sig-name descname"><span class="pre">delete_api_key</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.appsync.AppSyncClient.delete_api_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes an api key for an existing app sync api</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>api_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ID (ARN or friendly api name) for the api</p></li>
+<li><p><strong>id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ID for api key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>{}</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+<p>Sample response:</p>
+<p>{}</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.aws.appsync.AppSyncClient.get_graphql_api">
+<code class="sig-name descname"><span class="pre">get_graphql_api</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.appsync.AppSyncClient.get_graphql_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets an api hosted on app sync</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>api_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ID (ARN or friendly api name) for the api</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>{}</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+<p>Sample response:</p>
+<p>{</p>
+<blockquote>
+<div><dl>
+<dt>‘graphqlApi’: {</dt><dd><p>‘name’: ‘string’,
+‘apiId’: ‘string’,
+‘authenticationType’: ‘API_KEY’,
+‘logConfig’: {</p>
+<blockquote>
+<div><p>‘fieldLogLevel’: ‘NONE’|’ERROR’|’ALL’,
+‘cloudWatchLogsRoleArn’: ‘string’,
+‘excludeVerboseContent’: True|False</p>
+</div></blockquote>
+<p>},
+‘userPoolConfig’: {</p>
+<blockquote>
+<div><p>‘userPoolId’: ‘string’,
+‘awsRegion’: ‘string’,
+‘defaultAction’: ‘ALLOW’|’DENY’,
+‘appIdClientRegex’: ‘string’</p>
+</div></blockquote>
+<p>},
+‘openIDConnectConfig’: {</p>
+<blockquote>
+<div><p>‘issuer’: ‘string’,
+‘clientId’: ‘string’,
+‘iatTTL’: 123,
+‘authTTL’: 123</p>
+</div></blockquote>
+<p>},
+‘arn’: ‘string’,
+‘uris’: {</p>
+<blockquote>
+<div><p>‘string’: ‘string’</p>
+</div></blockquote>
+<p>},
+‘tags’: {</p>
+<blockquote>
+<div><p>‘string’: ‘string’</p>
+</div></blockquote>
+<p>},
+‘additionalAuthenticationProviders’: [</p>
+<blockquote>
+<div><dl>
+<dt>{</dt><dd><p>‘authenticationType’: ‘API_KEY’
+‘openIDConnectConfig’: {</p>
+<blockquote>
+<div><p>‘issuer’: ‘string’,
+‘clientId’: ‘string’,
+‘iatTTL’: 123,
+‘authTTL’: 123</p>
+</div></blockquote>
+<p>},
+‘userPoolConfig’: {</p>
+<blockquote>
+<div><p>‘userPoolId’: ‘string’,
+‘awsRegion’: ‘string’,
+‘appIdClientRegex’: ‘string’</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+<p>},</p>
+</div></blockquote>
+<p>],
+‘xrayEnabled’: True|False,
+‘wafWebAclArn’: ‘string’</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.aws.appsync.AppSyncClient.list_api_keys">
+<code class="sig-name descname"><span class="pre">list_api_keys</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_id</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.appsync.AppSyncClient.list_api_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists all api keys for an existing app sync api</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>api_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ID (ARN or friendly api name) for the api</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the list of api keys for the api</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+<p>Sample response:
+{</p>
+<blockquote>
+<div><dl>
+<dt>‘apiKeys’: [</dt><dd><dl class="simple">
+<dt>{</dt><dd><p>‘id’: ‘string’,
+‘description’: ‘string’,
+‘expires’: 123</p>
+</dd>
+</dl>
+<p>},</p>
+</dd>
+</dl>
+<p>],
+‘nextToken’: ‘string’</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt id="keydra.clients.aws.appsync.CreateApiKeyException">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.aws.appsync.</span></code><code class="sig-name descname"><span class="pre">CreateApiKeyException</span></code><a class="headerlink" href="#keydra.clients.aws.appsync.CreateApiKeyException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="keydra.clients.aws.appsync.DeleteApiKeyException">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.aws.appsync.</span></code><code class="sig-name descname"><span class="pre">DeleteApiKeyException</span></code><a class="headerlink" href="#keydra.clients.aws.appsync.DeleteApiKeyException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="keydra.clients.aws.appsync.GetApiException">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.aws.appsync.</span></code><code class="sig-name descname"><span class="pre">GetApiException</span></code><a class="headerlink" href="#keydra.clients.aws.appsync.GetApiException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="keydra.clients.aws.appsync.ListApiKeysException">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.aws.appsync.</span></code><code class="sig-name descname"><span class="pre">ListApiKeysException</span></code><a class="headerlink" href="#keydra.clients.aws.appsync.ListApiKeysException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="aws-iam">
+<span id="client-iam"></span><h2>AWS IAM<a class="headerlink" href="#aws-iam" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-keydra.clients.aws.secretsmanager">
+<span id="aws-secrets-manager"></span><span id="client-secretsmanager"></span><h2>AWS Secrets Manager<a class="headerlink" href="#module-keydra.clients.aws.secretsmanager" title="Permalink to this headline">¶</a></h2>
+<dl class="py exception">
+<dt id="keydra.clients.aws.secretsmanager.GetSecretException">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.aws.secretsmanager.</span></code><code class="sig-name descname"><span class="pre">GetSecretException</span></code><a class="headerlink" href="#keydra.clients.aws.secretsmanager.GetSecretException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="keydra.clients.aws.secretsmanager.InsertSecretException">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.aws.secretsmanager.</span></code><code class="sig-name descname"><span class="pre">InsertSecretException</span></code><a class="headerlink" href="#keydra.clients.aws.secretsmanager.InsertSecretException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt id="keydra.clients.aws.secretsmanager.SecretsManagerClient">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.aws.secretsmanager.</span></code><code class="sig-name descname"><span class="pre">SecretsManagerClient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.secretsmanager.SecretsManagerClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="keydra.clients.aws.secretsmanager.SecretsManagerClient.create_secret">
+<code class="sig-name descname"><span class="pre">create_secret</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret_value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.secretsmanager.SecretsManagerClient.create_secret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates secret in SecretsManager</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>secret_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name (identifier) for the secret</p></li>
+<li><p><strong>secret_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Secret value</p></li>
+<li><p><strong>description</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – (Optional) Description of the secret</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictonary with response (bypass from boto)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+<p>Sample response:</p>
+<dl class="simple">
+<dt>{</dt><dd><p>‘ARN’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>,
+‘Name’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>,
+‘VersionId’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+<p>}</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.aws.secretsmanager.SecretsManagerClient.describe_secret">
+<code class="sig-name descname"><span class="pre">describe_secret</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.secretsmanager.SecretsManagerClient.describe_secret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the details of a secret. It does not include the encrypted
+fields. Only those fields that are populated with a value are returned
+in the response.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>secret_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ID (ARN or friendly secret name) of the secret</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Description of the secret (minus encrypted bits)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#keydra.clients.aws.secretsmanager.GetSecretException" title="keydra.clients.aws.secretsmanager.GetSecretException"><code class="xref py py-class docutils literal notranslate"><span class="pre">GetSecretException</span></code></a> if secret doesn’t exist</p>
+</dd>
+</dl>
+<p>Sample response:</p>
+<dl>
+<dt>{</dt><dd><p>‘ARN’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>,
+‘Name’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>,
+‘Description’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>,
+‘KmsKeyId’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>,
+‘RotationEnabled’: <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>,
+‘RotationLambdaARN’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>,
+‘RotationRules’: {</p>
+<blockquote>
+<div><p>‘AutomaticallyAfterDays’: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</div></blockquote>
+<p>},
+‘LastRotatedDate’: <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>,
+‘LastChangedDate’: <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>,
+‘LastAccessedDate’: <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>,
+‘DeletedDate’: <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>,
+‘Tags’: [</p>
+<blockquote>
+<div><dl class="simple">
+<dt>{</dt><dd><p>‘Key’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>,
+‘Value’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+<p>},</p>
+</div></blockquote>
+<p>],
+‘VersionIdsToStages’: {</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>: [</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>,</p>
+</dd>
+</dl>
+<p>]</p>
+</div></blockquote>
+<p>},
+‘OwningService’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+<p>}</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.aws.secretsmanager.SecretsManagerClient.generate_random_password">
+<code class="sig-name descname"><span class="pre">generate_random_password</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.secretsmanager.SecretsManagerClient.generate_random_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a random password of the specified complexity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>length</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Length of the password</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A randomly generated password compliant with the spec
+provided</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+<p>Optional parameters:</p>
+<p>ExcludeCharacters=:class:<cite>str</cite>
+ExcludeNumbers=:class:<cite>bool</cite>
+ExcludePunctuation=:class:<cite>bool</cite>
+ExcludeUppercase=:class:<cite>bool</cite>
+ExcludeLowercase=:class:<cite>bool</cite>
+IncludeSpace=:class:<cite>bool</cite>
+RequireEachIncludedType=:class:<cite>bool</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.aws.secretsmanager.SecretsManagerClient.get_secret_value">
+<code class="sig-name descname"><span class="pre">get_secret_value</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version_stage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'current'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#keydra.clients.aws.secretsmanager.SecretsManagerClient.get_secret_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a secret from SecretsManager by name and stage</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>secret_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ID (ARN or friendly secret name) of the secret</p></li>
+<li><p><strong>version_stage</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Version stage of the secret (current/previous)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The secret matching the request</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.aws.secretsmanager.SecretsManagerClient.update_secret">
+<code class="sig-name descname"><span class="pre">update_secret</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.secretsmanager.SecretsManagerClient.update_secret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores a new encrypted secret value in the specified secret by
+creating a new version and attaching it to the secret with the label
+AWSCURRENT (which will trigger the rotation of the label in any
+existing secrets to AWSPREVIOUS)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>secret_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ID (ARN or friendly secret name) of the secret</p></li>
+<li><p><strong>secret_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Secret value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Details about the secret updated</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#keydra.clients.aws.secretsmanager.GetSecretException" title="keydra.clients.aws.secretsmanager.GetSecretException"><code class="xref py py-class docutils literal notranslate"><span class="pre">GetSecretException</span></code></a> if secret doesn’t exist</p>
+</dd>
+</dl>
+<p>Sample response:</p>
+<dl>
+<dt>{</dt><dd><p>‘ARN’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>,
+‘Name’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>,
+‘VersionId’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>,
+‘VersionStages’: [</p>
+<blockquote>
+<div><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>,</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>}</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.aws.secretsmanager.SecretsManagerClient.update_secret_description">
+<code class="sig-name descname"><span class="pre">update_secret_description</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.secretsmanager.SecretsManagerClient.update_secret_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the description of a secret</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>secret_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ID (ARN or friendly secret name) of the secret</p></li>
+<li><p><strong>description</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – Description of the Secret</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Details about the secret updated</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+<p>Sample response:</p>
+<dl class="simple">
+<dt>{</dt><dd><p>‘ARN’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>,
+‘Name’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>,
+‘VersionId’: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+<p>}</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt id="keydra.clients.aws.secretsmanager.UpdateSecretException">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.aws.secretsmanager.</span></code><code class="sig-name descname"><span class="pre">UpdateSecretException</span></code><a class="headerlink" href="#keydra.clients.aws.secretsmanager.UpdateSecretException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-keydra.clients.bitbucket">
+<span id="bitbucket"></span><span id="client-bitbucket"></span><h2>Bitbucket<a class="headerlink" href="#module-keydra.clients.bitbucket" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="keydra.clients.bitbucket.BitbucketClient">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.bitbucket.</span></code><code class="sig-name descname"><span class="pre">BitbucketClient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">passwd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient._delete">
+<code class="sig-name descname"><span class="pre">_delete</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient._delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient._fetch_all">
+<code class="sig-name descname"><span class="pre">_fetch_all</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient._fetch_all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient._post">
+<code class="sig-name descname"><span class="pre">_post</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient._post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient._put">
+<code class="sig-name descname"><span class="pre">_put</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient._put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient._query">
+<code class="sig-name descname"><span class="pre">_query</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient._query" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient.add_repo_deployment_variable">
+<code class="sig-name descname"><span class="pre">add_repo_deployment_variable</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_slug</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_uuid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secured</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient.add_repo_deployment_variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new deployment variables configured for a specific environments
+in the given repository</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo_slug</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Slug of the repository to be queried</p></li>
+<li><p><strong>env_uuid</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – UUID of the environment to be updated</p></li>
+<li><p><strong>key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Key for the variable in the deployment environment</p></li>
+<li><p><strong>value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Value for the variable in the deployment environment</p></li>
+<li><p><strong>secured</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Should this variable be hidden from humans?</p></li>
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Username of the team account</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A description of the variable added (as per BB API)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient.add_repo_environment">
+<code class="sig-name descname"><span class="pre">add_repo_environment</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_slug</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Production'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_locked</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient.add_repo_environment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add new environments to the given repository</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo_slug</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Slug of the repository to be queried</p></li>
+<li><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of the environment to be added</p></li>
+<li><p><strong>env_type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Type of the environment (Test/Staging/Production)</p></li>
+<li><p><strong>admin_locked</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Should this env be locked to admins only?</p></li>
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Username of the team account</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A description of the added environment (as per BB API)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient.add_repo_variable">
+<code class="sig-name descname"><span class="pre">add_repo_variable</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_slug</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secured</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient.add_repo_variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new variable for a specific repository</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo_slug</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Slug of the repository to be queried</p></li>
+<li><p><strong>key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Key for the variable in the deployment environment</p></li>
+<li><p><strong>value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Value for the variable in the deployment environment</p></li>
+<li><p><strong>secured</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Should this variable be hidden from humans?</p></li>
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Username of the team account</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A description of the variable added (as per BB API)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient.add_team_pipeline_variable">
+<code class="sig-name descname"><span class="pre">add_team_pipeline_variable</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secured</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient.add_team_pipeline_variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an “account level” variable in Bitbucket</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Variable key (how it is going to be accessed)</p></li>
+<li><p><strong>value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Value of the variable</p></li>
+<li><p><strong>secured</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Should this variable be hidden from humans?</p></li>
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Username of the team account</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Description of the newly added variable (as per BB API)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient.delete_team_pipeline_variable">
+<code class="sig-name descname"><span class="pre">delete_team_pipeline_variable</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uuid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient.delete_team_pipeline_variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes an “account level” variable in Bitbucket</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uuid</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – UUID of the variable in Bitbucket</p></li>
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Username of the team account</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>JSON response</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient.fetch_file_from_repository">
+<code class="sig-name descname"><span class="pre">fetch_file_from_repository</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient.fetch_file_from_repository" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads file from Bitbucket</p>
+<p><em>Notes</em>: Requires ‘repository’ privilege</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of the repository to fetch file from</p></li>
+<li><p><strong>path</strong> – Path to the file on repo</p></li>
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Username of the team account</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Content of the file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient.list_repo_deployment_variables">
+<code class="sig-name descname"><span class="pre">list_repo_deployment_variables</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_slug</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_uuid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient.list_repo_deployment_variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists all the deployment variables configured for a specific
+environments in the given repository</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo_slug</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Slug of the repository to be queried</p></li>
+<li><p><strong>env_uuid</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – UUID of the environment to be updated</p></li>
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Username of the team account</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of dictionaries describing environments
+(as per BB API)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient.list_repo_environments">
+<code class="sig-name descname"><span class="pre">list_repo_environments</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_slug</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient.list_repo_environments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists all the environments configured for the given repository</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo_slug</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Slug of the repository to be queried</p></li>
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Username of the team account</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of dictionaries describing environments
+(as per BB API)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient.list_repo_variables">
+<code class="sig-name descname"><span class="pre">list_repo_variables</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_slug</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient.list_repo_variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists all the variables configured for a given repository</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo_slug</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Slug of the repository to be queried</p></li>
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Username of the team account</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of dictionaries describing environments
+(as per BB API)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient.list_team_pipeline_variables">
+<code class="sig-name descname"><span class="pre">list_team_pipeline_variables</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient.list_team_pipeline_variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists all “account level” variables in Bitbucket</p>
+<dl class="simple">
+<dt>Note: this will list every single page of variables existing in the</dt><dd><p>account</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Username of the team account</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of dictionaries describing variables (as per BB API)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient.update_repo_deployment_variable">
+<code class="sig-name descname"><span class="pre">update_repo_deployment_variable</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_slug</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_uuid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_uuid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secured</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient.update_repo_deployment_variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates an existing deployment variables configured for a specific
+environments in the given repository</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo_slug</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Slug of the repository to be queried</p></li>
+<li><p><strong>env_uuid</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – UUID of the environment to be updated</p></li>
+<li><p><strong>var_uuid</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – UUID of the variable in Bitbucket</p></li>
+<li><p><strong>key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Key for the variable in the deployment environment</p></li>
+<li><p><strong>value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Value for the variable in the deployment environment</p></li>
+<li><p><strong>secured</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Should this variable be hidden from humans?</p></li>
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Username of the team account</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A description of the variable added (as per BB API)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient.update_repo_variable">
+<code class="sig-name descname"><span class="pre">update_repo_variable</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_slug</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_uuid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secured</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient.update_repo_variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates an existing deployment variables configured for a specific
+environments in the given repository</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo_slug</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Slug of the repository to be queried</p></li>
+<li><p><strong>env_uuid</strong> – UUID of the environment to be updated</p></li>
+<li><p><strong>key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Key for the variable in the deployment environment</p></li>
+<li><p><strong>value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Value for the variable in the deployment environment</p></li>
+<li><p><strong>secured</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Should this variable be hidden from humans?</p></li>
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Username of the team account</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A description of the variable added (as per BB API)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.bitbucket.BitbucketClient.update_team_pipeline_variable">
+<code class="sig-name descname"><span class="pre">update_team_pipeline_variable</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uuid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secured</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.bitbucket.BitbucketClient.update_team_pipeline_variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates an “account level” variable in Bitbucket</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uuid</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – UUID of the variable in Bitbucket</p></li>
+<li><p><strong>key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Variable key (how it is going to be accessed)</p></li>
+<li><p><strong>value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Value of the variable</p></li>
+<li><p><strong>secured</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Should this variable be hidden from humans?</p></li>
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Username of the team account</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Description of the updated variable (as per BB API)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-keydra.clients.cloudflare">
+<span id="cloudflare"></span><span id="client-cloudflare"></span><h2>Cloudflare<a class="headerlink" href="#module-keydra.clients.cloudflare" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="keydra.clients.cloudflare.CloudflareClient">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.cloudflare.</span></code><code class="sig-name descname"><span class="pre">CloudflareClient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_secret</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.cloudflare.CloudflareClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="keydra.clients.cloudflare.CloudflareClient._delete">
+<code class="sig-name descname"><span class="pre">_delete</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.cloudflare.CloudflareClient._delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.cloudflare.CloudflareClient._post">
+<code class="sig-name descname"><span class="pre">_post</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.cloudflare.CloudflareClient._post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.cloudflare.CloudflareClient._put">
+<code class="sig-name descname"><span class="pre">_put</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.cloudflare.CloudflareClient._put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.cloudflare.CloudflareClient._query">
+<code class="sig-name descname"><span class="pre">_query</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.cloudflare.CloudflareClient._query" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.cloudflare.CloudflareClient.details">
+<code class="sig-name descname"><span class="pre">details</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.cloudflare.CloudflareClient.details" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reveals details about the token.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>token_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ID of the token details should be provided for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Information about the operation (as per Cloudflare’s
+description)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.cloudflare.CloudflareClient.list_tokens">
+<code class="sig-name descname"><span class="pre">list_tokens</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.cloudflare.CloudflareClient.list_tokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>List available tokens</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Information about the operation (as per Cloudflare’s
+description)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.cloudflare.CloudflareClient.roll_token">
+<code class="sig-name descname"><span class="pre">roll_token</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.cloudflare.CloudflareClient.roll_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rolls the token, generating a new one</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Information about the operation (as per Cloudflare’s
+description)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.cloudflare.CloudflareClient.verify">
+<code class="sig-name descname"><span class="pre">verify</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.cloudflare.CloudflareClient.verify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests a token</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Information about the operation (as per Cloudflare’s
+description)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-keydra.clients.contentful">
+<span id="contentful"></span><span id="client-contentful"></span><h2>Contentful<a class="headerlink" href="#module-keydra.clients.contentful" title="Permalink to this headline">¶</a></h2>
+<dl class="py exception">
+<dt id="keydra.clients.contentful.ConnectionException">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.contentful.</span></code><code class="sig-name descname"><span class="pre">ConnectionException</span></code><a class="headerlink" href="#keydra.clients.contentful.ConnectionException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt id="keydra.clients.contentful.ContentfulClient">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.contentful.</span></code><code class="sig-name descname"><span class="pre">ContentfulClient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.contentful.ContentfulClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="keydra.clients.contentful.ContentfulClient._validate_client">
+<code class="sig-name descname"><span class="pre">_validate_client</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.contentful.ContentfulClient._validate_client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate we have a working API connection
+and access to at least one space</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.contentful.ContentfulClient.create_token">
+<code class="sig-name descname"><span class="pre">create_token</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readonly</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.contentful.ContentfulClient.create_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new personal access token</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>) – Token name</p></li>
+<li><p><strong>readonly</strong> – True for Read Only access, default True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>New token</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><dl class="field-list simple">
+<dt class="field-odd">class</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p><cite>contentful_management.personal_access_token.PersonalAccessToken</cite></p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.contentful.ContentfulClient.get_tokens">
+<code class="sig-name descname"><span class="pre">get_tokens</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.contentful.ContentfulClient.get_tokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of the current tokens</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of tokens</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.contentful.ContentfulClient.revoke_token">
+<code class="sig-name descname"><span class="pre">revoke_token</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.contentful.ContentfulClient.revoke_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Revoke a token with a specified ID</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>token_id</strong> – The ID of the token to revoke</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if successful, False otherwise</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt id="keydra.clients.contentful.ParameterException">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.contentful.</span></code><code class="sig-name descname"><span class="pre">ParameterException</span></code><a class="headerlink" href="#keydra.clients.contentful.ParameterException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-keydra.clients.qualys">
+<span id="qualys"></span><span id="client-qualys"></span><h2>Qualys<a class="headerlink" href="#module-keydra.clients.qualys" title="Permalink to this headline">¶</a></h2>
+<dl class="py exception">
+<dt id="keydra.clients.qualys.ConnectionException">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.qualys.</span></code><code class="sig-name descname"><span class="pre">ConnectionException</span></code><a class="headerlink" href="#keydra.clients.qualys.ConnectionException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="keydra.clients.qualys.PasswordChangeException">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.qualys.</span></code><code class="sig-name descname"><span class="pre">PasswordChangeException</span></code><a class="headerlink" href="#keydra.clients.qualys.PasswordChangeException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt id="keydra.clients.qualys.QualysClient">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.qualys.</span></code><code class="sig-name descname"><span class="pre">QualysClient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'US3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.qualys.QualysClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="keydra.clients.qualys.QualysClient._get">
+<code class="sig-name descname"><span class="pre">_get</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.qualys.QualysClient._get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a GET request to the Qualys API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>) – The URL to connect to, without the base</p></li>
+<li><p><strong>params</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>, optional) – The URL to connect to, without the base</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Full API response</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderedDict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.qualys.QualysClient._user_list">
+<code class="sig-name descname"><span class="pre">_user_list</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.qualys.QualysClient._user_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of all current users.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of users</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderedDict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.qualys.QualysClient.change_passwd">
+<code class="sig-name descname"><span class="pre">change_passwd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.qualys.QualysClient.change_passwd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update a Qualys user account password</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>) – The username of the account</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The new password</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-keydra.clients.salesforce">
+<span id="salesforce"></span><span id="client-salesforce"></span><h2>Salesforce<a class="headerlink" href="#module-keydra.clients.salesforce" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="keydra.clients.salesforce.SalesforceClient">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.salesforce.</span></code><code class="sig-name descname"><span class="pre">SalesforceClient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.salesforce.SalesforceClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="keydra.clients.salesforce.SalesforceClient.change_passwd">
+<code class="sig-name descname"><span class="pre">change_passwd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newpassword</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.salesforce.SalesforceClient.change_passwd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change a Salesforce user account password</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>userid</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>) – The user ID of the account</p></li>
+<li><p><strong>newpasswd</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">passwd</span></code>) – The new password to change to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if successful</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.salesforce.SalesforceClient.get_user_id">
+<code class="sig-name descname"><span class="pre">get_user_id</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.salesforce.SalesforceClient.get_user_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the Salesforce ID for a given
+username in the form of an email address.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>username</strong> – The username (email) to lookup</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The User ID corresponding to the username</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt id="keydra.clients.salesforce.ValidationException">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.salesforce.</span></code><code class="sig-name descname"><span class="pre">ValidationException</span></code><a class="headerlink" href="#keydra.clients.salesforce.ValidationException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-keydra.clients.splunk">
+<span id="splunk"></span><span id="client-splunk"></span><h2>Splunk<a class="headerlink" href="#module-keydra.clients.splunk" title="Permalink to this headline">¶</a></h2>
+<dl class="py exception">
+<dt id="keydra.clients.splunk.AppNotInstalledException">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.splunk.</span></code><code class="sig-name descname"><span class="pre">AppNotInstalledException</span></code><a class="headerlink" href="#keydra.clients.splunk.AppNotInstalledException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt id="keydra.clients.splunk.SplunkClient">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.splunk.</span></code><code class="sig-name descname"><span class="pre">SplunkClient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8089</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="keydra.clients.splunk.SplunkClient.app_exists">
+<code class="sig-name descname"><span class="pre">app_exists</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">appname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient.app_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a Splunk app exists</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>appname</strong> – The app name to check for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Result of check, True or False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.splunk.SplunkClient.change_passwd">
+<code class="sig-name descname"><span class="pre">change_passwd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oldpasswd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newpasswd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient.change_passwd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update a Splunk user account password</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>) – The username of the account</p></li>
+<li><p><strong>oldpasswd</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">passwd</span></code>) – The current password of the account</p></li>
+<li><p><strong>newpasswd</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">passwd</span></code>) – The new password to change to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if successful</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.splunk.SplunkClient.update_app_config">
+<code class="sig-name descname"><span class="pre">update_app_config</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient.update_app_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the config of a Splunk app. Will create the
+config entry if it does not already exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>app</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>) – The app context</p></li>
+<li><p><strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">path</span></code>) – The path to the config object</p></li>
+<li><p><strong>obj</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>) – The config object to update/create</p></li>
+<li><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – Additional post data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Resulting HTTP status code of the operation</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Athena Home Loans<br/>
+        
+            &copy; Copyright 2021, Athena Home Loans.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>

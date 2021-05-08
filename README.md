@@ -2,7 +2,7 @@
 
 Next level Secrets Management, without the price tag!
 
-![Secrets Management for Humans](docs/en/keydra.png?raw=true "Keydra")
+![Secrets Management for Humans](docsrc/_static/keydra.png?raw=true "Keydra")
 
 Keydra allows you to automatically rotate your secrets on a schedule you define. Since it's all automated, it's easy to rotate your service account and API keys much more frequently than you do today. Like, everyday!
 

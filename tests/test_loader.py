@@ -52,9 +52,18 @@ class TestLoader(unittest.TestCase):
 
         self.assertEqual(c.__name__, 'Client')
 
+    def test_load_client_exists(self):
+        c = loader.load_client('secretsmanager')
+
+        self.assertEqual(c.__name__, 'SecretsManagerClient')
+
     def test_load_provider_client_does_not_exist(self):
         with self.assertRaises(InvalidSecretProvider):
             loader.load_provider_client('not_a_provider_here_go_away')
+
+    def test_load_client_does_not_exist(self):
+        with self.assertRaises(InvalidSecretProvider):
+            loader.load_client('not_a_provider_here_go_away')
 
     @patch('keydra.loader.load_provider_client')
     @patch('keydra.loader.fetch_provider_creds')

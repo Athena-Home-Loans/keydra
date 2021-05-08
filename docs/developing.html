@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Developing Keydra &#8212; Keydra 0.1 documentation</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <img src='_static/keydra.png'><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><ul>
+    <li>
+        <a href='index.html'>Home</a>
+    </li>
+    <li>
+        <a href='quickstart.html'>Getting Started</a>
+    </li>
+    <li>
+        <a href='providers.html'>Supported Providers</a>
+    </li>
+    <li>
+        <a href='developing.html'>Developing</a>
+    </li>
+</ul>
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/developing.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/Athena-Home-Loans/keydra"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/Athena-Home-Loans/keydra/issues/new?title=Issue%20on%20page%20%2Fdeveloping.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#providers">
+   Providers
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#rotation">
+     Rotation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#distribution">
+     Distribution
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#clients">
+   Clients
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#contribution-guidelines">
+   Contribution guidelines
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="developing-keydra">
+<h1>Developing Keydra<a class="headerlink" href="#developing-keydra" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>If you are coding something new, chances are you are adding or updating a client, a provider or <em>both</em>!</p>
+<div class="section" id="providers">
+<h2>Providers<a class="headerlink" href="#providers" title="Permalink to this headline">¶</a></h2>
+<p><em>Providers</em> make the magic happen. As of today they have 2 responsibilities:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#rotate"><span class="std std-ref">rotate</span></a> (which depending on the provider, can also be used to provision secrets)</p></li>
+<li><p><a class="reference internal" href="#distribute"><span class="std std-ref">distribute</span></a></p></li>
+</ul>
+<p>… and implement the methods described in <cite>keydra.providers.base</cite>.
+See the <a class="reference internal" href="providers.html#providers"><span class="std std-ref">provider documentation</span></a> for more details on what’s supported out of the box.</p>
+<div class="section" id="rotation">
+<span id="rotate"></span><h3>Rotation<a class="headerlink" href="#rotation" title="Permalink to this headline">¶</a></h3>
+<p>During the <cite>rotate</cite> phase, the provider will be invoked with a description
+(<cite>dict</cite>) of a secret.</p>
+<p>So in the example below where <cite>secrets.yaml</cite> has:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">secret_identifier</span><span class="p">:</span>
+<span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Some description for the secret</span>
+<span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">key_identifier</span>
+<span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">provider_type</span>
+<span class="nt">rotate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nightly</span>
+<span class="nt">distribute</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>The rotate method will receive:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Some description for the secret&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;key_identifier&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;provider&quot;</span><span class="p">:</span> <span class="s2">&quot;provider_type&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;rotate&quot;</span><span class="p">:</span> <span class="s2">&quot;nightly&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that the <cite>provider</cite> attribute is what brought the config into your
+provider to begin with.</p>
+<p>From that moment on it is your responsibility to _rotate_ (whatever it means
+to your provider) the secret described as <cite>key_identifier</cite>.</p>
+<p>Something goes wrong, simply raise <cite>keydra.exceptions.RotationException</cite>.</p>
+<p>All going well, return a <cite>dict</cite> containing the attributes of your secret
+(including the secret bits, like password… don’t worry it is safe and never
+logged… unless you mess up).</p>
+</div>
+<div class="section" id="distribution">
+<span id="distribute"></span><h3>Distribution<a class="headerlink" href="#distribution" title="Permalink to this headline">¶</a></h3>
+<p>During the <cite>distribute</cite> phase, the provider will be invoked with 2 descriptions
+(<cite>dict</cite>, <cite>dict</cite>):</p>
+<ol class="arabic simple">
+<li><p><em>the secret</em> (recently rotated, containing the <em>secret</em> bits)</p></li>
+<li><p>A description of a distribution point.</p></li>
+</ol>
+<p>From that moment on it is your responsibility to _distribute_ (whatever it
+means to your provider) the secrets.</p>
+<p>Remember that the secret will come decorated with <cite>provider</cite>, so if you need
+to be specific about how to consume from certain providers you can. BUT…
+if that is happening you probably missed something as the description of a
+distribution point should be self-explanatory and self-contained.</p>
+</div>
+</div>
+<div class="section" id="clients">
+<h2>Clients<a class="headerlink" href="#clients" title="Permalink to this headline">¶</a></h2>
+<p><em>Clients</em> _commonly_ live in <cite>keydra.clients</cite> but you may be sourcing it
+directly from somewhere else or have other aspirations… no judgement here.</p>
+<p>Anyway… <em>Clients</em> are nothing but SDKs to facilitate (keep the code clean,
+really) the development of <em>Providers</em>.</p>
+<p>See the <a class="reference internal" href="clients.html#clients"><span class="std std-ref">client documentation</span></a> for more details on what’s supported.</p>
+</div>
+<div class="section" id="contribution-guidelines">
+<h2>Contribution guidelines<a class="headerlink" href="#contribution-guidelines" title="Permalink to this headline">¶</a></h2>
+<p>Plain and simple… just cut a PR!</p>
+<p>But not so fast!</p>
+<ul class="simple">
+<li><p>Work on a feature branch</p></li>
+<li><p>Make sure you have tests</p></li>
+<li><p>Did you drop coverage, be ready to discuss why</p></li>
+<li><p>Create a Pull Request:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Install deps</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -r requirements-dev.txt
+pip install -r src/requirements.txt
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Testing</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nosetests
+</pre></div>
+</div>
+<p>Please ensure tests are passing before creating a PR. We also ask you to be PEP8 compliant!</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flake8
+</pre></div>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Athena Home Loans<br/>
+        
+            &copy; Copyright 2021, Athena Home Loans.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>
