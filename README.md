@@ -2,7 +2,7 @@
 
 Next level Secrets Management, without the price tag!
 
-![Secrets Management for Humans](docsrc/_static/keydra.png?raw=true "Keydra")
+![Secrets Management for Humans](docs/static/keydra.png?raw=true "Keydra")
 
 Keydra allows you to automatically rotate your secrets on a schedule you define. Since it's all automated, it's easy to rotate your service account and API keys much more frequently than you do today. Like, everyday!
 
@@ -20,14 +20,10 @@ Use case examples;
 
 - Once a week, rotate/change a Salesforce user password, taking the current secret from AWS Secrets Manager and replacing with the new password once done. *(rotate: AWS SecretsManager, distribute: Salesforce, AWS SecretsManager)*
 
-See [providers.rst](docs/en/providers.rst) for a list of providers currently supported (with the list growing all the time!).
+See [the documentation](https://athena-home-loans.github.io/keydra/) for a list of providers currently supported (the list is growing all the time!).
 
 Need a new provider? It's easy to add one, cut a PR!
 
 ## Documentation
 
-We have [documentation](docs/en/index.rst)! Also see the [pretty HTML docs](docs/en/html/index.html) if you prefer.
-
-If you want some help getting up and running, we'd suggest taking a look at the [getting started guide](docs/en/quickstart.rst). 
-
-If you're more interested in contributing, take a look at [developing.rst](docs/en/developing.rst).
+Check out the [documentation here](https://athena-home-loans.github.io/keydra/)!
