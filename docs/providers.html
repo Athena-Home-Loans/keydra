@@ -49,7 +49,7 @@
           
 <div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
     
-        <img src='../../keydra.png'><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+        <img src='_static/keydra.png'><form class="bd-search d-flex align-items-center" action="search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><ul>
@@ -676,17 +676,21 @@ as per <cite>&lt;token_name&gt;.key</cite> and <cite>&lt;token_name&gt;.secret</
 <div class="section" id="qualys">
 <h2>Qualys<a class="headerlink" href="#qualys" title="Permalink to this headline">¶</a></h2>
 <p>Provides password rotation support for Qualys accounts. Only <cite>rotate</cite> has been implemented,
-<cite>distribution</cite> is not supported.</p>
-<p>For a given secet specification, the <cite>rotate</cite> function fetches the contents of a AWS Secrets Manager
+<cite>distribution</cite> is not (yet?) supported.</p>
+<p>For a given secret specification, the <cite>rotate</cite> function fetches the contents of a AWS Secrets Manager
 secret located at <cite>keydra/qualys/&lt;key&gt;</cite> (using the key from the spec), and changes the password of the user
-specified. As Qualys does not permit a user changing their own password via API, the Secret needs to specify a
-second account to be used to make the change.</p>
+specified on the Qualys platform. As Qualys does not permit a user to change their own password via API, the
+secret spec needs to specify a second account to be used to make the change.</p>
 <p>For example, for a secret spec of:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sample</span><span class="p">:</span>
   <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">API User</span>
   <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">api</span>
   <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">qualys</span>
   <span class="nt">rotate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nightly</span>
+  <span class="nt">config</span><span class="p">:</span>
+     <span class="nt">rotatewith</span><span class="p">:</span>
+        <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra/qualys/backup</span>
+        <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secretsmanager</span>
   <span class="nt">distribute</span><span class="p">:</span>
   <span class="p p-Indicator">-</span>
      <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra/qualys/api</span>
@@ -701,13 +705,12 @@ second account to be used to make the change.</p>
    <span class="nt">&quot;platform&quot;</span><span class="p">:</span> <span class="s2">&quot;US3&quot;</span><span class="p">,</span>
    <span class="nt">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;apiuser&quot;</span><span class="p">,</span>
    <span class="nt">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;Ssh.Secret!&quot;</span><span class="p">,</span>
-   <span class="nt">&quot;rotatewith&quot;</span><span class="p">:</span> <span class="s2">&quot;keydra/qualys/backup&quot;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Then use the creds of a similar secret at <cite>keydra/qualys/backup</cite> to connect to the Qualys API and change
-the password of the <cite>apiuser</cite> account. With the distribution setup in the example, the new password will then
-be placed into Secrets Manager.</p>
+<p>Then use the creds of the secret at <cite>keydra/qualys/backup</cite> (in Secrets Manager, as configured in the spec) to
+connect to the Qualys API and change the password of the <cite>apiuser</cite> account. With the distribution setup in the
+example, the new password will then be placed into Secrets Manager, replacing the password with the new one.</p>
 <p>See <a class="reference external" href="https://www.qualys.com/platform-identification/">https://www.qualys.com/platform-identification/</a> to identify which platform your instance is on.</p>
 <span class="target" id="module-keydra.providers.qualys"></span><dl class="py class">
 <dt id="keydra.providers.qualys.Client">

@@ -1,9 +1,9 @@
 import boto3
 import json
-import validators
 
 from keydra.clients.qualys import QualysClient
-from keydra.clients.aws.secretsmanager import SecretsManagerClient
+
+from keydra import loader
 
 from keydra.providers.base import BaseProvider
 from keydra.providers.base import exponential_backoff_retry
@@ -22,23 +22,9 @@ class Client(BaseProvider):
         if session is None:
             session = boto3.session.Session()
 
-        smclient = SecretsManagerClient(
-            session=session,
-            region_name=region_name
-        )
-
-        operator_creds = json.loads(
-            smclient.get_secret_value(credentials['rotatewith'])
-        )
-
-        self._operator = operator_creds['username']
+        self._session = session
+        self._region = region_name
         self._credentials = credentials
-
-        self._client = QualysClient(
-            platform=operator_creds['platform'],
-            username=operator_creds['username'],
-            password=operator_creds['password']
-        )
 
     def _rotate_secret(self, secret):
         '''
@@ -50,20 +36,47 @@ class Client(BaseProvider):
         :returns: New secret ready to distribute
         :rtype: :class:`dict`
         '''
+        if self._credentials is None:
+            raise RotationException(
+                'No credentials provided to provider on init, '
+                'this is required.'
+            )
+
         resp = self._credentials
         resp['provider'] = 'qualys'
 
+        # User the specified provider to load the operator secret
+        secret_client = loader.load_client(
+            secret['config']['rotatewith']['provider']
+        )
+        sclient = secret_client(
+            session=self._session,
+            region_name=self._region,
+            credentials=self._credentials
+        )
+
+        operator_creds = json.loads(
+            sclient.get_secret_value(
+                secret_id=secret['config']['rotatewith']['key']
+            )
+        )
+
+        qclient = QualysClient(
+            platform=operator_creds['platform'],
+            username=operator_creds['username'],
+            password=operator_creds['password']
+        )
+
         try:
-            resp['password'] = self._client.change_passwd(
+            resp['password'] = qclient.change_passwd(
                 username=self._credentials['username']
             )
 
         except Exception as e:
-            print(e)
             raise RotationException(
                 'Error rotating user {} (with user {}). Reason: {}'.format(
                     self._credentials['username'],
-                    self._operator,
+                    operator_creds['username'],
                     e
                 )
             )
@@ -85,18 +98,24 @@ class Client(BaseProvider):
 
     @classmethod
     def validate_spec(cls, spec):
+        valid, msg = BaseProvider.validate_spec(spec)
 
-        for k, v in spec.items():
-            if not validators.length(k, min=2, max=75):
-                return False, 'Key {} failed length checks'.format(k)
+        if not valid:
+            return valid, msg
 
-            # Don't key check lists, as it will check length of list not str
-            if (not isinstance(v, list) and
-                    not validators.length(v, min=2, max=75)):
-                return (False,
-                        'Value for key {} failed length checks'.format(k))
+        if 'config' not in spec:
+            return False, 'Attribute "config" not present in configuration'
 
-        return True, 'It is valid!'
+        if 'rotatewith' not in spec['config']:
+            return False, 'Attribute "rotatewith" not present in configuration'
+
+        req_keys = ['key', 'provider']
+        if not all(key in spec['config']['rotatewith'] for key in req_keys):
+            return False, '"config" stanza must include keys {}'.format(
+                ", ".join(req_keys)
+            )
+
+        return True, 'It is valid!'     # pragma: no cover
 
     @classmethod
     def redact_result(cls, result):

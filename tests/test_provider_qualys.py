@@ -1,4 +1,5 @@
 import unittest
+import json
 
 from keydra.providers import qualys
 
@@ -12,35 +13,41 @@ CREDS = {
   "platform": "US3",
   "username": "user",
   "password": "pass",
-  "rotatewith": "secrettwo"
 }
 
 OP_CREDS = {
   "platform": "US3",
   "username": "user2",
   "password": "pass2",
-  "rotatewith": "secretone"
 }
 
 SPEC = {
     'description': 'Test',
     'key': 'secretone',
-    'provider': 'splunk',
-    'rotate': 'nightly'
+    'provider': 'qualys',
+    'rotate': 'nightly',
+    'config': {
+        'rotatewith': {
+            'key': 'keydra/qualys/secrettwo',
+            'provider': 'secretsmanager'
+        }
+    }
 }
 
 
-class TestProviderSplunk(unittest.TestCase):
+class TestProviderQualys(unittest.TestCase):
+    @patch.object(qualys, 'loader')
     @patch.object(qualys, 'json')
-    @patch.object(qualys, 'SecretsManagerClient')
     @patch.object(qualys, 'QualysClient')
-    def test_rotate(self, mk_qualys, mk_sm, mk_json):
+    def test_rotate(self, mk_qualys, mk_json, mk_ldr):
         mk_json.loads.return_value = OP_CREDS
 
         cli = qualys.Client(credentials=CREDS, session=MagicMock(),
                             region_name='ap-southeast-2')
 
-        result = cli.rotate('something')
+        mk_ldr.fetch_provider_creds.return_value = json.dumps(OP_CREDS)
+
+        result = cli._rotate_secret(SPEC)
 
         self.assertEqual(type(result), dict)
         self.assertEqual(
@@ -48,10 +55,34 @@ class TestProviderSplunk(unittest.TestCase):
             'QualysClient().change_passwd()'
         )
 
+    @patch.object(qualys, 'loader')
     @patch.object(qualys, 'json')
-    @patch.object(qualys, 'SecretsManagerClient')
     @patch.object(qualys, 'QualysClient')
-    def test_distribute(self, mk_qualys, mk_sm, mk_json):
+    def test_rotate_nocreds(self, mk_qualys, mk_json, mk_ldr):
+        mk_json.loads.return_value = OP_CREDS
+
+        cli = qualys.Client(credentials=None, session=MagicMock(),
+                            region_name='ap-southeast-2')
+
+        mk_ldr.fetch_provider_creds.return_value = json.dumps(OP_CREDS)
+
+        with self.assertRaises(RotationException):
+            cli._rotate_secret(SPEC)
+
+    @patch.object(qualys, 'loader')
+    @patch.object(qualys, 'json')
+    @patch.object(qualys, 'QualysClient')
+    def test_init_nosess(self, mk_qualys, mk_json, mk_ldr):
+        mk_json.loads.return_value = OP_CREDS
+
+        cli = qualys.Client(credentials=CREDS, region_name='ap-southeast-2')
+
+        self.assertEqual(type(cli), qualys.Client)
+
+    @patch.object(qualys, 'loader')
+    @patch.object(qualys, 'json')
+    @patch.object(qualys, 'QualysClient')
+    def test_distribute(self, mk_qualys, mk_json, mk_ldr):
         mk_json.loads.return_value = OP_CREDS
 
         cli = qualys.Client(credentials=CREDS, session=MagicMock(),
@@ -65,7 +96,7 @@ class TestProviderSplunk(unittest.TestCase):
             'status': 'success',
             'action': 'rotate_secret',
             'value': {
-                'provider': 'splunk',
+                'provider': 'qualys',
                 'key': 'KEY_ID',
                 'password': 'THIS_IS_SECRET'
             }
@@ -92,22 +123,24 @@ class TestProviderSplunk(unittest.TestCase):
         self.assertEqual(r_result_1, (True,
                          'It is valid!'))
 
+    @patch.object(qualys, 'loader')
     @patch.object(qualys, 'json')
-    @patch.object(qualys, 'SecretsManagerClient')
     @patch.object(qualys, 'QualysClient')
-    def test__rotate_except(self, mk_qualys, mk_sm, mk_json):
+    def test__rotate_except(self, mk_qualys, mk_json, mk_ldr):
         cli = qualys.Client(credentials=CREDS, session=MagicMock(),
                             region_name='ap-southeast-2')
+
+        mk_ldr.fetch_provider_creds.return_value = json.dumps(OP_CREDS)
 
         mk_qualys().change_passwd.side_effect = Exception('Boom!')
 
         with self.assertRaises(RotationException):
             cli._rotate_secret(SPEC)
 
+    @patch.object(qualys, 'loader')
     @patch.object(qualys, 'json')
-    @patch.object(qualys, 'SecretsManagerClient')
     @patch.object(qualys, 'QualysClient')
-    def test__change_pass_except(self, mk_qualys, mk_sm, mk_json):
+    def test__change_pass_except(self, mk_qualys, mk_json, mk_ldr):
         cli = qualys.Client(credentials=CREDS, session=MagicMock(),
                             region_name='ap-southeast-2')
 
@@ -116,27 +149,36 @@ class TestProviderSplunk(unittest.TestCase):
         with self.assertRaises(RotationException):
             cli._rotate_secret(SPEC)
 
-    def test_validate_spec_overlength(self):
-        spec_overlength = {
-            'description': 'Lorem ipsum dolor sit amet, '
-                           'consectetur adipiscing elit, '
-                           'sed do eiusmod tempor incididunt'
-                           'ut labore et dolore magna'
-                           'aliqua. Ut enim ad minim veniam,'
-                           'quis nostrud exercitation'
-                           ' ullamco laboris nisi ut aliquip'
-                           'ex ea commodo consequat. '
-                           'Duis aute irure dolor in reprehenderit'
-                           'in voluptate velit esse cillum dolore eu'
-                           'fugiat nulla pariatur. Excepteur sint'
-                           ' occaecat cupidatat non proident, sunt in'
-                           'culpa qui officia deserunt mollit anim '
-                           'id est laborum.',
-            'key': 'test',
+    def test_validate_spec_fail(self):
+        spec_no_cfg = {
+            'description': 'Test',
+            'key': 'secretone',
             'provider': 'qualys',
-            'rotate': 'nightly'
+            'rotate': 'nightly',
+            'config': {
+                'rotatewith': {
+                    'key': 'keydra/qualys/secrettwo'
+                }
+            }
         }
 
-        r_result = qualys.Client.validate_spec(spec_overlength)
+        r_result = qualys.Client.validate_spec(spec_no_cfg)
         self.assertEqual(r_result, (False,
-                         'Value for key description failed length checks'))
+                         '"config" stanza must include keys key, provider'))
+
+    def test_validate_spec_fail2(self):
+        spec_no_key = {
+            'description': 'Test',
+            'provider': 'qualys',
+            'rotate': 'nightly',
+            'config': {
+                'rotatewith': {
+                    'key': 'keydra/qualys/secrettwo'
+                }
+            }
+        }
+
+        r_result, r_msg = qualys.Client.validate_spec(spec_no_key)
+
+        self.assertEqual(r_result, False)
+        self.assertEqual(r_msg.startswith('Invalid spec. Missing keys'), True)

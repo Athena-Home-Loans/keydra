@@ -122,12 +122,12 @@ Qualys
 ======
 
 Provides password rotation support for Qualys accounts. Only `rotate` has been implemented,
-`distribution` is not supported.
+`distribution` is not (yet?) supported.
 
-For a given secet specification, the `rotate` function fetches the contents of a AWS Secrets Manager
+For a given secret specification, the `rotate` function fetches the contents of a AWS Secrets Manager
 secret located at `keydra/qualys/<key>` (using the key from the spec), and changes the password of the user
-specified. As Qualys does not permit a user changing their own password via API, the Secret needs to specify a
-second account to be used to make the change.
+specified on the Qualys platform. As Qualys does not permit a user to change their own password via API, the
+secret spec needs to specify a second account to be used to make the change.
 
 For example, for a secret spec of:
 
@@ -138,6 +138,10 @@ For example, for a secret spec of:
       key: api
       provider: qualys
       rotate: nightly
+      config:
+         rotatewith:
+            key: keydra/qualys/backup
+            provider: secretsmanager
       distribute:
       -
          key: keydra/qualys/api
@@ -154,12 +158,11 @@ The provider will take an AWS Secrets Manager secret, located at `keydra/qualys/
       "platform": "US3",
       "username": "apiuser",
       "password": "Ssh.Secret!",
-      "rotatewith": "keydra/qualys/backup"
    }
 
-Then use the creds of a similar secret at `keydra/qualys/backup` to connect to the Qualys API and change
-the password of the `apiuser` account. With the distribution setup in the example, the new password will then 
-be placed into Secrets Manager.
+Then use the creds of the secret at `keydra/qualys/backup` (in Secrets Manager, as configured in the spec) to
+connect to the Qualys API and change the password of the `apiuser` account. With the distribution setup in the
+example, the new password will then be placed into Secrets Manager, replacing the password with the new one.
 
 See https://www.qualys.com/platform-identification/ to identify which platform your instance is on.
 

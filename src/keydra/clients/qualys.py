@@ -48,8 +48,14 @@ class QualysClient(object):
             "Content-Type": "application/json"
         }
 
-        if type(self._user_list()) is not OrderedDict:
-            raise ConnectionException('Unknown connection error')
+        userlist = self._user_list()
+        if type(userlist) is not OrderedDict:
+            raise ConnectionException(
+                'Connection test of fetching the accounts user list failed! '
+                'Check the API user permissions. Received response: {}'.format(
+                    userlist
+                )
+            )
 
     def _get(self, url, params=None):
         '''

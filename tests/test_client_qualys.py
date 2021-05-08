@@ -1,6 +1,7 @@
 import unittest
 
 from unittest.mock import patch
+from unittest.mock import MagicMock
 
 from requests import Response
 from keydra.clients import qualys
@@ -45,7 +46,7 @@ XML_RESP_EXPIRED = b'''<?xml version="1.0" encoding="UTF-8" ?>
 </GENERIC_RETURN>'''
 
 
-class TestSplunkClient(unittest.TestCase):
+class TestQualysClient(unittest.TestCase):
     @patch.object(qualys.requests, 'request')
     def test__init(self,  mk_req):
         resp = Response()
@@ -69,6 +70,23 @@ class TestSplunkClient(unittest.TestCase):
             },
             params=None
         )
+
+    @patch.object(qualys.requests, 'request')
+    def test__init_fail(self,  mk_req):
+        resp = Response()
+        resp.status_code = 200
+        resp._content = XML_RESP_USERLIST
+        mk_req.return_value = resp
+
+        qualys.QualysClient._user_list = MagicMock()
+        qualys.QualysClient._user_list.return_value = {}
+
+        with self.assertRaises(qualys.ConnectionException):
+            qualys.QualysClient(
+                platform=CREDS['platform'],
+                username=CREDS['username'],
+                password=CREDS['password']
+            )
 
     @patch.object(qualys.requests, 'request')
     def test__change_pass(self, mk_req):
