@@ -100,6 +100,52 @@ class Client(BaseProvider):
     def rotate(self, secret):
         return self._rotate_secret(secret)
 
+    def _dist_storepass(self, client, destination, data):
+        try:
+            result = client.update_app_storepass(
+                app=destination['config']['app'],
+                username=data['name'],
+                password=data['password'],
+                realm=destination['config'].get('realm')
+            )
+
+        except Exception as e:
+            raise DistributionException(
+                'Error distributing secret to '
+                'storage password {} of app {} on Splunk '
+                'host {} - {}'.format(
+                    data['name'],
+                    destination['config']['app'],
+                    destination['config']['host'],
+                    e
+                )
+            )
+
+        return result
+
+    def _dist_custom(self, client, destination, data):
+        try:
+            result = client.update_app_config(
+                app=destination['config']['app'],
+                path=destination['config']['path'],
+                obj=destination['key'],
+                data=data
+            )
+
+        except Exception as e:
+            raise DistributionException(
+                'Error distributing secret to '
+                'object {} of app {} on Splunk '
+                'host {} - {}'.format(
+                    destination['key'],
+                    destination['config']['app'],
+                    destination['config']['host'],
+                    e
+                )
+            )
+
+        return result
+
     def _distribute(self, secret, destination):
         '''
         Distribute credentials to Splunk as app config
@@ -112,12 +158,6 @@ class Client(BaseProvider):
         :returns: The spec as distributed
         :rtype: :class:`dict`
         '''
-        # Build post data. We want just the app specific stuff
-        post_data = dict(**destination['config']['appconfig'])
-
-        # Add the mapped values from the secret
-        for mapdest, mapsrc in destination['source'].items():
-            post_data[mapdest] = secret[mapsrc]
 
         # Connect to Splunk
         try:
@@ -134,7 +174,7 @@ class Client(BaseProvider):
             )
             raise DistributionException(
                 'Error distributing secret to '
-                'object {} of app {} on Splunk '
+                'app {} on Splunk '
                 'host {} - {}'.format(
                     destination['key'],
                     destination['config']['app'],
@@ -143,40 +183,42 @@ class Client(BaseProvider):
                 )
             )
 
-        # Distribute the config
-        try:
-            result = sp_client.update_app_config(
-                app=destination['config']['app'],
-                path=destination['config']['path'],
-                obj=destination['key'],
+        # Build post data. We want just the app specific stuff
+        post_data = dict(**destination['config']['appconfig'])
+
+        # Add the mapped values from the secret
+        for mapdest, mapsrc in destination['source'].items():
+            post_data[mapdest] = secret[mapsrc]
+
+        # Are we just updating storage passwords like a good app?
+        if destination['config'].get('path') is None:
+            result = self._dist_storepass(
+                client=sp_client,
+                destination=destination,
                 data=post_data
             )
-            if result not in range(200, 299):
-                raise DistributionException(
-                    'Error configuring app {} '
-                    'on Splunk host {}'.format(
-                        destination['config']['app'],
-                        destination['config']['host']
-                    )
-                )
 
-        except Exception as e:
+        # No, we're doing something custom.
+        else:
+            result = self._dist_custom(
+                client=sp_client,
+                destination=destination,
+                data=post_data
+            )
+
+        if result not in range(200, 299):
             raise DistributionException(
-                'Error distributing secret to '
-                'object {} of app {} on Splunk '
-                'host {} - {}'.format(
-                    destination['key'],
+                'Error configuring app {} '
+                'on Splunk host {}'.format(
                     destination['config']['app'],
-                    destination['config']['host'],
-                    e
+                    destination['config']['host']
                 )
             )
 
         LOGGER.info(
             'Splunk config distributed successfully '
-            'to object {} of app {} on Splunk '
+            'to app {} on Splunk '
             'host {}'.format(
-                destination['key'],
                 destination['config']['app'],
                 destination['config']['host']
             )

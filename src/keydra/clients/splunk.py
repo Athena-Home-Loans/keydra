@@ -97,6 +97,71 @@ class SplunkClient(object):
 
         return attempt.status
 
+    def update_app_storepass(self, app, username, password, realm=None):
+        '''
+        Updates a Splunk app storage password. Will create the
+        config entry if it does not already exist.
+
+        :param app: The app context
+        :type app: :class:`string`
+        :param obj: The config object to update/create
+        :type obj: :class:`string`
+        :param data: Additional post data
+        :type data: :class:`dict`
+
+        :returns: Resulting HTTP status code of the operation
+        :rtype: :class:`int`
+        '''
+        if not realm:
+            realm = ''
+
+        # First check the app is actually installed!
+        if self.app_exists(app) is not True:
+            raise AppNotInstalledException(
+                'App {} not installed on Splunk '
+                'host {}'.format(
+                    app,
+                    self._service.host
+                )
+            )
+
+        post_data = {
+            'name': username,
+            'password': password,
+            'realm': realm
+        }
+
+        # Craft our URL based on whether the password already exists
+        try:
+            self._service.get(
+                '/servicesNS/nobody/{}/'
+                'storage/passwords/{}'.format(app, username)
+            )
+            url = '/servicesNS/nobody/{}/storage/passwords/{}'.format(
+                app,
+                username
+            )
+            post_data.pop('name', None)
+            post_data.pop('realm', None)
+
+        except HTTPError:
+            url = '/servicesNS/nobody/{}/storage/passwords'.format(app)
+
+        try:
+            attempt = self._service.post(url, **post_data)
+
+        except HTTPError as error:
+            raise Exception(
+                'Error updating Splunk app {} on '
+                'host {}: {}'.format(
+                    app,
+                    self._service.host,
+                    error
+                )
+            )
+
+        return attempt.status
+
     def app_exists(self, appname):
         '''
         Check if a Splunk app exists

@@ -185,7 +185,7 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-keydra.providers.splunk">
+  <a class="reference internal nav-link" href="#splunk">
    Splunk
   </a>
  </li>
@@ -365,7 +365,7 @@ cherry picking fragments.</p>
 <dd><dl class="py method">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options._asdict">
 <code class="sig-name descname"><span class="pre">_asdict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options._asdict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a new dict which maps field names to their values.</p>
+<dd><p>Return a new OrderedDict which maps field names to their values.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -400,63 +400,63 @@ cherry picking fragments.</p>
 <dd><p>Return a new Options object replacing specified fields with new values</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="py method">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.bypass">
-<code class="sig-name descname"><span class="pre">bypass</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.bypass" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">bypass</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.bypass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="py method">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_char">
-<code class="sig-name descname"><span class="pre">exclude_char</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_char" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">exclude_char</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_char" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 3</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="py method">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_lower">
-<code class="sig-name descname"><span class="pre">exclude_lower</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_lower" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">exclude_lower</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_lower" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 7</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="py method">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_num">
-<code class="sig-name descname"><span class="pre">exclude_num</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_num" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">exclude_num</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_num" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 4</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="py method">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_punct">
-<code class="sig-name descname"><span class="pre">exclude_punct</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_punct" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">exclude_punct</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_punct" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 5</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="py method">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_upper">
-<code class="sig-name descname"><span class="pre">exclude_upper</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_upper" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">exclude_upper</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_upper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 6</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="py method">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.include_space">
-<code class="sig-name descname"><span class="pre">include_space</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.include_space" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">include_space</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.include_space" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 8</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="py method">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.length">
-<code class="sig-name descname"><span class="pre">length</span></code><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.length" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">length</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 2</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="py method">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.require_each_type">
-<code class="sig-name descname"><span class="pre">require_each_type</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.require_each_type" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">require_each_type</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.require_each_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 9</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="py method">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.rotate_attribute">
-<code class="sig-name descname"><span class="pre">rotate_attribute</span></code><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.rotate_attribute" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">rotate_attribute</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.rotate_attribute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
@@ -474,7 +474,7 @@ cherry picking fragments.</p>
 
 <dl class="py method">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider._generate_secret_value">
-<code class="sig-name descname"><span class="pre">_generate_secret_value</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options" title="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options"><span class="pre">keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider._generate_secret_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">_generate_secret_value</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">keydra.providers.aws_secretsmanager.Options</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider._generate_secret_value" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -808,14 +808,191 @@ before added here.</p>
 
 <p>Uses client <a class="reference internal" href="clients.html#client-salesforce"><span class="std std-ref">Salesforce</span></a>.</p>
 </div>
-<div class="section" id="module-keydra.providers.splunk">
-<span id="splunk"></span><h2>Splunk<a class="headerlink" href="#module-keydra.providers.splunk" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
+<div class="section" id="splunk">
+<h2>Splunk<a class="headerlink" href="#splunk" title="Permalink to this headline">¶</a></h2>
+<p>Provides password rotation and distribution support for Splunk. Rotation allows for Splunk account
+passwords to be rotated, while Distribute allows you to save passwords from other providers in Splunk
+apps, like Qualys or AWS.</p>
+<p>Rotation generates a new 32 character password (using AWS Secrets Manager) and changes the Splunk password
+for the account corresponding to the “key” value in the secret. This change is made on all Splunk hosts defined
+in the “hosts” key of the secret.</p>
+<p>An example secret spec to rotate a Splunk user password and store in AWS Secrets Manager:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunkuser</span>
+<span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Splunk Rotation Example</span>
+<span class="nt">custodians</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">your_team</span>
+<span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunk</span>
+<span class="nt">rotate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nightly</span>
+<span class="nt">hosts</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">your.splunkhostname.com</span>
+<span class="nt">distribute</span><span class="p">:</span>
+<span class="p p-Indicator">-</span>
+   <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra/splunk/splunkuser</span>
+   <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secretsmanager</span>
+   <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+   <span class="nt">envs</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">prod</span>
+</pre></div>
+</div>
+<p>The Secrets Manager entry format is as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+<span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;splunk&quot;</span><span class="p p-Indicator">,</span>
+<span class="s">&quot;key&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;splunkuser&quot;</span><span class="p p-Indicator">,</span>
+<span class="s">&quot;secret&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;abcdefghijklmnopqrstuvwxyz1234567890&quot;</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>Distribution is a little more complex; configuring a Splunk App or Add-On with a service account to be
+used by that app to connect to various data sources. Only one destination host can be specified; if you need to
+send to more Splunk hosts you will need another distribution entry. The provider supports either Splunk storage
+passwords or a more custom method of actually storing the password on Splunk - which one to use depends on the
+destination Splunk TA/app. For example, the AWS app for Splunk uses the custom method, while the Qualys app uses
+storage passwords.</p>
+<p>The destination app must already be installed on the Splunk instance, though the config entry / storage password
+will be created if it doesn’t already exist.</p>
+<table class="colwidths-given table" id="id2">
+<caption><span class="caption-text">Splunk Provider Distribution Format</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>key</p></td>
+<td><p>String</p></td>
+<td><p>The object to distribute to. Ignored/optional if we’re saving to a Splunk storage password.</p></td>
+</tr>
+<tr class="row-odd"><td><p>provider</p></td>
+<td><p>String</p></td>
+<td><p>Always “splunk” for this provider.</p></td>
+</tr>
+<tr class="row-even"><td><p>provider_secret_key</p></td>
+<td><p>String</p></td>
+<td><p>The credentials that should be used to authenticate to the Splunk API. In the code, this value will be
+prepended with <cite>keydra/splunk/</cite> to form the secret name in AWS Secrets Manager where the creds are stored.</p></td>
+</tr>
+<tr class="row-odd"><td><p>source</p></td>
+<td><p>Dict</p></td>
+<td><p>Used to pass through values from the secret being distributed - format is <cite>splunk field</cite>: <cite>secret key</cite>. In
+the example below, a field of “secret_key” will be used in the Splunk post, containing the value of the
+“secret” key.</p></td>
+</tr>
+<tr class="row-even"><td><p>config</p></td>
+<td><p>Dict</p></td>
+<td><p>See below for details.</p></td>
+</tr>
+<tr class="row-odd"><td><p>env</p></td>
+<td><p>List</p></td>
+<td><p>Which environments to run Keydra from. Should match the environment where the secret is held in Secrets Manager.</p></td>
+</tr>
+</tbody>
+</table>
+<p>In the <cite>config</cite> section:</p>
+<table class="colwidths-given table" id="id3">
+<caption><span class="caption-text">Config Format</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>host</p></td>
+<td><p>String</p></td>
+<td><p>The Splunk host to configure. Only one destination host can be specified, if you need to distribute
+to more Splunk hosts you will need another distribution entry.</p></td>
+</tr>
+<tr class="row-odd"><td><p>app</p></td>
+<td><p>String</p></td>
+<td><p>Splunk App context to deploy to.</p></td>
+</tr>
+<tr class="row-even"><td><p>appconfig</p></td>
+<td><p>Dict</p></td>
+<td><p>Used to add any values needed by this Add-On. All appconfig KV pairs will be passed to the Splunk call as is.</p></td>
+</tr>
+<tr class="row-odd"><td><p>path</p></td>
+<td><p>String</p></td>
+<td><p>Optional. Specifies the (case sensitive!) URL path to the configuration section to update. Omit this key to
+save to a splunk storage password instead.</p></td>
+</tr>
+<tr class="row-even"><td><p>realm</p></td>
+<td><p>String</p></td>
+<td><p>Optional. If storage passwords are being used, the realm to use in the password. Defaults to blank.</p></td>
+</tr>
+</tbody>
+</table>
+<p>An example, to rotate an IAM user and distribute it into the AWS app/TA of a Splunk instance:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">km_managed_splunk</span>
+<span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Rotate an AWS Splunk integration account</span>
+<span class="nt">custodians</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">your_team</span>
+<span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">IAM</span>
+<span class="nt">rotate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nightly</span>
+<span class="nt">distribute</span><span class="p">:</span>
+<span class="p p-Indicator">-</span>
+   <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">aws_security</span>
+   <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunk</span>
+   <span class="nt">provider_secret_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">provisioning_user</span>
+   <span class="nt">source</span><span class="p">:</span>
+      <span class="nt">key_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">key</span>
+      <span class="nt">secret_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+   <span class="nt">config</span><span class="p">:</span>
+      <span class="nt">app</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Splunk_TA_aws</span>
+      <span class="nt">appconfig</span><span class="p">:</span>
+        <span class="nt">category</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+        <span class="nt">output_mode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">json</span>
+      <span class="nt">host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">your.splunkhostname.com</span>
+      <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunk_ta_aws_aws_account</span>
+   <span class="nt">envs</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">prod</span>
+</pre></div>
+</div>
+<p>What does this do? Keydra will rotate these IAM credentials, then use the Splunk credentials stored in an AWS Secrets
+Manager secret, located at ‘keydra/splunk/provisioning_user’ to connect to Splunk. It will then post the key value
+pairs in the <cite>config/appconfig</cite> section to the app specified (Splunk_TA_aws), mixing in the keys in the <cite>source</cite>
+section after mapping them from the secret. As in, the <cite>key</cite> value from the IAM secret will be posted as <cite>key_id</cite>.</p>
+<p>Note: The category 1 reference? This is the category of the account. ‘1’ is AWS Global (not GovCloud).</p>
+<p>If your app uses storage passwords (like the Qualys app), the distribution stanza would look more like:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span>
+<span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunk</span>
+<span class="nt">provider_secret_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">provisioning_user</span>
+<span class="nt">source</span><span class="p">:</span>
+   <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">username</span>
+   <span class="nt">password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">password</span>
+<span class="nt">config</span><span class="p">:</span>
+   <span class="nt">app</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TA-QualysCloudPlatform</span>
+   <span class="nt">appconfig</span><span class="p">:</span>
+      <span class="nt">output_mode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">json</span>
+   <span class="nt">host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">your.splunkhostname.com</span>
+<span class="nt">envs</span><span class="p">:</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">prod</span>
+</pre></div>
+</div>
+<span class="target" id="module-keydra.providers.splunk"></span><dl class="py class">
 <dt id="keydra.providers.splunk.Client">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.providers.splunk.</span></code><code class="sig-name descname"><span class="pre">Client</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.splunk.Client" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py attribute">
 <dt id="keydra.providers.splunk.Client._abc_impl">
 <code class="sig-name descname"><span class="pre">_abc_impl</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;_abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#keydra.providers.splunk.Client._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.splunk.Client._dist_custom">
+<code class="sig-name descname"><span class="pre">_dist_custom</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.splunk.Client._dist_custom" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.splunk.Client._dist_storepass">
+<code class="sig-name descname"><span class="pre">_dist_storepass</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.splunk.Client._dist_storepass" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
