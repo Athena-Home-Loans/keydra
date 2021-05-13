@@ -294,3 +294,29 @@ class TestProviderSplunk(unittest.TestCase):
 
         with self.assertRaises(DistributionException):
             cli._distribute(secret=SF_CREDS, destination=DEST)
+
+    @patch.object(splunk, 'SplunkClient')
+    def test__update_fail(self, mk_splunk):
+        cli = splunk.Client(credentials=SPLUNK_CREDS, session=None,
+                            region_name='ap-southeast-2', verify=False)
+
+        cli._smclient = MagicMock()
+        cli._smclient.get_secret_value.return_value = json.dumps(SPLUNK_CREDS)
+
+        mk_splunk().update_app_config.side_effect = Exception
+
+        with self.assertRaises(DistributionException):
+            cli._distribute(secret=SF_CREDS, destination=DEST)
+
+    @patch.object(splunk, 'SplunkClient')
+    def test__update_fail2(self, mk_splunk):
+        cli = splunk.Client(credentials=SPLUNK_CREDS, session=None,
+                            region_name='ap-southeast-2', verify=False)
+
+        cli._smclient = MagicMock()
+        cli._smclient.get_secret_value.return_value = json.dumps(SPLUNK_CREDS)
+
+        mk_splunk().update_app_storepass.side_effect = Exception
+
+        with self.assertRaises(DistributionException):
+            cli._distribute(secret=SF_CREDS, destination=DEST)
