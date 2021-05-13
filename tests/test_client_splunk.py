@@ -1,7 +1,5 @@
 import unittest
 
-from requests import Response
-
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
@@ -17,6 +15,7 @@ SPLUNK_CREDS = {
     "secret": "test"
 }
 
+
 class body():
     def __init__(self, text):
         self.text = text
@@ -24,12 +23,14 @@ class body():
     def read(self):
         return self.text
 
+
 class response():
     def __init__(self, status, body, reason='', headers=''):
         self.status = status
         self.reason = reason
         self.body = body
         self.headers = headers
+
 
 class TestSplunkClient(unittest.TestCase):
     @patch.object(splunkclient, 'Service')
@@ -81,8 +82,12 @@ class TestSplunkClient(unittest.TestCase):
                 verify=False
             )
         sp_client._service.apps.list.return_value = ['app']
-        httpResponse = response(status=200, reason="does not exist", body=body('does not exist'))
-        httpResponse2 = response(status=800, reason="does not exist", body=body('does not exist'))
+        httpResponse = response(
+            status=200, reason="does not exist", body=body('does not exist')
+        )
+        httpResponse2 = response(
+            status=800, reason="does not exist", body=body('does not exist')
+        )
 
         sp_client._service.post(
             '/servicesNS/nobody/app/path/obj', name='obj'
@@ -152,7 +157,6 @@ class TestSplunkClient(unittest.TestCase):
             password='pass'
         )
 
-
         self.assertEqual(u_result, 200)
 
     @patch.object(splunkclient, 'Service')
@@ -173,7 +177,6 @@ class TestSplunkClient(unittest.TestCase):
             username='user',
             password='pass'
         )
-
 
         self.assertEqual(u_result, 200)
 
@@ -248,7 +251,9 @@ class TestSplunkClient(unittest.TestCase):
         sp_client._app_exists = MagicMock()
         sp_client._app_exists.return_value = True
 
-        httpResponse = response(status=200, reason="no!", body=body('does not exist'))
+        httpResponse = response(
+            status=200, reason="no!", body=body('does not exist')
+        )
         sp_client._service.post().side_effect = HTTPError(httpResponse)
 
         with self.assertRaises(Exception):
