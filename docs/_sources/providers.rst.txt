@@ -177,9 +177,52 @@ Uses client :ref:`Qualys <client_qualys>`.
 Salesforce
 ==========
 
-*Salesforce* (declared as `salesforce`): currently can only
-`rotate` secrets. Please note that users need to be manually created in salesforce
+*Salesforce* (declared as `salesforce`): currently can only `rotate` secrets.
+Please note that users need to be manually created in salesforce
 before added here.
+
+Sample secret spec:
+
+.. code-block:: yaml
+
+   key: salesforce_sample
+   description: Salesforce Example
+   custodians: your_team
+   provider: salesforce
+   rotate: nightly
+   distribute:
+   -
+      key: keydra/salesforce/salesforce_sample
+      provider: secretsmanager
+      source: secret
+      envs:
+         - prod
+
+The Secrets Manager entry format is as follows:
+
+.. code-block:: yaml
+
+   {
+   "provider": "salesforce",
+   "key": "my_sf_user",
+   "secret": "my_sf_password",
+   "token": "sf_token",
+   "domain": "sf_domain"
+   }
+
+The field names can be customised via a `config` section in the spec, e.g.:
+
+.. code-block:: yaml
+
+   key: salesforce_sample
+   description: Salesforce Example
+   provider: salesforce
+   config:
+      user_field: SF_USERNAME
+      password_field: SF_PASSWORD
+      token_field: SF_TOKEN
+      domain_field: SF_DOMAIN
+   # ...
 
 .. automodule:: keydra.providers.salesforce
    :members:
