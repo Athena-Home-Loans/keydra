@@ -1,5 +1,7 @@
 import unittest
 import json
+from keydra.clients.aws.secretsmanager import SecretsManagerClient
+from keydra.clients.salesforce import SalesforceClient
 
 from keydra.providers import salesforce
 
@@ -54,6 +56,81 @@ class TestProviderSalesforce(unittest.TestCase):
 
         mk_rotate_secret.assert_called_once_with('something')
 
+    @patch.object(SecretsManagerClient, 'generate_random_password')
+    @patch.object(SalesforceClient, 'change_passwd')
+    @patch.object(SalesforceClient, 'get_user_id')
+    @patch.object(SalesforceClient, '__init__')
+    def test__rotate_secret_no_config(self, sf_init, sf_gui, sf_cp, smc_grp):
+        # Arrange
+        cli = salesforce.Client(credentials=SF_CREDS,
+                                session=MagicMock(),
+                                region_name='ap-southeast-2')
+
+        sf_init.return_value = None
+        new_pass = 'a' * 32
+        smc_grp.return_value = new_pass
+        sf_gui.return_value = 'user'
+
+        # Act
+        result = cli._rotate_secret(SF_SPEC)
+
+        # Assert
+        sf_cp.assert_called_once_with(
+            userid='user',
+            newpassword=new_pass
+        )
+
+        self.assertEqual(result['provider'], SF_CREDS['provider'])
+        self.assertEqual(result['key'], SF_CREDS['key'])
+        self.assertEqual(result['secret'], new_pass)
+        self.assertEqual(result['token'], SF_CREDS['token'])
+        self.assertEqual(result['env'], SF_CREDS['env'])
+        self.assertEqual(result['domain'], SF_CREDS['domain'])
+
+    @patch.object(SecretsManagerClient, 'generate_random_password')
+    @patch.object(SalesforceClient, 'change_passwd')
+    @patch.object(SalesforceClient, 'get_user_id')
+    @patch.object(SalesforceClient, '__init__')
+    def test__rotate_secret_overridden_fields(
+            self, sf_init, sf_gui, sf_cp, smc_grp):
+        # Arrange
+        cfg = {
+            'user_field': 'SF_USERNAME',
+            'password_field': 'SF_PASSWORD',
+            'token_field': 'SF_TOKEN',
+            'domain_field': 'SF_DOMAIN',
+        }
+        orig_secret = {
+            'SF_USERNAME': 'tester',
+            'SF_PASSWORD': 'hide me',
+            'SF_TOKEN': 'this is also secret',
+            'SF_DOMAIN': 'test',
+            'env': 'test',
+        }
+        cli = salesforce.Client(credentials=orig_secret,
+                                session=MagicMock(),
+                                region_name='ap-southeast-2')
+
+        sf_init.return_value = None
+        new_pass = 'a' * 32
+        smc_grp.return_value = new_pass
+        sf_gui.return_value = 'user'
+
+        # Act
+        result = cli._rotate_secret({**SF_SPEC, 'config': cfg})
+
+        # Assert
+        sf_cp.assert_called_once_with(
+            userid='user',
+            newpassword=new_pass
+        )
+
+        self.assertEqual(result['SF_USERNAME'], orig_secret['SF_USERNAME'])
+        self.assertEqual(result['SF_TOKEN'], orig_secret['SF_TOKEN'])
+        self.assertEqual(result['SF_PASSWORD'], new_pass)
+        self.assertEqual(result['SF_DOMAIN'], orig_secret['SF_DOMAIN'])
+        self.assertEqual(result['env'], orig_secret['env'])
+
     def test__redact_result(self):
         result = {
             'status': 'success',
@@ -66,12 +143,36 @@ class TestProviderSalesforce(unittest.TestCase):
             }
         }
 
-        r_result = salesforce.Client.redact_result(result)
+        r_result = salesforce.Client.redact_result(result, SF_CREDS)
         r_secret = r_result['value']['secret']
         r_token = r_result['value']['token']
 
         self.assertNotEqual(r_secret, 'THIS_IS_SECRET')
         self.assertNotEqual(r_token, 'this is also secret')
+
+    def test__redact_result_overriden_fields(self):
+        result = {
+            'status': 'success',
+            'action': 'rotate_secret',
+            'value': {
+                'SF_USERNAME': 'tester',
+                'SF_PASSWORD': 'hide me',
+                'SF_TOKEN': 'this is also secret',
+                'SF_DOMAIN': 'test',
+            }
+        }
+
+        redacted = salesforce.Client.redact_result(result, {**SF_CREDS, 'config': {
+            'user_field': 'SF_USERNAME',
+            'password_field': 'SF_PASSWORD',
+            'token_field': 'SF_TOKEN',
+            'domain_field': 'SF_DOMAIN',
+        }})
+
+        self.assertEqual(redacted['value']['SF_USERNAME'], 'tester')
+        self.assertEqual(redacted['value']['SF_PASSWORD'], '***')
+        self.assertEqual(redacted['value']['SF_TOKEN'], '***')
+        self.assertEqual(redacted['value']['SF_DOMAIN'], 'test')
 
     def test__redact_result_no_secrets(self):
         result = {
@@ -79,137 +180,34 @@ class TestProviderSalesforce(unittest.TestCase):
             'action': 'rotate_secret'
         }
 
-        r_result = salesforce.Client.redact_result(result)
+        r_result = salesforce.Client.redact_result(result, SF_CREDS)
 
         self.assertEqual(r_result, result)
 
-    def test_validate_spec_overlength(self):
-        spec_overlength = {
-            'description': 'Lorem ipsum dolor sit amet, '
-                           'consectetur adipiscing elit, '
-                           'sed do eiusmod tempor incididunt'
-                           'ut labore et dolore magna'
-                           'aliqua. Ut enim ad minim veniam,'
-                           'quis nostrud exercitation'
-                           ' ullamco laboris nisi ut aliquip'
-                           'ex ea commodo consequat. '
-                           'Duis aute irure dolor in reprehenderit'
-                           'in voluptate velit esse cillum dolore eu'
-                           'fugiat nulla pariatur. Excepteur sint'
-                           ' occaecat cupidatat non proident, sunt in'
-                           'culpa qui officia deserunt mollit anim '
-                           'id est laborum.',
-            'key': 'splunk',
-            'provider': 'salesforce',
-            'rotate': 'nightly'
-        }
-
-        r_result = salesforce.Client.validate_spec(spec_overlength)
-        self.assertEqual(r_result, (False,
-                         'Value for key description failed length checks'))
-
-    def test_validate_spec_underlength(self):
-        spec_underlength = {
-            'e': 'e',
-            'key': 'splunk',
-            'provider': 'salesforce',
-            'rotate': 'nightly'
-        }
-
-        r_result = salesforce.Client.validate_spec(spec_underlength)
-        self.assertEqual(r_result, (False, 'Key e failed length checks'))
-
-    def test_validate_spec_underlength_nested(self):
-        spec_underlength = {
-            'ewewewe': 'eewewew',
-            'key': 'splunk',
-            'provider': 'salesforce',
-            'rotate': ['nightly', 'e']
-        }
-
-        r_result = salesforce.Client.validate_spec(spec_underlength)
-        self.assertEqual(r_result, (False, 'List entry failed length checks'))
-
-    def test_validate_spec_overlength_nested(self):
-        spec_overlength = {
-            'description': ['Lorem ipsum dolor sit amet, '
-                            'consectetur adipiscing elit, '
-                            'sed do eiusmod tempor incididunt'
-                            'ut labore et dolore magna'
-                            'aliqua. Ut enim ad minim veniam,'
-                            'quis nostrud exercitation'
-                            ' ullamco laboris nisi ut aliquip'
-                            'ex ea commodo consequat. '
-                            'Duis aute irure dolor in reprehenderit'
-                            'in voluptate velit esse cillum dolore eu'
-                            'fugiat nulla pariatur. Excepteur sint'
-                            ' occaecat cupidatat non proident, sunt in'
-                            'culpa qui officia deserunt mollit anim '
-                            'id est laborum.'],
-            'key': 'splunk',
-            'provider': 'salesforce',
-            'rotate': 'nightly'
-        }
-
-        r_result = salesforce.Client.validate_spec(spec_overlength)
-        self.assertEqual(r_result, (False,
-                         'List entry failed length checks'))
-
-    def test_validate_underlength_dict_nested(self):
-        spec_underlength = {
-            'description': 'Test',
-            'key': 'splunk',
-            'provider': 'salesforce',
-            'rotate': 'nightly',
-            'distribute': [
-                {
-                    'e': 'secretsmanager',
-                    'source': 'secret',
-                    'key': 'keydra/salesforce/splunk',
-                    'envs': ['dev'],
-                    'provider': 'salesforce',
-                }
-            ]
-        }
-
-        r_result = salesforce.Client.validate_spec(spec_underlength)
-        self.assertEqual(r_result, (False, 'Dict entry failed length checks'))
-
-    def test_validate_overlength_dict_nested(self):
-        spec_overlength = {
-            'description': [
-                {
-                    'key': 'Lorem ipsum dolor sit, '
-                    'consectetur adipiscing elit, '
-                    'sed do eiusmod tempor incididunt'
-                    'ut labore et dolore magna'
-                    'aliqua. Ut enim ad minim veniam,'
-                    'quis nostrud exercitation'
-                    ' ullamco laboris nisi ut aliquip'
-                    'ex ea commodo consequat. '
-                    'Duis aute irure dolor in reprehenderit'
-                    'in voluptate velit esse cillumlore eu'
-                    'fugiat nulla pariatur. Excepteur sint'
-                    ' occaecat cupidatat non proident, sunt in'
-                    'culpa qui officia deserunt mollit anim '
-                    'id est laborum.',
-                    'provider': 'salesforce'
-                }
-            ],
-            'key': 'splunk',
-            'provider': 'salesforce',
-            'rotate': 'nightly'
-        }
-
-        r_result = salesforce.Client.validate_spec(spec_overlength)
-        self.assertEqual(r_result, (False,
-                         'Dict entry failed length checks'))
-
-    def test__validate_spec_good(self):
+    def test__validate_spec_no_config(self):
         r_result_1 = salesforce.Client.validate_spec(SF_SPEC)
 
         self.assertEqual(r_result_1, (True,
                          'It is valid!'))
+
+    def test__validate_spec_known_config_fields(self):
+        result = salesforce.Client.validate_spec(
+            {**SF_SPEC, 'config': {
+                'user_field': 'user',
+                'password_field': 'pass',
+                'token_field': 'SF_TOKEN',
+                'domain_field': 'DOMAIN',
+            }})
+
+        self.assertEqual(result, (True,
+                         'It is valid!'))
+
+    def test__validate_spec_unknown_config_fields(self):
+        result = salesforce.Client.validate_spec(
+            {**SF_SPEC, 'config': {'field1': 'a', 'field2': 'b'}})
+
+        self.assertEqual(result, (False,
+                         'Unknown config fields: field1, field2'))
 
     @patch.object(salesforce, 'SalesforceClient')
     def test__distribute_exception(self, mk_sf_client):
@@ -231,7 +229,7 @@ class TestProviderSalesforce(unittest.TestCase):
         cli._smclient.get_secret_value.side_effect = Exception('Boom!')
 
         with self.assertRaises(RotationException):
-            cli._rotate_secret(secret=SF_CREDS)
+            cli._rotate_secret(spec=SF_CREDS)
 
     @patch.object(salesforce, 'SalesforceClient')
     def test__gen_pass_good(self, mk_sforce):
@@ -247,7 +245,7 @@ class TestProviderSalesforce(unittest.TestCase):
         new_pass = "12345678901234567890123456789012"
         cli._generate_sforce_passwd.return_value = new_pass
 
-        r_result = cli._rotate_secret(secret=SF_CREDS)
+        r_result = cli._rotate_secret(spec=SF_CREDS)
 
         cli._generate_sforce_passwd.assert_called_once_with(32)
         self.assertEqual(r_result['secret'], new_pass)
@@ -266,7 +264,7 @@ class TestProviderSalesforce(unittest.TestCase):
         cli._generate_sforce_passwd.return_value = "123456789012123456789012"
 
         with self.assertRaises(RotationException):
-            cli._rotate_secret(secret=SF_CREDS)
+            cli._rotate_secret(spec=SF_CREDS)
 
     @patch.object(salesforce, 'SalesforceClient')
     def test__sforce_pass_change_except(self, mk_sforce):
@@ -287,7 +285,7 @@ class TestProviderSalesforce(unittest.TestCase):
         mk_sforce().change_passwd.side_effect = Exception('Boom')
 
         with self.assertRaises(RotationException):
-            cli._rotate_secret(secret=SF_CREDS)
+            cli._rotate_secret(spec=SF_CREDS)
 
     @patch.object(salesforce, 'SalesforceClient')
     def test__sm_pass_gen(self, mk_sforce):
@@ -305,7 +303,7 @@ class TestProviderSalesforce(unittest.TestCase):
 
         mk_sforce._init.side_effect = Exception
 
-        cli._rotate_secret(secret=SF_CREDS)
+        cli._rotate_secret(spec=SF_CREDS)
 
         cli._smclient.generate_random_password.assert_called_once_with(
             IncludeSpace=True,
