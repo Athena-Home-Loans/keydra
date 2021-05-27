@@ -1,5 +1,6 @@
+from typing import NamedTuple
 import boto3
-import validators
+import boto3.session
 
 from keydra.clients.salesforce import SalesforceClient
 
@@ -8,7 +9,7 @@ from keydra.clients.aws.secretsmanager import SecretsManagerClient
 from keydra.providers.base import BaseProvider
 from keydra.providers.base import exponential_backoff_retry
 
-from keydra.exceptions import DistributionException
+from keydra.exceptions import ConfigException, DistributionException
 from keydra.exceptions import RotationException
 
 from keydra.logging import get_logger
@@ -19,11 +20,18 @@ PASS_LENGTH = 32
 
 
 class Client(BaseProvider):
+    class Options(NamedTuple):
+        user_field: str = 'key'
+        password_field: str = 'secret'
+        token_field: str = 'token'
+        domain_field: str = 'domain'
+
     def __init__(self, session=None, credentials=None, region_name=None):
-        self._sf_username = credentials['key']
-        self._sf_token = credentials['token']
-        self._sf_env = credentials['env']
-        self._sf_domain = credentials['domain']
+        if not credentials:
+            raise ConfigException(
+                'Credentials are required for Salesforce provider')
+
+        self._orig_secret = credentials
 
         if session is None:
             session = boto3.session.Session()
@@ -31,13 +39,6 @@ class Client(BaseProvider):
         self._smclient = SecretsManagerClient(
             session=session,
             region_name=region_name
-        )
-
-        self._client = SalesforceClient(
-            username=self._sf_username,
-            password=credentials['secret'],
-            token=self._sf_token,
-            domain=self._sf_domain
         )
 
     def _generate_sforce_passwd(self, length):
@@ -51,7 +52,7 @@ class Client(BaseProvider):
 
         return passwd
 
-    def _rotate_secret(self, secret):
+    def _rotate_secret(self, spec):
         # Generate new random password from SecretsManager
         new_passwd = self._generate_sforce_passwd(PASS_LENGTH)
 
@@ -60,39 +61,46 @@ class Client(BaseProvider):
                 'Failed to generate new password!'
             )
 
+        opts = Client.Options(**spec.get('config', {}))
+
+        sf_user = self._orig_secret[opts.user_field]
+
+        client = SalesforceClient(
+            username=sf_user,
+            password=self._orig_secret[opts.password_field],
+            token=self._orig_secret[opts.token_field],
+            domain=self._orig_secret[opts.domain_field]
+        )
+
         # Change Salesforce password
         try:
-            self._client.change_passwd(
-                userid=self._client.get_user_id(self._sf_username),
+            client.change_passwd(
+                userid=client.get_user_id(sf_user),
                 newpassword=new_passwd
             )
 
         except Exception as error:
             LOGGER.error(
                 "Failed to change Salesforce password for user "
-                "'{}'".format(self._sf_username)
+                "'{}'".format(sf_user)
             )
 
             raise RotationException(
                 'Error rotating user {} on Salesforce - '
                 'error : {}'.format(
-                    self._sf_username,
+                    sf_user,
                     error
                 )
             )
 
         LOGGER.info(
             'Salesforce password changed successfully for user '
-            "'{}'.".format(self._sf_username)
+            "'{}'.".format(sf_user)
         )
 
         return {
-            'provider': 'salesforce',
-            'key': self._sf_username,
-            'secret': new_passwd,
-            'token': self._sf_token,
-            'env': self._sf_env,
-            'domain': self._sf_domain
+            **self._orig_secret,
+            f"{opts.password_field}": new_passwd
         }
 
     @exponential_backoff_retry(3)
@@ -104,33 +112,24 @@ class Client(BaseProvider):
 
     @classmethod
     def validate_spec(cls, spec):
-        for k, v in spec.items():
-            if not validators.length(k, min=2, max=75):
-                return False, 'Key {} failed length checks'.format(k)
-            if isinstance(v, list):
-                for entry in v:
-                    if isinstance(entry, dict):
-                        if entry.get('provider', '').lower() != 'salesforce':
-                            continue
+        valid, msg = BaseProvider.validate_spec(spec)
 
-                        if Client.validate_spec(entry)[0] is not True:
-                            print(entry)
-                            return False, 'Dict entry failed length checks'
-                    else:
-                        if validators.length(entry, min=2, max=75) is not True:
-                            return False, 'List entry failed length checks'
+        if not valid:
+            return False, msg
 
-            elif validators.length(v, min=2, max=75) is not True:
-                return (False,
-                        'Value for key {} failed length checks'.format(k))
+        unknown_fields = spec.get('config', {}).keys() - Client.Options._fields
+        if unknown_fields:
+            return False, 'Unknown config fields: ' + ', '.join(
+                sorted(unknown_fields))
 
         return True, 'It is valid!'
 
     @classmethod
-    def redact_result(cls, result):
-        if 'value' in result and 'secret' in result['value']:
-            result['value']['secret'] = '***'
-        if 'value' in result and 'token' in result['value']:
-            result['value']['token'] = '***'
+    def redact_result(cls, result, spec):
+        opts = Client.Options(**spec.get('config', {}))
+
+        for field in (opts.password_field, opts.token_field):
+            if 'value' in result and field in result['value']:
+                result['value'][field] = '***'
 
         return result

@@ -76,7 +76,7 @@ class Client(BaseProvider):
         raise DistributionException('Contentful does not support distribution')
 
     @classmethod
-    def redact_result(cls, result):
+    def redact_result(cls, result, spec=None):
         if 'value' in result and 'secret' in result['value']:
             result['value']['secret'] = '***'
 

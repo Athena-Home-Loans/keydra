@@ -89,11 +89,11 @@ class Client(BaseProvider):
             )
             new_api_key = result['apiKey']
             LOGGER.info(
-                    'new api key for api {} created in appsync: {}'.format(
-                        target_key_description,
-                        api_id
-                    )
+                'new api key for api {} created in appsync: {}'.format(
+                    target_key_description,
+                    api_id
                 )
+            )
             return {
                 'provider': 'aws_appsync',
                 'key': api_id,
@@ -125,7 +125,7 @@ class Client(BaseProvider):
                 return False, 'Please provide a config specifying the api-id'
 
     @classmethod
-    def redact_result(cls, result):
+    def redact_result(cls, result, spec=None):
         if 'value' in result and 'secret' in result['value']:
             result['value']['secret'] = '***'
 

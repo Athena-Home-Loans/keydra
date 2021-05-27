@@ -251,7 +251,7 @@ class Client(BaseProvider):
         return True, 'It is valid!'
 
     @classmethod
-    def redact_result(cls, result):
+    def redact_result(cls, result, spec=None):
         if 'value' in result and 'secret' in result['value']:
             result['value']['secret'] = '***'
 

@@ -65,7 +65,8 @@ class Keydra(object):
             result['key'] = secret['key']
             result['provider'] = secret['provider']
 
-            result[r_result.pop('action')] = self._redact_secrets(r_result)
+            result[r_result.pop('action')] = self._redact_secrets(
+                r_result, secret)
 
             if r_result['status'] == 'success' and 'distribute' in secret:
                 d_result = self._distribute_secret(secret, r_result['value'])
@@ -77,14 +78,14 @@ class Keydra(object):
 
         return resp
 
-    def _redact_secrets(self, result):
+    def _redact_secrets(self, result, spec):
         r_result = copy.deepcopy(result)
         provider = r_result.get('value', {}).get('provider', '')
 
         try:
             km_provider = loader.load_provider_client(provider)
 
-            return km_provider.redact_result(r_result)
+            return km_provider.redact_result(r_result, spec)
 
         except InvalidSecretProvider:
             pass

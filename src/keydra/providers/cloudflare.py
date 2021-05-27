@@ -92,7 +92,7 @@ class Client(BaseProvider):
         )
 
     @classmethod
-    def redact_result(cls, result):
+    def redact_result(cls, result, spec=None):
         if 'value' in result:
             for key, value in result['value'].items():
                 if 'secret' in key:
