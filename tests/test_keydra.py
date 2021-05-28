@@ -160,14 +160,14 @@ class TestKeydra(unittest.TestCase):
         bbc_distribute.return_value = "distributed"
 
         result = self._kdra.rotate_and_distribute(
-            run_for_secrets=CONFIG, rotate='adhoc')
+            run_for_secrets=CONFIG, rotate='nightly')
 
         self._kdra._cw.put_metric_data.assert_called()
 
         self.assertEqual(result[0]['rotate_secret']['status'], 'success')
         self.assertEqual(result[0]['distribute_secret']['status'], 'success')
         self._cfg.load_secrets.assert_called_once_with(
-            secrets=CONFIG, rotate='adhoc')
+            secrets=CONFIG, rotate='nightly')
 
     def test__distribute_secret_failure(self):
         result = self._kdra._distribute_secret({
