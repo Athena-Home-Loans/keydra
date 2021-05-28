@@ -140,7 +140,11 @@ def load_client(provider):
 
 def build_client(secret_provider, key_name):
     km_provider = load_provider_client(secret_provider)
-    credentials = fetch_provider_creds(secret_provider, key_name)
+    credentials = None
+    if km_provider.has_creds():
+        credentials = fetch_provider_creds(secret_provider, key_name)
+    else:
+        LOGGER.debug('Don\'t need to fetch creds for ' + secret_provider)
 
     return km_provider(
         session=SESSION,

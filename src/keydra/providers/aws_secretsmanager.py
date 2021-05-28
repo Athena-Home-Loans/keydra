@@ -98,9 +98,8 @@ class SecretsManagerProvider(BaseProvider):
             )
 
         LOGGER.info(
-            'Successfully distributed {} to SecretsManager from {}'.format(
-                dest['key'],
-                secret['provider']
+            'Successfully distributed {} to SecretsManager'.format(
+                dest['key']
             )
         )
 
@@ -189,3 +188,7 @@ class SecretsManagerProvider(BaseProvider):
                     result['value'][key] = '***'
 
         return result
+
+    @classmethod
+    def has_creds(cls):
+        return False

@@ -39,7 +39,8 @@ class Keydra(object):
             LOGGER.error(e)
             return [self._fail(e)]
 
-        self._emit_spec_metrics(secrets)
+        if rotate != 'adhoc':
+            self._emit_spec_metrics(secrets)
 
         if not secrets:
             return [self._success(
@@ -74,13 +75,19 @@ class Keydra(object):
 
             resp.append(result)
 
-        self._emit_result_metrics(resp)
+        if rotate != 'adhoc':
+            self._emit_result_metrics(resp)
 
         return resp
 
     def _redact_secrets(self, result, spec):
         r_result = copy.deepcopy(result)
-        provider = r_result.get('value', {}).get('provider', '')
+        provider = spec['provider']
+
+        LOGGER.debug(
+            'Redacting the value of {}::{}'.format(
+                spec['provider'],
+                spec['key']))
 
         try:
             km_provider = loader.load_provider_client(provider)
