@@ -82,3 +82,7 @@ class BaseProvider(ABC):
     @classmethod
     def redact_result(self, result):
         return result
+
+    @classmethod
+    def has_creds(cls):
+        return True

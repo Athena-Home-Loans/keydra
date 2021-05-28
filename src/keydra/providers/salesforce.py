@@ -26,7 +26,7 @@ class Client(BaseProvider):
         token_field: str = 'token'
         domain_field: str = 'domain'
 
-    def __init__(self, session=None, credentials=None, region_name=None):
+    def __init__(self, session=None, credentials: dict = None, region_name=None):
         if not credentials:
             raise ConfigException(
                 'Credentials are required for Salesforce provider')
@@ -53,15 +53,17 @@ class Client(BaseProvider):
         return passwd
 
     def _rotate_secret(self, spec):
-        # Generate new random password from SecretsManager
-        new_passwd = self._generate_sforce_passwd(PASS_LENGTH)
-
-        if len(new_passwd) != PASS_LENGTH:
-            raise RotationException(
-                'Failed to generate new password!'
-            )
-
         opts = Client.Options(**spec.get('config', {}))
+
+        # Ensure the current secret is compatible with the spec for a successful rotation
+        requiredFields = [getattr(opts, optField) for optField in opts._fields]
+        missingFields = requiredFields - self._orig_secret.keys()
+        if missingFields:
+            raise RotationException(
+                'The current value of {}::{} is missing required key(s): {}'.format(
+                    spec['provider'],
+                    spec['key'],
+                    ' ,'.join(missingFields)))
 
         sf_user = self._orig_secret[opts.user_field]
 
@@ -71,6 +73,14 @@ class Client(BaseProvider):
             token=self._orig_secret[opts.token_field],
             domain=self._orig_secret[opts.domain_field]
         )
+
+        # Generate new random password from SecretsManager
+        new_passwd = self._generate_sforce_passwd(PASS_LENGTH)
+
+        if len(new_passwd) != PASS_LENGTH:
+            raise RotationException(
+                'Failed to generate new password!'
+            )
 
         # Change Salesforce password
         try:
@@ -128,8 +138,9 @@ class Client(BaseProvider):
     def redact_result(cls, result, spec):
         opts = Client.Options(**spec.get('config', {}))
 
-        for field in (opts.password_field, opts.token_field):
-            if 'value' in result and field in result['value']:
-                result['value'][field] = '***'
+        if 'value' in result:
+            for field in (opts.password_field, opts.token_field):
+                if field in result['value']:
+                    result['value'][field] = '***'
 
         return result
