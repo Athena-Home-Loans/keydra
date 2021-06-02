@@ -4,7 +4,7 @@ contentful-management==2.10.0
 idna==2.9
 PyYAML==5.4
 requests==2.23.0
-urllib3==1.25.8
+urllib3==1.26.5
 python-json-logger==0.1.11
 simple-salesforce==1.0.0
 splunk-sdk==1.6.12
