@@ -1,29 +1,37 @@
 import json
 import unittest
 
+from botocore.exceptions import ClientError
+
 from keydra import loader
 
-from keydra.exceptions import InvalidSecretProvider
+from keydra.exceptions import ConfigException, InvalidSecretProvider
 
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
 
 class TestLoader(unittest.TestCase):
-    def setUp(self):
-        loader.SESSION = MagicMock()
-        loader.SECRETS_MANAGER = MagicMock()
-
     @patch('keydra.loader.SECRETS_MANAGER.get_secret_value')
     def test_fetch_provider_creds_no_key_name(self, mk_sm):
-        secret_string = 'secret'
-        mk_sm.return_value = secret_string
+        secret_value = {'a': 'b', 'c': 'd'}
+        mk_sm.return_value = json.dumps(secret_value)
         key_id = '{}/iam'.format(loader.KEYDRA_SECRETS_PREFIX)
 
         creds = loader.fetch_provider_creds('iam', None)
 
         mk_sm.assert_called_once_with(key_id)
-        self.assertEqual(creds, secret_string)
+        self.assertEqual(creds, secret_value)
+
+    @patch('keydra.loader.SECRETS_MANAGER.get_secret_value')
+    def test_fetch_provider_creds_sm_throws(self, mk_sm):
+        mk_sm.side_effect = ClientError({}, 'getsecret')
+        key_id = '{}/iam'.format(loader.KEYDRA_SECRETS_PREFIX)
+
+        with self.assertRaises(ConfigException):
+            loader.fetch_provider_creds('iam', None)
+
+        mk_sm.assert_called_once_with(key_id)
 
     @patch('keydra.loader.SECRETS_MANAGER.get_secret_value')
     def test_fetch_provider_creds_good_json(self, mk_sm):
@@ -42,10 +50,10 @@ class TestLoader(unittest.TestCase):
         mk_sm.return_value = secret_string
         key_id = '{}/iam/key'.format(loader.KEYDRA_SECRETS_PREFIX)
 
-        creds = loader.fetch_provider_creds('iam', 'key')
+        with self.assertRaises(ConfigException):
+            loader.fetch_provider_creds('iam', 'key')
 
         mk_sm.assert_called_once_with(key_id)
-        self.assertEqual(creds, secret_string)
 
     def test_load_provider_client_exists(self):
         c = loader.load_provider_client('iam')
