@@ -1,4 +1,5 @@
 import boto3
+import boto3.session
 
 from botocore.exceptions import ClientError
 
@@ -54,8 +55,7 @@ class AppSyncClient:
             return self._client.list_api_keys(apiId=api_id, **kwargs)
         except ClientError as e:
             raise ListApiKeysException(
-                'Error creating api key for app {}:'.format(api_id, e)
-            )
+                'Error creating api key for app {}: {}'.format(api_id, e))
 
     def create_api_key(self, api_id, expires, description):
         '''
@@ -87,8 +87,7 @@ class AppSyncClient:
             )
         except ClientError as e:
             raise CreateApiKeyException(
-                'Error creating api key for app {}:'.format(api_id, e)
-            )
+                'Error creating api key for app {}: {}'.format(api_id, e))
 
     def delete_api_key(self, api_id, id):
         '''
@@ -112,8 +111,8 @@ class AppSyncClient:
             )
         except ClientError as e:
             raise DeleteApiKeyException(
-                'Error deleting api key {} for app {}:'.format(id, api_id, e)
-            )
+                'Error deleting api key {} for app {}: {}'.format(
+                    id, api_id, e))
 
     def get_graphql_api(self, api_id):
         '''

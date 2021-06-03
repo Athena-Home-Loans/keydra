@@ -118,7 +118,7 @@ class Client(BaseProvider):
     def _update_access_key(self, user, key_id, active):
         active_string = 'Active' if active else 'Inactive'
 
-        LOGGER.info('Updating key: {}'.format(key_id, active_string))
+        LOGGER.info('Updating key {}: {}'.format(key_id, active_string))
 
         self._client.update_access_key(
             AccessKeyId=key_id,

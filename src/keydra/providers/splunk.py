@@ -1,4 +1,5 @@
 import boto3
+import boto3.session
 import validators
 
 from keydra.clients.splunk import SplunkClient
@@ -173,9 +174,9 @@ class Client(BaseProvider):
                 'host {}: {}'.format(destination['config']['host'], error)
             )
             raise DistributionException(
-                'Error distributing secret to '
+                'Error distributing secret {} to '
                 'app {} on Splunk '
-                'host {} - {}'.format(
+                'host {}: {}'.format(
                     destination['key'],
                     destination['config']['app'],
                     destination['config']['host'],

@@ -1,4 +1,5 @@
 import boto3
+import boto3.session
 
 from keydra.providers.base import BaseProvider
 
@@ -67,7 +68,7 @@ class Client(BaseProvider):
             try:
                 self._appsync_client.delete_api_key(api_id, existing_key)
                 LOGGER.info(
-                    'api key {} for api {} deleted from appsync: {}'.format(
+                    'api key {} for api {} deleted from appsync'.format(
                         existing_key,
                         api_id
                     )
