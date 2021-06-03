@@ -130,3 +130,7 @@ class Client(BaseProvider):
             result['value']['secret'] = '***'
 
         return result
+
+    @classmethod
+    def has_creds(cls):
+        return False
