@@ -289,3 +289,7 @@ class Client(BaseProvider):
                         .format(unknown_vals))
 
             return True, 'All good!'
+
+    @classmethod
+    def has_creds(cls):
+        return False
