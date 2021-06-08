@@ -175,6 +175,11 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-keydra.clients.github">
+   Github
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-keydra.clients.qualys">
    Qualys
   </a>
@@ -1138,6 +1143,123 @@ and access to at least one space</p>
 <dt id="keydra.clients.contentful.ParameterException">
 <em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.contentful.</span></code><code class="sig-name descname"><span class="pre">ParameterException</span></code><a class="headerlink" href="#keydra.clients.contentful.ParameterException" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</div>
+<div class="section" id="module-keydra.clients.github">
+<span id="github"></span><span id="client-github"></span><h2>Github<a class="headerlink" href="#module-keydra.clients.github" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="keydra.clients.github.GithubClient">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.github.</span></code><code class="sig-name descname"><span class="pre">GithubClient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">passwd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.github.GithubClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="keydra.clients.github.GithubClient._delete">
+<code class="sig-name descname"><span class="pre">_delete</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.github.GithubClient._delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.github.GithubClient._encrypt_secret">
+<code class="sig-name descname"><span class="pre">_encrypt_secret</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">public_key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.github.GithubClient._encrypt_secret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encrypt a secret string using the orgs public key
+<a class="reference external" href="https://docs.github.com/en/rest/reference/actions#create-or-update-an-organization-secret">https://docs.github.com/en/rest/reference/actions#create-or-update-an-organization-secret</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>secret</strong> – Slug of the repository to be queried</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Encypted secret</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.github.GithubClient._get_repo_public_key">
+<code class="sig-name descname"><span class="pre">_get_repo_public_key</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.github.GithubClient._get_repo_public_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.github.GithubClient._post">
+<code class="sig-name descname"><span class="pre">_post</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.github.GithubClient._post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.github.GithubClient._put">
+<code class="sig-name descname"><span class="pre">_put</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.github.GithubClient._put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.github.GithubClient._query">
+<code class="sig-name descname"><span class="pre">_query</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extraheaders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.github.GithubClient._query" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.github.GithubClient.add_repo_variable">
+<code class="sig-name descname"><span class="pre">add_repo_variable</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">org</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.github.GithubClient.add_repo_variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new variable for a specific repository
+<a class="reference external" href="https://docs.github.com/en/rest/reference/actions#create-or-update-an-environment-secret">https://docs.github.com/en/rest/reference/actions#create-or-update-an-environment-secret</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Slug of the repository to be queried</p></li>
+<li><p><strong>key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Key for the variable in the repo</p></li>
+<li><p><strong>value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Value for the variable in the repo</p></li>
+<li><p><strong>org</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Organisation the repo is in</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A description of the variable added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.github.GithubClient.fetch_file_from_repository">
+<code class="sig-name descname"><span class="pre">fetch_file_from_repository</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.github.GithubClient.fetch_file_from_repository" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads file from Github
+<a class="reference external" href="https://docs.github.com/rest/reference/repos#get-repository-content">https://docs.github.com/rest/reference/repos#get-repository-content</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of the repository to fetch file from</p></li>
+<li><p><strong>path</strong> – Path to the file in the repo</p></li>
+<li><p><strong>account</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – GH account name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Content of the file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.github.GithubClient.list_repo_variables">
+<code class="sig-name descname"><span class="pre">list_repo_variables</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">org</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.github.GithubClient.list_repo_variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists all the variables configured for a given repository
+<a class="reference external" href="https://docs.github.com/en/rest/reference/actions#list-repository-secrets">https://docs.github.com/en/rest/reference/actions#list-repository-secrets</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Repository to be queried</p></li>
+<li><p><strong>org</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Organisation the repo belongs to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of dicts describing secrets</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
 
 </div>
 <div class="section" id="module-keydra.clients.qualys">

@@ -2,11 +2,12 @@ certifi==2020.4.5.1
 chardet==3.0.4
 contentful-management==2.10.0
 idna==2.10
+python-json-logger==0.1.11
+PyNaCl==1.4.0
 PyYAML==5.4
 requests==2.25.1
-urllib3==1.26.5
-python-json-logger==0.1.11
 simple-salesforce==1.0.0
 splunk-sdk==1.6.12
+urllib3==1.26.5
 validators==0.14.3
 xmltodict==0.12.0

@@ -26,8 +26,8 @@ Resources:
       Role: !Sub "<IAM Role Arn>"
       Environment:
         Variables:
-          KEYDRA_CFG_PROVIDER: bitbucket
-          KEYDRA_CFG_CONFIG_ACCOUNTUSERNAME: <bb account name>
+          KEYDRA_CFG_PROVIDER: bitbucket OR github
+          KEYDRA_CFG_CONFIG_ACCOUNTUSERNAME: <bb account name or github org name>
           KEYDRA_CFG_CONFIG_SECRETS_REPOSITORY: <secrets repo name>
           KEYDRA_CFG_CONFIG_SECRETS_PATH: <path to secrets.yaml>
           KEYDRA_CFG_CONFIG_SECRETS_FILETYPE: yaml

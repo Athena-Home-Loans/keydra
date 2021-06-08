@@ -35,10 +35,12 @@ class TestLambda(unittest.TestCase):
         {
             'KEYDRA_CFG_PROVIDER': 'provider',
             'KEYDRA_CFG_CONFIG_ACCOUNTUSERNAME': 'acct_user',
-            'KEYDRA_CFG_CONFIG_SECRETS_REPO': 'sec_repo',
+            'KEYDRA_CFG_CONFIG_SECRETS_REPOSITORY': 'sec_repo',
             'KEYDRA_CFG_CONFIG_SECRETS_PATH': 'sec_path',
-            'KEYDRA_CFG_CONFIG_ENVIRONMENT_REPO': 'env_repo',
+            'KEYDRA_CFG_CONFIG_SECRETS_FILETYPE': 'yaml',
+            'KEYDRA_CFG_CONFIG_ENVIRONMENT_REPOSITORY': 'env_repo',
             'KEYDRA_CFG_CONFIG_ENVIRONMENT_PATH': 'env_path',
+            'KEYDRA_CFG_CONFIG_ENVIRONMENTS_FILETYPE': 'yaml'
         }
     )
     def test__load_env_config(self):
@@ -47,17 +49,23 @@ class TestLambda(unittest.TestCase):
         self.assertEqual(
             config,
             {
-                'provider': 'provider',
                 'config': {
                     'accountusername': 'acct_user',
                     'secrets': {
-                        'repo': 'sec_repo',
+                        'repository': 'sec_repo',
+                        'filetype': 'yaml',
                         'path': 'sec_path'
                     },
+                    'environments': {
+                        'filetype': 'yaml',
+                        'repository': 'keydraconfiguration',
+                        'path': 'config/environments.yaml'
+                    },
                     'environment': {
-                        'repo': 'env_repo',
+                        'repository': 'env_repo',
                         'path': 'env_path'
                     }
-                }
+                },
+                'provider': 'provider'
             }
         )

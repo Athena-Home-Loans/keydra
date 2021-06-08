@@ -118,6 +118,75 @@ Contentful
 
 Uses client :ref:`Contentful <client_contentful>`.
 
+Github
+======
+
+*Github* can `distribute` secrets to the `repository` scope only. It is also a config provider, and can be used as a 
+source for your secret and environment specs. In your SAM template, use `KEYDRA_CFG_PROVIDER=github` to 
+tell Keydra to look in Github for secrets to manage.
+
+This provider is really just an MVP to kickstart Github support, so other secret scopes have not yet
+been implemented.
+
+For a given secret specification, the `distribute` function will add an encrypted secret to the specified repository. See
+https://docs.github.com/en/actions/reference/encrypted-secrets.
+
+For example, for a secret spec of:
+
+.. code-block:: yaml
+
+   sample:
+      key: keydra_managed_sample
+      description: A example secret which exists in IAM
+      custodians: my_team
+      provider: IAM
+      rotate: nightly
+      distribute:
+      - config:
+            repository: keydraconfiguration
+            account_username: me
+         envs:
+            - dev
+         key: AWS_ACCESS_KEY_ID
+         provider: github
+         scope: repository
+         source: key
+      - config:
+            repository: keydraconfiguration
+            account_username: me
+         envs:
+            - dev
+         key: AWS_SECRET_ACCESS_KEY
+         provider: github
+         scope: repository
+         source: secret
+
+The provider will take the AWS IAM user credentials and, using an access token from the AWS Secrets Manager secret
+located at `keydra/github`, encrypt the IAM user Id/password values and save them to secrets within the `keydraconfiguration` 
+repo of the `me` organisation or Github account.
+
+To use Github as your main Keydra source provider, set the relevant environment variables that your Lambda runs as. As in, set
+the following in your SAM `template.yaml`:
+
+.. code-block:: yaml
+
+   Variables:
+      KEYDRA_CFG_PROVIDER: github
+      KEYDRA_CFG_CONFIG_ACCOUNTUSERNAME: myAccountName
+      KEYDRA_CFG_CONFIG_SECRETS_REPOSITORY: keydraconfiguration
+      KEYDRA_CFG_CONFIG_SECRETS_PATH: main/config/secrets.yaml
+      KEYDRA_CFG_CONFIG_SECRETS_FILETYPE: yaml
+      KEYDRA_CFG_CONFIG_ENVIRONMENTS_REPOSITORY: keydraconfiguration
+      KEYDRA_CFG_CONFIG_ENVIRONMENTS_PATH: main/config/environments.yaml
+      KEYDRA_CFG_CONFIG_ENVIRONMENTS_FILETYPE: yaml
+
+.. automodule:: keydra.providers.github
+   :members:
+   :undoc-members:
+   :private-members:
+
+Uses client :ref:`Github <client_github>`.
+
 Qualys
 ======
 

@@ -74,6 +74,17 @@ Contentful
    :private-members:
 
 
+.. _client_github:
+
+Github
+======
+
+.. automodule:: keydra.clients.github
+   :members:
+   :undoc-members:
+   :private-members:
+
+
 .. _client_qualys:
 
 Qualys

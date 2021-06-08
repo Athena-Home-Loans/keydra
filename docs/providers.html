@@ -175,6 +175,11 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#github">
+   Github
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#qualys">
    Qualys
   </a>
@@ -242,6 +247,11 @@ keys in the format:</p>
 <dl class="py method">
 <dt id="keydra.providers.aws_appsync.Client.distribute">
 <code class="sig-name descname"><span class="pre">distribute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_appsync.Client.distribute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.aws_appsync.Client.has_creds">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">has_creds</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_appsync.Client.has_creds" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -324,6 +334,11 @@ keys in the format:</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="keydra.providers.aws_iam.Client.has_creds">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">has_creds</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_iam.Client.has_creds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="keydra.providers.aws_iam.Client.redact_result">
 <em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">redact_result</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_iam.Client.redact_result" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -365,7 +380,7 @@ cherry picking fragments.</p>
 <dd><dl class="py method">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options._asdict">
 <code class="sig-name descname"><span class="pre">_asdict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options._asdict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a new OrderedDict which maps field names to their values.</p>
+<dd><p>Return a new dict which maps field names to their values.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -400,63 +415,63 @@ cherry picking fragments.</p>
 <dd><p>Return a new Options object replacing specified fields with new values</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.bypass">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">bypass</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.bypass" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">bypass</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.bypass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_char">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">exclude_char</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_char" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">exclude_char</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_char" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 3</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_lower">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">exclude_lower</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_lower" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">exclude_lower</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_lower" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 7</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_num">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">exclude_num</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_num" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">exclude_num</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_num" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 4</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_punct">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">exclude_punct</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_punct" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">exclude_punct</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_punct" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 5</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_upper">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">exclude_upper</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_upper" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">exclude_upper</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_upper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 6</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.include_space">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">include_space</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.include_space" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">include_space</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.include_space" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 8</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.length">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">length</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.length" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">length</span></code><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 2</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.require_each_type">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">require_each_type</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.require_each_type" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">require_each_type</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.require_each_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 9</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.rotate_attribute">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">rotate_attribute</span></code><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.rotate_attribute" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">rotate_attribute</span></code><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.rotate_attribute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
@@ -485,6 +500,11 @@ cherry picking fragments.</p>
 <dl class="py method">
 <dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.distribute">
 <code class="sig-name descname"><span class="pre">distribute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.distribute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.aws_secretsmanager.SecretsManagerProvider.has_creds">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">has_creds</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_secretsmanager.SecretsManagerProvider.has_creds" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -673,6 +693,116 @@ as per <cite>&lt;token_name&gt;.key</cite> and <cite>&lt;token_name&gt;.secret</
 
 <p>Uses client <a class="reference internal" href="clients.html#client-contentful"><span class="std std-ref">Contentful</span></a>.</p>
 </div>
+<div class="section" id="github">
+<h2>Github<a class="headerlink" href="#github" title="Permalink to this headline">¶</a></h2>
+<p><em>Github</em> can <cite>distribute</cite> secrets to the <cite>repository</cite> scope only. It is also a config provider, and can be used as a
+source for your secret and environment specs. In your SAM template, use <cite>KEYDRA_CFG_PROVIDER=github</cite> to
+tell Keydra to look in Github for secrets to manage.</p>
+<p>This provider is really just an MVP to kickstart Github support, so other secret scopes have not yet
+been implemented.</p>
+<p>For a given secret specification, the <cite>distribute</cite> function will add an encrypted secret to the specified repository. See
+<a class="reference external" href="https://docs.github.com/en/actions/reference/encrypted-secrets">https://docs.github.com/en/actions/reference/encrypted-secrets</a>.</p>
+<p>For example, for a secret spec of:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sample</span><span class="p">:</span>
+   <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra_managed_sample</span>
+   <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">A example secret which exists in IAM</span>
+   <span class="nt">custodians</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_team</span>
+   <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">IAM</span>
+   <span class="nt">rotate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nightly</span>
+   <span class="nt">distribute</span><span class="p">:</span>
+   <span class="p p-Indicator">-</span> <span class="nt">config</span><span class="p">:</span>
+         <span class="nt">repository</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydraconfiguration</span>
+         <span class="nt">account_username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">me</span>
+     <span class=" -Error"> </span><span class="nt">envs</span><span class="p">:</span>
+         <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">dev</span>
+      <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS_ACCESS_KEY_ID</span>
+      <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
+      <span class="nt">scope</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">repository</span>
+      <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">key</span>
+   <span class="p p-Indicator">-</span> <span class="nt">config</span><span class="p">:</span>
+         <span class="nt">repository</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydraconfiguration</span>
+         <span class="nt">account_username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">me</span>
+     <span class=" -Error"> </span><span class="nt">envs</span><span class="p">:</span>
+         <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">dev</span>
+      <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS_SECRET_ACCESS_KEY</span>
+      <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
+      <span class="nt">scope</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">repository</span>
+      <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+</pre></div>
+</div>
+<p>The provider will take the AWS IAM user credentials and, using an access token from the AWS Secrets Manager secret
+located at <cite>keydra/github</cite>, encrypt the IAM user Id/password values and save them to secrets within the <cite>keydraconfiguration</cite>
+repo of the <cite>me</cite> organisation or Github account.</p>
+<p>To use Github as your main Keydra source provider, set the relevant environment variables that your Lambda runs as. As in, set
+the following in your SAM <cite>template.yaml</cite>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">Variables</span><span class="p">:</span>
+   <span class="nt">KEYDRA_CFG_PROVIDER</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
+   <span class="nt">KEYDRA_CFG_CONFIG_ACCOUNTUSERNAME</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">myAccountName</span>
+   <span class="nt">KEYDRA_CFG_CONFIG_SECRETS_REPOSITORY</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydraconfiguration</span>
+   <span class="nt">KEYDRA_CFG_CONFIG_SECRETS_PATH</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">main/config/secrets.yaml</span>
+   <span class="nt">KEYDRA_CFG_CONFIG_SECRETS_FILETYPE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yaml</span>
+   <span class="nt">KEYDRA_CFG_CONFIG_ENVIRONMENTS_REPOSITORY</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydraconfiguration</span>
+   <span class="nt">KEYDRA_CFG_CONFIG_ENVIRONMENTS_PATH</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">main/config/environments.yaml</span>
+   <span class="nt">KEYDRA_CFG_CONFIG_ENVIRONMENTS_FILETYPE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yaml</span>
+</pre></div>
+</div>
+<span class="target" id="module-keydra.providers.github"></span><dl class="py class">
+<dt id="keydra.providers.github.Client">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.providers.github.</span></code><code class="sig-name descname"><span class="pre">Client</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.github.Client" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt id="keydra.providers.github.Client._abc_impl">
+<code class="sig-name descname"><span class="pre">_abc_impl</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;_abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#keydra.providers.github.Client._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.github.Client._distribute">
+<code class="sig-name descname"><span class="pre">_distribute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.github.Client._distribute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.github.Client._distribute_repository_secret">
+<code class="sig-name descname"><span class="pre">_distribute_repository_secret</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.github.Client._distribute_repository_secret" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.github.Client._load_remote_file">
+<code class="sig-name descname"><span class="pre">_load_remote_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.github.Client._load_remote_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.github.Client._validate_repository_spec">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">_validate_repository_spec</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.github.Client._validate_repository_spec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.github.Client.distribute">
+<code class="sig-name descname"><span class="pre">distribute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.github.Client.distribute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.github.Client.load_config">
+<code class="sig-name descname"><span class="pre">load_config</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.github.Client.load_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.github.Client.pre_process_spec">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">pre_process_spec</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.github.Client.pre_process_spec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.github.Client.rotate">
+<code class="sig-name descname"><span class="pre">rotate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.github.Client.rotate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.github.Client.validate_spec">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">validate_spec</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.github.Client.validate_spec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<p>Uses client <a class="reference internal" href="clients.html#client-github"><span class="std std-ref">Github</span></a>.</p>
+</div>
 <div class="section" id="qualys">
 <h2>Qualys<a class="headerlink" href="#qualys" title="Permalink to this headline">¶</a></h2>
 <p>Provides password rotation support for Qualys accounts. Only <cite>rotate</cite> has been implemented,
@@ -805,14 +935,14 @@ before added here.</p>
 </div>
 <span class="target" id="module-keydra.providers.salesforce"></span><dl class="py class">
 <dt id="keydra.providers.salesforce.Client">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.providers.salesforce.</span></code><code class="sig-name descname"><span class="pre">Client</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.salesforce.Client" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.providers.salesforce.</span></code><code class="sig-name descname"><span class="pre">Client</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.salesforce.Client" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py class">
 <dt id="keydra.providers.salesforce.Client.Options">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Options</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password_field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_field</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.salesforce.Client.Options" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
 <dt id="keydra.providers.salesforce.Client.Options._asdict">
 <code class="sig-name descname"><span class="pre">_asdict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.salesforce.Client.Options._asdict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a new OrderedDict which maps field names to their values.</p>
+<dd><p>Return a new dict which maps field names to their values.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -847,27 +977,27 @@ before added here.</p>
 <dd><p>Return a new Options object replacing specified fields with new values</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt id="keydra.providers.salesforce.Client.Options.domain_field">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">domain_field</span></code><a class="headerlink" href="#keydra.providers.salesforce.Client.Options.domain_field" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">domain_field</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#keydra.providers.salesforce.Client.Options.domain_field" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 3</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt id="keydra.providers.salesforce.Client.Options.password_field">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">password_field</span></code><a class="headerlink" href="#keydra.providers.salesforce.Client.Options.password_field" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">password_field</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#keydra.providers.salesforce.Client.Options.password_field" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt id="keydra.providers.salesforce.Client.Options.token_field">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">token_field</span></code><a class="headerlink" href="#keydra.providers.salesforce.Client.Options.token_field" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">token_field</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#keydra.providers.salesforce.Client.Options.token_field" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 2</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt id="keydra.providers.salesforce.Client.Options.user_field">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">user_field</span></code><a class="headerlink" href="#keydra.providers.salesforce.Client.Options.user_field" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">user_field</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#keydra.providers.salesforce.Client.Options.user_field" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 

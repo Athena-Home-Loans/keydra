@@ -142,6 +142,7 @@
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
@@ -171,6 +172,8 @@
 </li>
         <li><a href="providers.html#keydra.providers.contentful.Client._abc_impl">(keydra.providers.contentful.Client attribute)</a>
 </li>
+        <li><a href="providers.html#keydra.providers.github.Client._abc_impl">(keydra.providers.github.Client attribute)</a>
+</li>
         <li><a href="providers.html#keydra.providers.qualys.Client._abc_impl">(keydra.providers.qualys.Client attribute)</a>
 </li>
         <li><a href="providers.html#keydra.providers.salesforce.Client._abc_impl">(keydra.providers.salesforce.Client attribute)</a>
@@ -193,6 +196,8 @@
       <ul>
         <li><a href="clients.html#keydra.clients.cloudflare.CloudflareClient._delete">(keydra.clients.cloudflare.CloudflareClient method)</a>
 </li>
+        <li><a href="clients.html#keydra.clients.github.GithubClient._delete">(keydra.clients.github.GithubClient method)</a>
+</li>
       </ul></li>
       <li><a href="providers.html#keydra.providers.aws_iam.Client._delete_access_key">_delete_access_key() (keydra.providers.aws_iam.Client method)</a>
 </li>
@@ -203,6 +208,8 @@
       <li><a href="providers.html#keydra.providers.bitbucket.Client._distribute">_distribute() (keydra.providers.bitbucket.Client method)</a>
 
       <ul>
+        <li><a href="providers.html#keydra.providers.github.Client._distribute">(keydra.providers.github.Client method)</a>
+</li>
         <li><a href="providers.html#keydra.providers.splunk.Client._distribute">(keydra.providers.splunk.Client method)</a>
 </li>
       </ul></li>
@@ -211,8 +218,14 @@
       <li><a href="providers.html#keydra.providers.bitbucket.Client._distribute_deployment_secret">_distribute_deployment_secret() (keydra.providers.bitbucket.Client method)</a>
 </li>
       <li><a href="providers.html#keydra.providers.bitbucket.Client._distribute_repository_secret">_distribute_repository_secret() (keydra.providers.bitbucket.Client method)</a>
+
+      <ul>
+        <li><a href="providers.html#keydra.providers.github.Client._distribute_repository_secret">(keydra.providers.github.Client method)</a>
 </li>
+      </ul></li>
       <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider._distribute_secret">_distribute_secret() (keydra.providers.aws_secretsmanager.SecretsManagerProvider method)</a>
+</li>
+      <li><a href="clients.html#keydra.clients.github.GithubClient._encrypt_secret">_encrypt_secret() (keydra.clients.github.GithubClient method)</a>
 </li>
       <li><a href="providers.html#keydra.providers.aws_iam._explain_secret">_explain_secret() (in module keydra.providers.aws_iam)</a>
 </li>
@@ -238,14 +251,14 @@
         <li><a href="providers.html#keydra.providers.salesforce.Client.Options._fields">(keydra.providers.salesforce.Client.Options attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options._fields_defaults">_fields_defaults (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options attribute)</a>
 
       <ul>
         <li><a href="providers.html#keydra.providers.salesforce.Client.Options._fields_defaults">(keydra.providers.salesforce.Client.Options attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="providers.html#keydra.providers.aws_appsync.Client._generate_expiry_epoch">_generate_expiry_epoch() (keydra.providers.aws_appsync.Client method)</a>
 </li>
       <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider._generate_secret_value">_generate_secret_value() (keydra.providers.aws_secretsmanager.SecretsManagerProvider method)</a>
@@ -262,8 +275,14 @@
 </li>
       <li><a href="providers.html#keydra.providers.bitbucket.Client._get_or_create_environment">_get_or_create_environment() (keydra.providers.bitbucket.Client method)</a>
 </li>
-      <li><a href="providers.html#keydra.providers.bitbucket.Client._load_remote_file">_load_remote_file() (keydra.providers.bitbucket.Client method)</a>
+      <li><a href="clients.html#keydra.clients.github.GithubClient._get_repo_public_key">_get_repo_public_key() (keydra.clients.github.GithubClient method)</a>
 </li>
+      <li><a href="providers.html#keydra.providers.bitbucket.Client._load_remote_file">_load_remote_file() (keydra.providers.bitbucket.Client method)</a>
+
+      <ul>
+        <li><a href="providers.html#keydra.providers.github.Client._load_remote_file">(keydra.providers.github.Client method)</a>
+</li>
+      </ul></li>
       <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options._make">_make() (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options class method)</a>
 
       <ul>
@@ -277,17 +296,23 @@
       <ul>
         <li><a href="clients.html#keydra.clients.cloudflare.CloudflareClient._post">(keydra.clients.cloudflare.CloudflareClient method)</a>
 </li>
+        <li><a href="clients.html#keydra.clients.github.GithubClient._post">(keydra.clients.github.GithubClient method)</a>
+</li>
       </ul></li>
       <li><a href="clients.html#keydra.clients.bitbucket.BitbucketClient._put">_put() (keydra.clients.bitbucket.BitbucketClient method)</a>
 
       <ul>
         <li><a href="clients.html#keydra.clients.cloudflare.CloudflareClient._put">(keydra.clients.cloudflare.CloudflareClient method)</a>
 </li>
+        <li><a href="clients.html#keydra.clients.github.GithubClient._put">(keydra.clients.github.GithubClient method)</a>
+</li>
       </ul></li>
       <li><a href="clients.html#keydra.clients.bitbucket.BitbucketClient._query">_query() (keydra.clients.bitbucket.BitbucketClient method)</a>
 
       <ul>
         <li><a href="clients.html#keydra.clients.cloudflare.CloudflareClient._query">(keydra.clients.cloudflare.CloudflareClient method)</a>
+</li>
+        <li><a href="clients.html#keydra.clients.github.GithubClient._query">(keydra.clients.github.GithubClient method)</a>
 </li>
       </ul></li>
       <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options._replace">_replace() (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options method)</a>
@@ -323,7 +348,11 @@
       <li><a href="providers.html#keydra.providers.bitbucket.Client._validate_deployment_spec">_validate_deployment_spec() (keydra.providers.bitbucket.Client class method)</a>
 </li>
       <li><a href="providers.html#keydra.providers.bitbucket.Client._validate_repository_spec">_validate_repository_spec() (keydra.providers.bitbucket.Client class method)</a>
+
+      <ul>
+        <li><a href="providers.html#keydra.providers.github.Client._validate_repository_spec">(keydra.providers.github.Client class method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -335,7 +364,11 @@
       <li><a href="clients.html#keydra.clients.bitbucket.BitbucketClient.add_repo_environment">add_repo_environment() (keydra.clients.bitbucket.BitbucketClient method)</a>
 </li>
       <li><a href="clients.html#keydra.clients.bitbucket.BitbucketClient.add_repo_variable">add_repo_variable() (keydra.clients.bitbucket.BitbucketClient method)</a>
+
+      <ul>
+        <li><a href="clients.html#keydra.clients.github.GithubClient.add_repo_variable">(keydra.clients.github.GithubClient method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clients.html#keydra.clients.bitbucket.BitbucketClient.add_team_pipeline_variable">add_team_pipeline_variable() (keydra.clients.bitbucket.BitbucketClient method)</a>
@@ -356,7 +389,7 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.bypass">bypass() (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options property)</a>
+      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.bypass">bypass (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -382,6 +415,8 @@
         <li><a href="providers.html#keydra.providers.cloudflare.Client">(class in keydra.providers.cloudflare)</a>
 </li>
         <li><a href="providers.html#keydra.providers.contentful.Client">(class in keydra.providers.contentful)</a>
+</li>
+        <li><a href="providers.html#keydra.providers.github.Client">(class in keydra.providers.github)</a>
 </li>
         <li><a href="providers.html#keydra.providers.qualys.Client">(class in keydra.providers.qualys)</a>
 </li>
@@ -439,6 +474,8 @@
 </li>
         <li><a href="providers.html#keydra.providers.contentful.Client.distribute">(keydra.providers.contentful.Client method)</a>
 </li>
+        <li><a href="providers.html#keydra.providers.github.Client.distribute">(keydra.providers.github.Client method)</a>
+</li>
         <li><a href="providers.html#keydra.providers.qualys.Client.distribute">(keydra.providers.qualys.Client method)</a>
 </li>
         <li><a href="providers.html#keydra.providers.salesforce.Client.distribute">(keydra.providers.salesforce.Client method)</a>
@@ -448,7 +485,7 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="providers.html#keydra.providers.salesforce.Client.Options.domain_field">domain_field() (keydra.providers.salesforce.Client.Options property)</a>
+      <li><a href="providers.html#keydra.providers.salesforce.Client.Options.domain_field">domain_field (keydra.providers.salesforce.Client.Options attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -456,17 +493,17 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_char">exclude_char() (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options property)</a>
+      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_char">exclude_char (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options attribute)</a>
 </li>
-      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_lower">exclude_lower() (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options property)</a>
+      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_lower">exclude_lower (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_num">exclude_num() (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options property)</a>
+      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_num">exclude_num (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options attribute)</a>
 </li>
-      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_punct">exclude_punct() (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options property)</a>
+      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_punct">exclude_punct (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options attribute)</a>
 </li>
-      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_upper">exclude_upper() (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options property)</a>
+      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.exclude_upper">exclude_upper (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -475,7 +512,11 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clients.html#keydra.clients.bitbucket.BitbucketClient.fetch_file_from_repository">fetch_file_from_repository() (keydra.clients.bitbucket.BitbucketClient method)</a>
+
+      <ul>
+        <li><a href="clients.html#keydra.clients.github.GithubClient.fetch_file_from_repository">(keydra.clients.github.GithubClient method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -488,23 +529,39 @@
 </li>
       <li><a href="clients.html#keydra.clients.aws.secretsmanager.SecretsManagerClient.get_secret_value">get_secret_value() (keydra.clients.aws.secretsmanager.SecretsManagerClient method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clients.html#keydra.clients.contentful.ContentfulClient.get_tokens">get_tokens() (keydra.clients.contentful.ContentfulClient method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clients.html#keydra.clients.salesforce.SalesforceClient.get_user_id">get_user_id() (keydra.clients.salesforce.SalesforceClient method)</a>
 </li>
       <li><a href="clients.html#keydra.clients.aws.appsync.GetApiException">GetApiException</a>
 </li>
       <li><a href="clients.html#keydra.clients.aws.secretsmanager.GetSecretException">GetSecretException</a>
 </li>
+      <li><a href="clients.html#keydra.clients.github.GithubClient">GithubClient (class in keydra.clients.github)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="providers.html#keydra.providers.aws_appsync.Client.has_creds">has_creds() (keydra.providers.aws_appsync.Client class method)</a>
+
+      <ul>
+        <li><a href="providers.html#keydra.providers.aws_iam.Client.has_creds">(keydra.providers.aws_iam.Client class method)</a>
+</li>
+        <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.has_creds">(keydra.providers.aws_secretsmanager.SecretsManagerProvider class method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.include_space">include_space() (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options property)</a>
+      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.include_space">include_space (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -549,6 +606,13 @@
 
       <ul>
         <li><a href="clients.html#module-keydra.clients.contentful">module</a>
+</li>
+      </ul></li>
+      <li>
+    keydra.clients.github
+
+      <ul>
+        <li><a href="clients.html#module-keydra.clients.github">module</a>
 </li>
       </ul></li>
       <li>
@@ -617,6 +681,13 @@
 </li>
       </ul></li>
       <li>
+    keydra.providers.github
+
+      <ul>
+        <li><a href="providers.html#module-keydra.providers.github">module</a>
+</li>
+      </ul></li>
+      <li>
     keydra.providers.qualys
 
       <ul>
@@ -643,7 +714,7 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.length">length() (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options property)</a>
+      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.length">length (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options attribute)</a>
 </li>
       <li><a href="clients.html#keydra.clients.aws.appsync.AppSyncClient.list_api_keys">list_api_keys() (keydra.clients.aws.appsync.AppSyncClient method)</a>
 </li>
@@ -651,10 +722,14 @@
 </li>
       <li><a href="clients.html#keydra.clients.bitbucket.BitbucketClient.list_repo_environments">list_repo_environments() (keydra.clients.bitbucket.BitbucketClient method)</a>
 </li>
+      <li><a href="clients.html#keydra.clients.bitbucket.BitbucketClient.list_repo_variables">list_repo_variables() (keydra.clients.bitbucket.BitbucketClient method)</a>
+
+      <ul>
+        <li><a href="clients.html#keydra.clients.github.GithubClient.list_repo_variables">(keydra.clients.github.GithubClient method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="clients.html#keydra.clients.bitbucket.BitbucketClient.list_repo_variables">list_repo_variables() (keydra.clients.bitbucket.BitbucketClient method)</a>
-</li>
       <li><a href="clients.html#keydra.clients.bitbucket.BitbucketClient.list_team_pipeline_variables">list_team_pipeline_variables() (keydra.clients.bitbucket.BitbucketClient method)</a>
 </li>
       <li><a href="clients.html#keydra.clients.cloudflare.CloudflareClient.list_tokens">list_tokens() (keydra.clients.cloudflare.CloudflareClient method)</a>
@@ -662,7 +737,11 @@
       <li><a href="clients.html#keydra.clients.aws.appsync.ListApiKeysException">ListApiKeysException</a>
 </li>
       <li><a href="providers.html#keydra.providers.bitbucket.Client.load_config">load_config() (keydra.providers.bitbucket.Client method)</a>
+
+      <ul>
+        <li><a href="providers.html#keydra.providers.github.Client.load_config">(keydra.providers.github.Client method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -683,6 +762,8 @@
 </li>
         <li><a href="clients.html#module-keydra.clients.contentful">keydra.clients.contentful</a>
 </li>
+        <li><a href="clients.html#module-keydra.clients.github">keydra.clients.github</a>
+</li>
         <li><a href="clients.html#module-keydra.clients.qualys">keydra.clients.qualys</a>
 </li>
         <li><a href="clients.html#module-keydra.clients.salesforce">keydra.clients.salesforce</a>
@@ -701,6 +782,8 @@
 </li>
         <li><a href="providers.html#module-keydra.providers.contentful">keydra.providers.contentful</a>
 </li>
+        <li><a href="providers.html#module-keydra.providers.github">keydra.providers.github</a>
+</li>
         <li><a href="providers.html#module-keydra.providers.qualys">keydra.providers.qualys</a>
 </li>
         <li><a href="providers.html#module-keydra.providers.salesforce">keydra.providers.salesforce</a>
@@ -716,14 +799,18 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clients.html#keydra.clients.contentful.ParameterException">ParameterException</a>
 </li>
-      <li><a href="providers.html#keydra.providers.salesforce.Client.Options.password_field">password_field() (keydra.providers.salesforce.Client.Options property)</a>
+      <li><a href="providers.html#keydra.providers.salesforce.Client.Options.password_field">password_field (keydra.providers.salesforce.Client.Options attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clients.html#keydra.clients.qualys.PasswordChangeException">PasswordChangeException</a>
 </li>
       <li><a href="providers.html#keydra.providers.bitbucket.Client.pre_process_spec">pre_process_spec() (keydra.providers.bitbucket.Client class method)</a>
+
+      <ul>
+        <li><a href="providers.html#keydra.providers.github.Client.pre_process_spec">(keydra.providers.github.Client class method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -756,14 +843,14 @@
         <li><a href="providers.html#keydra.providers.splunk.Client.redact_result">(keydra.providers.splunk.Client class method)</a>
 </li>
       </ul></li>
-      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.require_each_type">require_each_type() (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options property)</a>
+      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.require_each_type">require_each_type (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options attribute)</a>
 </li>
       <li><a href="clients.html#keydra.clients.contentful.ContentfulClient.revoke_token">revoke_token() (keydra.clients.contentful.ContentfulClient method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clients.html#keydra.clients.cloudflare.CloudflareClient.roll_token">roll_token() (keydra.clients.cloudflare.CloudflareClient method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="providers.html#keydra.providers.aws_appsync.Client.rotate">rotate() (keydra.providers.aws_appsync.Client method)</a>
 
       <ul>
@@ -777,6 +864,8 @@
 </li>
         <li><a href="providers.html#keydra.providers.contentful.Client.rotate">(keydra.providers.contentful.Client method)</a>
 </li>
+        <li><a href="providers.html#keydra.providers.github.Client.rotate">(keydra.providers.github.Client method)</a>
+</li>
         <li><a href="providers.html#keydra.providers.qualys.Client.rotate">(keydra.providers.qualys.Client method)</a>
 </li>
         <li><a href="providers.html#keydra.providers.salesforce.Client.rotate">(keydra.providers.salesforce.Client method)</a>
@@ -784,7 +873,7 @@
         <li><a href="providers.html#keydra.providers.splunk.Client.rotate">(keydra.providers.splunk.Client method)</a>
 </li>
       </ul></li>
-      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.rotate_attribute">rotate_attribute() (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options property)</a>
+      <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options.rotate_attribute">rotate_attribute (keydra.providers.aws_secretsmanager.SecretsManagerProvider.Options attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -810,7 +899,7 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="providers.html#keydra.providers.salesforce.Client.Options.token_field">token_field() (keydra.providers.salesforce.Client.Options property)</a>
+      <li><a href="providers.html#keydra.providers.salesforce.Client.Options.token_field">token_field (keydra.providers.salesforce.Client.Options attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -836,7 +925,7 @@
 </li>
       <li><a href="clients.html#keydra.clients.aws.secretsmanager.UpdateSecretException">UpdateSecretException</a>
 </li>
-      <li><a href="providers.html#keydra.providers.salesforce.Client.Options.user_field">user_field() (keydra.providers.salesforce.Client.Options property)</a>
+      <li><a href="providers.html#keydra.providers.salesforce.Client.Options.user_field">user_field (keydra.providers.salesforce.Client.Options attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -852,6 +941,8 @@
         <li><a href="providers.html#keydra.providers.aws_secretsmanager.SecretsManagerProvider.validate_spec">(keydra.providers.aws_secretsmanager.SecretsManagerProvider class method)</a>
 </li>
         <li><a href="providers.html#keydra.providers.bitbucket.Client.validate_spec">(keydra.providers.bitbucket.Client class method)</a>
+</li>
+        <li><a href="providers.html#keydra.providers.github.Client.validate_spec">(keydra.providers.github.Client class method)</a>
 </li>
         <li><a href="providers.html#keydra.providers.qualys.Client.validate_spec">(keydra.providers.qualys.Client class method)</a>
 </li>

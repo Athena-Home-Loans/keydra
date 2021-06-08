@@ -172,8 +172,8 @@
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#bootstrap-and-test-run">
-     Bootstrap and Test Run
+    <a class="reference internal nav-link" href="#test-run">
+     Test Run
     </a>
    </li>
   </ul>
@@ -196,9 +196,8 @@
 <h2>You will need<a class="headerlink" href="#you-will-need" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>An AWS account. Don’t have one, free tier is fine! Go get a free one at <a class="reference external" href="https://aws.amazon.com/free">https://aws.amazon.com/free</a> !</p></li>
-<li><p>An Atlassian Bitbucket account, to host your Keydra configuration. We only support Bitbucket right now, but expect to add other code repository providers in the future.</p></li>
+<li><p>An Atlassian Bitbucket or a Github account, to host your Keydra configuration. We only support Bitbucket and Github right now, but expect to add other code repository providers in the future.</p></li>
 </ul>
-<p>You can <a class="reference external" href="https://id.atlassian.com/signup?application=bitbucket">create a free account here.</a></p>
 </div>
 </div>
 <div class="section" id="initial-deployment">
@@ -206,19 +205,13 @@
 <div class="section" id="setup-a-configuration-repository">
 <h2>Setup a configuration repository<a class="headerlink" href="#setup-a-configuration-repository" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li><p>Create a new private repository in Bitbucket. Let’s call it <cite>KeydraConfiguration</cite>.</p></li>
-</ol>
-<a class="reference internal image-reference" href="static/create_repo.png"><img alt="Create a Bitbucket repository" src="static/create_repo.png" style="width: 400px;" /></a>
-<ol class="arabic" start="2">
-<li><p>Clone your new repo locally. Click the <em>Clone</em> button at the top right of your new repo’s <cite>Source</cite> page, and paste into your terminal.</p>
-<p>Note: You may need to setup an SSH key for this, <a class="reference external" href="https://support.atlassian.com/bitbucket-cloud/docs/set-up-an-ssh-key/">see here for help if needed.</a></p>
+<li><p>Create a new private repository, clone it locally, and change to the new directory. See the relevant guide for your
+preferred platform option:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="github.html#setup-github"><span class="std std-ref">Github</span></a></p></li>
+<li><p><a class="reference internal" href="bitbucket.html#setup-bitbucket"><span class="std std-ref">Bitbucket</span></a></p></li>
+</ul>
 </li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone git@bitbucket.org:&lt;your BB username&gt;/keydraconfiguration.git
-<span class="nb">cd</span> keydraconfiguration
-</pre></div>
-</div>
-<ol class="arabic simple" start="3">
 <li><p>Create a new directory called <cite>config</cite>, and initialise your environments and secrets files.
 We’ll start with one AWS environment (i.e. account) called <cite>main</cite>, and one sample secret called <cite>sample</cite>.</p></li>
 </ol>
@@ -226,7 +219,7 @@ We’ll start with one AWS environment (i.e. account) called <cite>main</cite>, 
 touch environments.yaml secrets.yaml
 </pre></div>
 </div>
-<ol class="arabic simple" start="4">
+<ol class="arabic simple" start="3">
 <li><p>Edit <cite>environments.yaml</cite>. This file tells Keydra about the AWS account it will deploy to, and which secrets to manage there.</p></li>
 </ol>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">dev</span><span class="p">:</span>
@@ -238,12 +231,12 @@ touch environments.yaml secrets.yaml
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">sample</span>
 </pre></div>
 </div>
-<ol class="arabic simple" start="5">
+<ol class="arabic simple" start="4">
 <li><p>For this example, we’ve told Keydra that this account is a <cite>dev</cite> one, but could also be <cite>production</cite> or <cite>uat</cite>.
 The <cite>sample</cite> line tells Keydra to manage that secret in this environment, which we’ll now define!
 You can add lots of environments (i.e. AWS accounts) to this file, just follow the same format and append.</p></li>
-<li><p>Edit <cite>secrets.yaml</cite>. This file tells Keydra about our secrets, just one for the time being - update with your Bitbucket username!
-Note that the repository name here needs to be all lower case.</p></li>
+<li><p>Edit <cite>secrets.yaml</cite>. This file tells Keydra about our secrets, just one for the time being - update with your
+repo organisation or user name, and update the <cite>provider</cite> key to match your code repo type. Note that the repository name here needs to be all lower case.</p></li>
 </ol>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sample</span><span class="p">:</span>
       <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra_managed_sample</span>
@@ -257,34 +250,36 @@ Note that the repository name here needs to be all lower case.</p></li>
       <span class="nt">distribute</span><span class="p">:</span>
       <span class="p p-Indicator">-</span> <span class="nt">config</span><span class="p">:</span>
           <span class="nt">repository</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydraconfiguration</span>
-          <span class="nt">account_username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your bb username&gt;</span>
+          <span class="nt">account_username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your repo org or user name&gt;</span>
         <span class="nt">envs</span><span class="p">:</span>
         <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">dev</span>
         <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS_ACCESS_KEY_ID</span>
-        <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bitbucket</span>
+        <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;bitbucket OR github&gt;</span>
         <span class="nt">scope</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">repository</span>
         <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">key</span>
       <span class="p p-Indicator">-</span> <span class="nt">config</span><span class="p">:</span>
           <span class="nt">repository</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydraconfiguration</span>
-          <span class="nt">account_username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your bb username&gt;</span>
+          <span class="nt">account_username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your repo org or user name&gt;</span>
         <span class="nt">envs</span><span class="p">:</span>
         <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">dev</span>
         <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS_SECRET_ACCESS_KEY</span>
-        <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bitbucket</span>
+        <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;bitbucket OR github&gt;</span>
         <span class="nt">scope</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">repository</span>
         <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
 </pre></div>
 </div>
-<ol class="arabic simple" start="7">
-<li><p>Now push your config up to Bitbucket.</p></li>
+<ol class="arabic simple" start="6">
+<li><p>Now push your config up to the repo.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git add .
 git commit -m <span class="s2">&quot;Initial commit&quot;</span>
 git push origin main
 </pre></div>
 </div>
-<p>What have we setup? This secret will create/manage an IAM user, which we’ll rotate the password every night, and distribute the key and secret as two environment variables in our new Bitbucket repository.
-Why would you do this? You could use these credentials in Bitbucket pipelines to deploy code to AWS. Rather than hardcoding these values in your repo, this way Keydra will ensure that they are:</p>
+<p>What have we setup? This secret will create/manage an IAM user, which we’ll rotate the password every night, and distribute
+the key and secret as two environment variables in our new code repository. Why would you do this? You could use these
+credentials in pipelines to deploy code to AWS. Rather than hardcoding these values in your repo, this way Keydra will ensure
+that they are:</p>
 <ul class="simple">
 <li><p>using your least privilege deploy IAM group (<cite>MyDeploymentGroup</cite>, which we’ll create soon)</p></li>
 <li><p>are changed (very!) frequently to limit impact if compromised/exposed</p></li>
@@ -304,32 +299,40 @@ pip install -r src/requirements.txt
 </div>
 <ol class="arabic simple" start="2">
 <li><p>Friends don’t let friends use admin for everything!! Login to your AWS account console, and create a new IAM user called <cite>keydra_deploy</cite>, with programmatic access only and
-a policy like that in <cite>docs/en/KeydraDeploy.json</cite>.</p></li>
+a policy like that in <cite>docsrc/KeydraDeploy.json</cite>.</p></li>
 <li><p>Create an access key for the <cite>keydra_deploy</cite> user and stash the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY as <a class="reference external" href="https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials_environment.html">enviroment variables in your terminal.</a></p></li>
-<li><p>Now, we’re going to use <a href="#id1"><span class="problematic" id="id2">`AWS SAM&lt;https://aws.amazon.com/serverless/sam/&gt;`_</span></a> to deploy two CloudFormation stacks. The first one (<cite>keydraExecRole</cite>)sets up a least privilege role to run Keydra with.
+<li><p>Now, we’re going to use <a class="reference external" href="https://aws.amazon.com/serverless/sam/">AWS SAM</a> to deploy two CloudFormation stacks. The first one (<cite>keydraExecRole</cite>)sets up a least privilege role to run Keydra with.
 Execute the following on your local machine, changing the region to match your needs.</p></li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sam build -t docs/en/KeydraExecRole.yaml
-sam deploy -t docs/en/KeydraExecRole.yaml --stack-name keydraExecRole --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM --region ap-southeast-2
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sam build -t docsrc/KeydraExecRole.yaml
+sam deploy -t docsrc/KeydraExecRole.yaml --stack-name keydraExecRole --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM --region ap-southeast-2
 </pre></div>
 </div>
 <ol class="arabic simple" start="5">
 <li><p>Assuming the SAM run was successful, you should see an outputs block with an Arn for the new role. Note this down, we’ll need this for step 7.</p></li>
-<li><p>Now we’ll create the second stack, this one for <cite>keydra</cite> itself. Copy <cite>docs/en/sample_template.yaml</cite> to your main keydra directory as <cite>template.yaml</cite>.
+<li><p>Now we’ll create the second stack, this one for <cite>keydra</cite> itself. Copy <cite>docsrc/sample_template.yaml</cite> to your main Keydra directory as <cite>template.yaml</cite>.
 This is a nice SAM template that will make this easy!</p></li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp docs/en/sample_template.yaml template.yaml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp docsrc/sample_template.yaml template.yaml
 </pre></div>
 </div>
 <ol class="arabic simple" start="7">
 <li><p>Edit <cite>template.yaml</cite>. This looks daunting, but you only need to change the 6 values in angle brackets.</p>
 <ul class="simple">
 <li><p><cite>IAM Role Arn</cite> - This is the ARN to an AWS IAM role that you’ll use to run Keydra, from step 5.</p></li>
-<li><p><cite>bb account name</cite> - The Bitbucket account name from the first section.</p></li>
-<li><p><cite>secrets repo name</cite> - The Bitbucket repository name. In this example, this is <cite>KeydraConfiguration</cite>.</p></li>
-<li><p><cite>path to secrets.yaml</cite> - The path to our secrets. For our example, this is  <cite>src/main/config/secrets.yaml</cite></p></li>
+<li><p><cite>repo account name</cite> - The code repo account or organisation name from the first section.</p></li>
+<li><p><cite>secrets repo name</cite> - The repository name. In this example, this is <cite>KeydraConfiguration</cite>.</p></li>
+<li><dl class="simple">
+<dt><cite>path to secrets.yaml</cite> - The path to our secrets. For our example, this is <cite>src/main/config/secrets.yaml</cite> for Bitbucket,</dt><dd><p>or <cite>main/config/secrets.yaml</cite> for Github.</p>
+</dd>
+</dl>
+</li>
 <li><p><cite>environments repo name</cite> - We’ll use the same repo, use <cite>KeydraConfiguration</cite>.</p></li>
-<li><p><cite>path to environments.yaml</cite> - The path to our environments definition. For our example, this is  <cite>src/main/config/environments.yaml</cite></p></li>
+<li><dl class="simple">
+<dt><cite>path to environments.yaml</cite> - The path to our environments definition. For our example, this is</dt><dd><p><cite>src/main/config/environments.yaml</cite> for Bitbucket, or <cite>main/config/environments.yaml</cite> for Github.</p>
+</dd>
+</dl>
+</li>
 </ul>
 </li>
 <li><p>Build and deploy with SAM. Make sure Docker is installed/running first!</p></li>
@@ -339,40 +342,17 @@ sam deploy --stack-name keydra --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXP
 </pre></div>
 </div>
 </div>
-<div class="section" id="bootstrap-and-test-run">
-<h2>Bootstrap and Test Run<a class="headerlink" href="#bootstrap-and-test-run" title="Permalink to this headline">¶</a></h2>
-<p>We’re just about there! We just need to bootstrap BitBucket connections, and we can do an adhoc trial run of the lamnda!</p>
+<div class="section" id="test-run">
+<h2>Test Run<a class="headerlink" href="#test-run" title="Permalink to this headline">¶</a></h2>
+<p>Let’s do an adhoc trial run of the lambda!</p>
 <ol class="arabic simple">
-<li><p>Create App password for your Bitbucket user. Click your user avatar in the bottom left corner, then <cite>Personal settings</cite> &gt; <cite>App passwords</cite>.
-Click the blue <cite>Create app password</cite> button.</p></li>
-</ol>
-<a class="reference internal image-reference" href="static/create_app_password.png"><img alt="Create a App password" src="static/create_app_password.png" style="width: 400px;" /></a>
-<ol class="arabic simple" start="2">
-<li><p>Call the App password <cite>keydra</cite>, and minimum permissions. Click <cite>Create</cite>.</p></li>
-</ol>
-<a class="reference internal image-reference" href="static/perms_app_password.png"><img alt="Configure App password permissions" src="static/perms_app_password.png" style="width: 400px;" /></a>
-<ol class="arabic simple" start="3">
-<li><p>You’ll be shown a password, which you’ll only see once! In another tab, login to the AWS Console and navigate to the <cite>Secrets Manager</cite> service.</p></li>
-<li><p>Click the orange <cite>Store a new secret</cite> button.</p></li>
-</ol>
-<a class="reference internal image-reference" href="static/store_secret.png"><img alt="Store a secret" src="static/store_secret.png" style="width: 400px;" /></a>
-<ol class="arabic simple" start="5">
-<li><p>Choose a secret type of <cite>Other type of secrets</cite>, and add a plaintext secret as follows (substituting your details).</p></li>
-</ol>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="nt">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;the password from step 3&gt;&quot;</span><span class="p">,</span>
-<span class="nt">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;your bb username&gt;&quot;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<ol class="arabic simple" start="6">
-<li><p>You can leave encyption settings as default, or update to your needs. Click <cite>Next</cite>.</p></li>
-<li><p>Call your secret <cite>keydra/bitbucket</cite>, and add a tag of ‘managedby’=’keydra’. Click <cite>Next</cite>.</p></li>
-<li><p>Auto rotation is not required (Keydra will do this), so just click <cite>Next</cite> on the next screen, then <cite>Store</cite> on the one after.</p></li>
-<li><p>Time to give it a go! In the AWS Console, navigate to the <cite>Lambda</cite> service.</p></li>
+<li><p>In the AWS Console, navigate to the <cite>Lambda</cite> service.</p></li>
 <li><p>You should see a <cite>keydra</cite> function, open it up.</p></li>
-<li><p>Scroll down a little, and select the <cite>Test</cite> tab. Test with the following event, which tells Keydra to run a <cite>Nightly</cite> run
-with debug enabled. Click the <cite>Test</cite> button to run Keydra.</p></li>
+<li><dl class="simple">
+<dt>Scroll down a little, and select the <cite>Test</cite> tab. Test with the following event, which tells Keydra to run a <cite>Nightly</cite> run</dt><dd><p>with debug enabled. Click the <cite>Test</cite> button to run Keydra.</p>
+</dd>
+</dl>
+</li>
 </ol>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
 <span class="nt">&quot;trigger&quot;</span><span class="p">:</span> <span class="s2">&quot;nightly&quot;</span><span class="p">,</span>
@@ -381,16 +361,20 @@ with debug enabled. Click the <cite>Test</cite> button to run Keydra.</p></li>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="static/test_function.png"><img alt="Test Keydra!" src="static/test_function.png" style="width: 400px;" /></a>
-<ol class="arabic simple" start="12">
+<ol class="arabic simple" start="4">
 <li><p>With a little luck, you should see something like this!</p></li>
 </ol>
 <a class="reference internal image-reference" href="static/success.png"><img alt="Success!" src="static/success.png" style="width: 400px;" /></a>
-<ol class="arabic simple" start="13">
-<li><p>What just happened? Keydra created an IAM user in AWS, and then stored the IAM username and password in two separate
-repository variables in Bitbucket. You can see the results in Bitbucket under your repo; browse to <cite>Repository settings</cite> &gt;
-<cite>Repository variables</cite></p></li>
+<ol class="arabic simple" start="5">
+<li><dl class="simple">
+<dt>What just happened? Keydra created an IAM user in AWS, and then stored the IAM username and password in two separate</dt><dd><p>repository variables in your code repository. You can see the results under your repo; browse to <cite>Repository settings</cite> &gt;
+<cite>Repository variables</cite> in Bitbucket, or <cite>Settings</cite> &gt; <cite>Secrets</cite> in Github.</p>
+</dd>
+</dl>
+</li>
 </ol>
-<a class="reference internal image-reference" href="static/repo_vars.png"><img alt="Our new vars" src="static/repo_vars.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="static/repo_vars.png"><img alt="Our new vars (BB)" src="static/repo_vars.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="static/repo_vars_gh.png"><img alt="Our new vars (GH)" src="static/repo_vars_gh.png" style="width: 400px;" /></a>
 <p>You can now use these values to deploy your code to AWS, and Keydra will kindly rotate them automagically every night, without
 you needing to do a thing!</p>
 </div>
