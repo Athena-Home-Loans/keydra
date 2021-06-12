@@ -183,6 +183,13 @@ class Keydra(object):
             km = loader.build_client(
                 target['provider'], target.get('provider_secret_key')
             )
+            if callable(getattr(km, "load_config")):
+                LOGGER.debug(
+                    "{} is a config provider! Setting default org/account.".format(
+                        target['provider']
+                    )
+                )
+                km.accountusername = self._cfg.get_accountusername()
 
             return self._success(km.distribute(secret, target))
 

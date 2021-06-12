@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Keydra - Secrets Management for Humans! &#8212; Keydra 0.1 documentation</title>
+    <title>Initial Bitbucket Setup &#8212; Keydra 0.1 documentation</title>
     
   <link href="static/css/theme.css" rel="stylesheet" />
   <link href="static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -101,7 +101,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/index.rst.txt"><button type="button"
+        <a class="dropdown-buttons" href="_sources/bitbucket.rst.txt"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.rst</button></a>
         <!-- Download PDF via print -->
@@ -121,7 +121,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/Athena-Home-Loans/keydra/issues/new?title=Issue%20on%20page%20%2Findex.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/Athena-Home-Loans/keydra/issues/new?title=Issue%20on%20page%20%2Fbitbucket.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -142,6 +142,24 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setup-a-configuration-repository">
+   Setup a configuration repository
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#create-app-credentials">
+   Create app credentials
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -150,23 +168,57 @@
         
               <div>
                 
-  <div class="section" id="keydra-secrets-management-for-humans">
-<h1>Keydra - Secrets Management for Humans!<a class="headerlink" href="#keydra-secrets-management-for-humans" title="Permalink to this headline">¶</a></h1>
-<p>Next level Secrets Management, without the price tag!</p>
-<p>Keydra allows you to automatically rotate your secrets on a schedule you define. Since it’s all automated, it’s easy to rotate your service account and API keys much more frequently than you do today. Like, everyday!</p>
-<p>This significanty decreases the period of time an attacker has to use compromised credentials, and lowers the risk for your organisation.</p>
-<p>It runs as a Lambda function in AWS, and has two main functions.</p>
+  <div class="section" id="initial-bitbucket-setup">
+<span id="setup-bitbucket"></span><h1>Initial Bitbucket Setup<a class="headerlink" href="#initial-bitbucket-setup" title="Permalink to this headline">¶</a></h1>
+<p>To use Bitbucket for your config source, read on. If needed, you
+can <a class="reference external" href="https://id.atlassian.com/signup?application=bitbucket">create a free account here.</a></p>
+<div class="section" id="setup-a-configuration-repository">
+<h2>Setup a configuration repository<a class="headerlink" href="#setup-a-configuration-repository" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li><p>Rotate: Change a secret</p></li>
-<li><p>Distribute: Store a secret</p></li>
+<li><p>Create a new private repository in Bitbucket. Let’s call it <cite>KeydraConfiguration</cite>.</p></li>
 </ol>
-<p>These functions are called against <em>providers</em>, which are modular integrations with technology platforms. For each defined secret, you rotate on a single provider, but distribute to multiple providers.</p>
-<p>Use case examples;</p>
-<ul class="simple">
-<li><p>Once a day, rotate/change an AWS IAM user password, and store in a BitBucket repository as a deployment variable to use in pipelines. <em>(rotate: AWS IAM, distribute: BitBucket)</em></p></li>
-<li><p>Once a week, rotate/change a Salesforce user password, taking the current secret from AWS Secrets Manager and replacing with the new password once done. <em>(rotate: AWS SecretsManager, distribute: Salesforce, AWS SecretsManager)</em></p></li>
-</ul>
-<p>Check out the <a class="reference internal" href="providers.html#providers"><span class="std std-ref">supported providers</span></a>, the list is growing all the time!</p>
+<a class="reference internal image-reference" href="static/create_repo.png"><img alt="Create a Bitbucket repository" src="static/create_repo.png" style="width: 400px;" /></a>
+<ol class="arabic" start="2">
+<li><p>Clone your new repo locally. Click the <em>Clone</em> button at the top right of your new repo’s <cite>Source</cite> page, and paste into your terminal.</p>
+<p>Note: You may need to setup an SSH key for this, <a class="reference external" href="https://support.atlassian.com/bitbucket-cloud/docs/set-up-an-ssh-key/">see here for help if needed.</a></p>
+</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone git@bitbucket.org:&lt;your BB username&gt;/keydraconfiguration.git
+<span class="nb">cd</span> keydraconfiguration
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-app-credentials">
+<h2>Create app credentials<a class="headerlink" href="#create-app-credentials" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Create App password for your Bitbucket user. Click your user avatar in the bottom left corner, then <cite>Personal settings</cite> &gt; <cite>App passwords</cite>.
+Click the blue <cite>Create app password</cite> button.</p></li>
+</ol>
+<a class="reference internal image-reference" href="static/create_app_password.png"><img alt="Create a App password" src="static/create_app_password.png" style="width: 400px;" /></a>
+<ol class="arabic simple" start="2">
+<li><p>Call the App password <cite>keydra</cite>, and minimum permissions. Click <cite>Create</cite>.</p></li>
+</ol>
+<a class="reference internal image-reference" href="static/perms_app_password.png"><img alt="Configure App password permissions" src="static/perms_app_password.png" style="width: 400px;" /></a>
+<ol class="arabic simple" start="3">
+<li><p>You’ll be shown a password, which you’ll only see once! In another tab, login to the AWS Console and navigate to the <cite>Secrets Manager</cite> service.</p></li>
+<li><p>Click the orange <cite>Store a new secret</cite> button.</p></li>
+</ol>
+<a class="reference internal image-reference" href="static/store_secret.png"><img alt="Store a secret" src="static/store_secret.png" style="width: 400px;" /></a>
+<ol class="arabic simple" start="5">
+<li><p>Choose a secret type of <cite>Other type of secrets</cite>, and add a plaintext secret as follows (substituting your details).</p></li>
+</ol>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="nt">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;the password from step 3&gt;&quot;</span><span class="p">,</span>
+<span class="nt">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;your bb username&gt;&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>You can leave encryption settings as default, or update to your needs. Click <cite>Next</cite>.</p></li>
+<li><p>Call your secret <cite>keydra/bitbucket</cite>.</p></li>
+<li><p>Auto rotation is not required (Keydra will do this), so just click <cite>Next</cite> on the next screen, then <cite>Store</cite> on the one after.</p></li>
+</ol>
+</div>
 </div>
 
 

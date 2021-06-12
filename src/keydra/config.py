@@ -211,3 +211,12 @@ class KeydraConfig(object):
             rotate=rotate,
             requested_secrets=secrets
         )
+
+    def get_accountusername(self):
+        '''
+        Get the account or organisation name of our chosen config provider
+
+        :returns: Account or oganisation name from config provider
+        :rtype: :class:`str`
+        '''
+        return self._config['config']['accountusername']

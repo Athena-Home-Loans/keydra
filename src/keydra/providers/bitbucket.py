@@ -5,6 +5,8 @@ import yaml
 from keydra.clients.bitbucket import BitbucketClient
 
 from keydra.providers.base import BaseProvider
+from keydra.providers.base import ConfigProvider
+
 from keydra.providers.base import exponential_backoff_retry
 
 from keydra.exceptions import ConfigException
@@ -25,9 +27,15 @@ class Client(BaseProvider):
             user=credentials['username'],
             passwd=credentials['password']
         )
+        self.accountusername = None
 
     def _distribute_account_secret(self, secret, dest):
-        acct_username = dest['config'].get(ACCT_USERNAME_TAG)
+        if ACCT_USERNAME_TAG in dest['config']:
+            # Account/org is being over-ridden
+            acct_username = dest['config'].get(ACCT_USERNAME_TAG)
+        else:
+            acct_username = self.accountusername
+
         account_variables = self._client.list_team_pipeline_variables(
             username=acct_username
         )
@@ -134,6 +142,12 @@ class Client(BaseProvider):
     def _distribute_deployment_secret(self, secret, dest):
         config = dest['config']
 
+        if ACCT_USERNAME_TAG in config:
+            # Account/org is being over-ridden
+            acct_username = config.get(ACCT_USERNAME_TAG)
+        else:
+            acct_username = self.accountusername
+
         env_uuid, environment = self._get_or_create_environment(
             config
         )
@@ -141,7 +155,7 @@ class Client(BaseProvider):
         env_vars = self._client.list_repo_deployment_variables(
             repo_slug=config['repository'],
             env_uuid=env_uuid,
-            username=config[ACCT_USERNAME_TAG]
+            username=acct_username
         )
         existing_variable = None
 
@@ -163,7 +177,7 @@ class Client(BaseProvider):
                     env_uuid=env_uuid,
                     key=dest['key'],
                     value=secret[dest['source']],
-                    username=config[ACCT_USERNAME_TAG],
+                    username=acct_username,
                     secured=True
                 )
 
@@ -180,7 +194,7 @@ class Client(BaseProvider):
                     env_uuid=env_uuid,
                     key=dest['key'],
                     value=secret[dest['source']],
-                    username=config[ACCT_USERNAME_TAG],
+                    username=acct_username,
                     secured=True
                 )
 
@@ -204,9 +218,15 @@ class Client(BaseProvider):
     def _distribute_repository_secret(self, secret, dest):
         config = dest['config']
 
+        if ACCT_USERNAME_TAG in config:
+            # Account/org is being over-ridden
+            acct_username = config.get(ACCT_USERNAME_TAG)
+        else:
+            acct_username = self.accountusername
+
         env_vars = self._client.list_repo_variables(
             config['repository'],
-            username=config[ACCT_USERNAME_TAG]
+            username=acct_username
         )
         existing_variable = None
 
@@ -232,7 +252,7 @@ class Client(BaseProvider):
                     repo_slug=config['repository'],
                     key=dest['key'],
                     value=secret[dest['source']],
-                    username=config[ACCT_USERNAME_TAG],
+                    username=acct_username,
                     secured=True
                 )
 
@@ -248,7 +268,7 @@ class Client(BaseProvider):
                     repo_slug=config['repository'],
                     key=dest['key'],
                     value=secret[dest['source']],
-                    username=config[ACCT_USERNAME_TAG],
+                    username=acct_username,
                     secured=True
                 )
 
@@ -274,18 +294,18 @@ class Client(BaseProvider):
 
     def _distribute(self, secret, destination):
         try:
-            if destination['scope'] == 'account':
+            if destination['config']['scope'] == 'account':
                 return self._distribute_account_secret(secret, destination)
 
-            elif destination['scope'] == 'repository':
+            elif destination['config']['scope'] == 'repository':
                 return self._distribute_repository_secret(secret, destination)
 
-            elif destination['scope'] == 'deployment':
+            elif destination['config']['scope'] == 'deployment':
                 return self._distribute_deployment_secret(secret, destination)
 
             else:
                 raise NotImplementedError(
-                    'Bitbucket for scope {}'.format(destination['scope'])
+                    'Bitbucket for scope {}'.format(destination['config']['scope'])
                 )
 
         except Exception as e:
@@ -304,7 +324,7 @@ class Client(BaseProvider):
 
     @classmethod
     def _validate_deployment_spec(cls, spec):
-        for attribute in ['repository', 'environment']:
+        for attribute in ['repository', 'environment', 'scope']:
             if attribute not in spec['config']:
                 return False, 'Attribute "config.{}" not present'.format(
                     attribute
@@ -319,16 +339,16 @@ class Client(BaseProvider):
         if not valid:
             return valid, msg
 
-        if 'scope' not in spec:
-            return False, 'Attribute "scope" not present in configuration'
-
         if 'config' not in spec:
             return False, 'Attribute "config" not present in configuration'
 
-        if spec['scope'] == 'deployment':
+        if 'scope' not in spec['config']:
+            return False, 'Attribute "scope" not present in configuration'
+
+        if spec['config']['scope'] == 'deployment':
             return Client._validate_deployment_spec(spec)
 
-        if spec['scope'] == 'repository':
+        if spec['config']['scope'] == 'repository':
             return Client._validate_repository_spec(spec)
 
         return True, 'It is valid!'  # pragma: no cover
@@ -357,7 +377,7 @@ class Client(BaseProvider):
                 **{'ENV': current_env_name.upper()}
             )
 
-        if spec['scope'] in ['deployment', 'repository'] and any(
+        if spec['config']['scope'] in ['deployment', 'repository'] and any(
             [
                 isinstance(spec['config']['repository'], list),
                 isinstance(spec['config']['repository'], tuple)
@@ -398,43 +418,22 @@ class Client(BaseProvider):
             )
 
     def load_config(self, config):
-        username = config.get('accountusername')
-        secrets_repo = config.get('secrets', {}).get('repository')
-        secrets_path = config.get('secrets', {}).get('path')
-        secrets_filetype = config.get('secrets', {}).get('filetype', 'yaml')
-        envs_repo = config.get('environments', {}).get('repository')
-        envs_path = config.get('environments', {}).get('path')
-        envs_filetype = config.get('environments', {}).get('filetype', 'yaml')
-
-        if not secrets_repo:
-            raise ConfigException(
-                '"repository" not defined for "secrets" in configuration'
-            )
-
-        if not envs_repo:
-            raise ConfigException(
-                '"repository" not defined for "environments" in configuration'
-            )
-
-        if not username:
-            raise ConfigException(
-                '"accountusername" not defined in configuration'
-            )
+        Cp = ConfigProvider(config)
 
         LOGGER.info('Attempting to load config from Bitbucket')
 
         envs = self._load_remote_file(
-            repo=envs_repo,
-            path=envs_path,
-            filetype=envs_filetype,
-            username=username
+            repo=Cp.envs_repo,
+            path=Cp.envs_path,
+            filetype=Cp.envs_filetype,
+            username=Cp.username
         )
 
         specs = self._load_remote_file(
-            repo=secrets_repo,
-            path=secrets_path,
-            filetype=secrets_filetype,
-            username=username
+            repo=Cp.secrets_repo,
+            path=Cp.secrets_path,
+            filetype=Cp.secrets_filetype,
+            username=Cp.username
         )
 
         return envs, specs
