@@ -4,7 +4,6 @@ import unittest
 from keydra.providers import github
 
 from keydra.exceptions import ConfigException
-from keydra.exceptions import DistributionException
 from keydra.exceptions import RotationException
 
 from unittest.mock import call
@@ -25,17 +24,33 @@ GH_DEST_ACCT = {
     'key': 'secret_name',
     'provider': 'github',
     'source': 'key',
-    'scope': 'account',
     'envs': ['*'],
-    'config': {'account_username': 'acct_user'}
+    'config': {
+        'account_username': 'acct_user',
+        'scope': 'account'
+    }
 }
 
 GH_DEST_REPO = {
     'key': 'secret_name',
     'provider': 'github',
     'source': 'key',
-    'scope': 'repository',
-    'config': {'repository': 'repo', 'account_username': 'acct_user'},
+    'config': {
+        'repository': 'repo',
+        'scope': 'repository'
+    },
+    'envs': ['*']
+}
+
+GH_DEST_REPO_OVERRIDE = {
+    'key': 'secret_name',
+    'provider': 'github',
+    'source': 'key',
+    'config': {
+        'repository': 'repo',
+        'account_username': 'acct_user',
+        'scope': 'repository'
+    },
     'envs': ['*']
 }
 
@@ -43,26 +58,12 @@ GH_DEST_ENV = {
     'key': 'secret_name',
     'provider': 'github',
     'source': 'key',
-    'scope': 'deployment',
     'config': {
         'repository': 'repo',
         'environment': 'env',
         'account_username': 'acct_user',
-        'create': True
-    },
-    'envs': ['*']
-}
-
-GH_DEST_REPO_NO_CREATE = {
-    'key': 'secret_name',
-    'provider': 'github',
-    'source': 'key',
-    'scope': 'repository',
-    'config': {
-        'repository': 'repo',
-        'environment': 'env',
-        'account_username': 'acct_user',
-        'create': False
+        'create': True,
+        'scope': 'deployment'
     },
     'envs': ['*']
 }
@@ -71,11 +72,11 @@ GH_DEST_ENV_MULTI_REPO = {
     'key': 'secret_name_{ENV}',
     'provider': 'github',
     'source': 'key',
-    'scope': 'deployment',
     'config': {
         'repository': ['repoA', 'repoB'],
         'environment': '{ENV}',
-        'account_username': 'acct_user'
+        'account_username': 'acct_user',
+        'scope': 'deployment'
     },
     'envs': ['*']
 }
@@ -94,7 +95,7 @@ class TestProviderGithub(unittest.TestCase):
             repo='repo',
             key='secret_name',
             value='secret_key',
-            org='acct_user'
+            org=None
         )
 
     def test__distribute_repo_secret_existing_var(self):
@@ -106,6 +107,23 @@ class TestProviderGithub(unittest.TestCase):
         ]
 
         cli._distribute_repository_secret(IAM_SECRET, GH_DEST_REPO)
+
+        cli._client.add_repo_variable.assert_called_once_with(
+            repo='repo',
+            key='secret_name',
+            value='secret_key',
+            org=None
+        )
+
+    def test__distribute_repo_override_org(self):
+        cli = github.Client(credentials=GH_CREDS)
+
+        cli._client = MagicMock()
+        cli._client.list_repo_variables.return_value = [
+            {'name': 'secret_name'}
+        ]
+
+        cli._distribute_repository_secret(IAM_SECRET, GH_DEST_REPO_OVERRIDE)
 
         cli._client.add_repo_variable.assert_called_once_with(
             repo='repo',
@@ -126,15 +144,6 @@ class TestProviderGithub(unittest.TestCase):
 
         cli._distribute(IAM_SECRET, GH_DEST_REPO)
         mk_drs.assert_called_once_with(IAM_SECRET, GH_DEST_REPO)
-
-        with self.assertRaises(DistributionException):
-            cli._distribute(IAM_SECRET, GH_DEST_ACCT)
-
-        with self.assertRaises(DistributionException):
-            cli._distribute(IAM_SECRET, GH_DEST_ENV)
-
-        with self.assertRaises(DistributionException):
-            cli._distribute(IAM_SECRET, {'scope': 'weird_scope'})
 
     def test__validate_repository_spec(self):
         valid, _ = github.Client._validate_repository_spec(
@@ -167,9 +176,9 @@ class TestProviderGithub(unittest.TestCase):
         mk_vrc.return_value = [True, '']
         valid, _ = github.Client.validate_spec(
             {
-                'scope': 'repository',
                 'config': {
-                    'repository': 'woot'
+                    'repository': 'woot',
+                    'scope': 'repository'
                 }
             }
         )

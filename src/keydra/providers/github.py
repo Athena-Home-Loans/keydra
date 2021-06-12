@@ -5,6 +5,8 @@ import yaml
 from keydra.clients.github import GithubClient
 
 from keydra.providers.base import BaseProvider
+from keydra.providers.base import ConfigProvider
+
 from keydra.providers.base import exponential_backoff_retry
 
 from keydra.exceptions import ConfigException
@@ -25,60 +27,40 @@ class Client(BaseProvider):
             user=credentials['username'],
             passwd=credentials['password']
         )
+        self.accountusername = None
 
     def _distribute_repository_secret(self, secret, dest):
         config = dest['config']
 
-        env_vars = self._client.list_repo_variables(
-            config['repository'],
-            org=config[ACCT_USERNAME_TAG]
-        )
-        existing_variable = None
-
-        for remote_var in env_vars:
-            if remote_var['name'] == dest['key']:
-                existing_variable = remote_var
-                break
+        if ACCT_USERNAME_TAG in config:
+            # Account/org is being over-ridden
+            org = config.get(ACCT_USERNAME_TAG)
+        else:
+            org = self.accountusername
 
         try:
-            if existing_variable is None:
-                LOGGER.info(
-                    '{} not present in Github[{}], adding.'.format(
-                        dest['key'], config['repository']
-                    )
-                )
-
-                if not dest['source'] in secret:
-                    raise DistributionException(
-                        'Key "{}" not found in the secret'.format(
-                            dest['source']))
-
-            else:
-                LOGGER.info(
-                    '{} is present in Github[{}], updating.'.format(
-                        dest['key'], config['repository']
-                    )
-                )
-
             self._client.add_repo_variable(
                 repo=config['repository'],
                 key=dest['key'],
                 value=secret[dest['source']],
-                org=config[ACCT_USERNAME_TAG],
+                org=org
             )
 
         except Exception as e:  # pragma: no cover
-            LOGGER.warn('Failed to distribute secret: {}'.format(e))
+            LOGGER.warn('Failed to distribute secret to Github repo {}: {}'.format(
+                    config['repository'],
+                    e
+                )
+            )
             raise DistributionException(e)
 
         LOGGER.info(
-            'Successfully distributed {}{} to Github[{}] from '
-            '{} - {}'.format(
-                dest['key'],
-                ' ({})'.format(secret['key']) if 'key' in secret else '',
-                dest['source'],
+            'Successfully distributed {}.{}.key to '
+            'github.{}.{} '.format(
                 secret['provider'],
+                secret['key'],
                 config['repository'],
+                dest['key']
             )
         )
 
@@ -89,13 +71,8 @@ class Client(BaseProvider):
 
     def _distribute(self, secret, destination):
         try:
-            if destination['scope'] == 'repository':
-                return self._distribute_repository_secret(secret, destination)
-
-            else:
-                raise NotImplementedError(
-                    'Github for scope {}'.format(destination['scope'])
-                )
+            # We only support repo level distribution right now
+            return self._distribute_repository_secret(secret, destination)
 
         except Exception as e:
             raise DistributionException(e)
@@ -118,13 +95,13 @@ class Client(BaseProvider):
         if not valid:
             return valid, msg
 
-        if 'scope' not in spec:
-            return False, 'Attribute "scope" not present in configuration'
-
         if 'config' not in spec:
             return False, 'Attribute "config" not present in configuration'
 
-        if spec['scope'] != 'repository':
+        if 'scope' not in spec['config']:
+            return False, 'Attribute "scope" not present in configuration'
+
+        if spec['config']['scope'] != 'repository':
             return False, 'Unsupported scope'
         else:
             return Client._validate_repository_spec(spec)
@@ -155,7 +132,7 @@ class Client(BaseProvider):
                 **{'ENV': current_env_name.upper()}
             )
 
-        if spec['scope'] in ['deployment', 'repository'] and any(
+        if spec['config']['scope'] in ['deployment', 'repository'] and any(
             [
                 isinstance(spec['config']['repository'], list),
                 isinstance(spec['config']['repository'], tuple)
@@ -173,7 +150,7 @@ class Client(BaseProvider):
 
     def _load_remote_file(self, repo, path, username, filetype):
         LOGGER.info(
-            'Loading remote file: {} - {}'.format(repo, path)
+            'Loading remote file from Github repo {} at path {}'.format(repo, path)
         )
 
         resp = self._client.fetch_file_from_repository(
@@ -182,7 +159,7 @@ class Client(BaseProvider):
             org=username
         )
 
-        LOGGER.debug('Remove file content: \n{}'.format(resp))
+        LOGGER.debug('Remote file content: \n{}'.format(resp))
 
         if filetype.lower() in ['json']:
             return json.loads(resp)
@@ -196,43 +173,22 @@ class Client(BaseProvider):
             )
 
     def load_config(self, config):
-        username = config.get('accountusername')
-        secrets_repo = config.get('secrets', {}).get('repository')
-        secrets_path = config.get('secrets', {}).get('path')
-        secrets_filetype = config.get('secrets', {}).get('filetype', 'yaml')
-        envs_repo = config.get('environments', {}).get('repository')
-        envs_path = config.get('environments', {}).get('path')
-        envs_filetype = config.get('environments', {}).get('filetype', 'yaml')
-
-        if not secrets_repo:
-            raise ConfigException(
-                '"repository" not defined for "secrets" in configuration'
-            )
-
-        if not envs_repo:
-            raise ConfigException(
-                '"repository" not defined for "environments" in configuration'
-            )
-
-        if not username:
-            raise ConfigException(
-                '"accountusername" not defined in configuration'
-            )
+        Cp = ConfigProvider(config)
 
         LOGGER.info('Attempting to load config from Github')
 
         envs = self._load_remote_file(
-            repo=envs_repo,
-            path=envs_path,
-            filetype=envs_filetype,
-            username=username
+            repo=Cp.envs_repo,
+            path=Cp.envs_path,
+            filetype=Cp.envs_filetype,
+            username=Cp.username
         )
 
         specs = self._load_remote_file(
-            repo=secrets_repo,
-            path=secrets_path,
-            filetype=secrets_filetype,
-            username=username
+            repo=Cp.secrets_repo,
+            path=Cp.secrets_path,
+            filetype=Cp.secrets_filetype,
+            username=Cp.username
         )
 
         return envs, specs

@@ -25,17 +25,22 @@ BB_DEST_ACCT = {
     'key': 'secret_name',
     'provider': 'bitbucket',
     'source': 'key',
-    'scope': 'account',
     'envs': ['*'],
-    'config': {'account_username': 'acct_user'}
+    'config': {
+        'account_username': 'acct_user',
+        'scope': 'account'
+    }
 }
 
 BB_DEST_REPO = {
     'key': 'secret_name',
     'provider': 'bitbucket',
     'source': 'key',
-    'scope': 'repository',
-    'config': {'repository': 'repo', 'account_username': 'acct_user'},
+    'config': {
+        'repository': 'repo',
+        'account_username': 'acct_user',
+        'scope': 'repository'
+    },
     'envs': ['*']
 }
 
@@ -43,12 +48,12 @@ BB_DEST_ENV = {
     'key': 'secret_name',
     'provider': 'bitbucket',
     'source': 'key',
-    'scope': 'deployment',
     'config': {
         'repository': 'repo',
         'environment': 'env',
         'account_username': 'acct_user',
-        'create': True
+        'create': True,
+        'scope': 'deployment'
     },
     'envs': ['*']
 }
@@ -57,12 +62,12 @@ BB_DEST_REPO_NO_CREATE = {
     'key': 'secret_name',
     'provider': 'bitbucket',
     'source': 'key',
-    'scope': 'repository',
     'config': {
         'repository': 'repo',
         'environment': 'env',
         'account_username': 'acct_user',
-        'create': False
+        'create': False,
+        'scope': 'repository'
     },
     'envs': ['*']
 }
@@ -71,11 +76,11 @@ BB_DEST_ENV_MULTI_REPO = {
     'key': 'secret_name_{ENV}',
     'provider': 'bitbucket',
     'source': 'key',
-    'scope': 'deployment',
     'config': {
         'repository': ['repoA', 'repoB'],
         'environment': '{ENV}',
-        'account_username': 'acct_user'
+        'account_username': 'acct_user',
+        'scope': 'deployment'
     },
     'envs': ['*']
 }
@@ -279,7 +284,7 @@ class TestProviderBitbucket(unittest.TestCase):
         self.assertEqual(valid, False)
 
         valid, _ = bitbucket.Client._validate_deployment_spec(
-            {'config': {'repository': 'repo', 'environment': 'env'}}
+            {'config': {'repository': 'repo', 'environment': 'env', 'scope': 'repository'}}
         )
 
         self.assertEqual(valid, True)
@@ -294,9 +299,12 @@ class TestProviderBitbucket(unittest.TestCase):
 
         self.assertEqual(valid, False)
 
+        mk_vdc.return_value = [False, '']
         valid, _ = bitbucket.Client.validate_spec(
             {
-                'scope': 'deployment'
+                'config': {
+                    'scope': 'deployment'
+                }
             }
         )
 
@@ -305,8 +313,9 @@ class TestProviderBitbucket(unittest.TestCase):
         mk_vrc.return_value = [True, '']
         valid, _ = bitbucket.Client.validate_spec(
             {
-                'scope': 'repository',
-                'config': {}
+                'config': {
+                    'scope': 'repository'
+                }
             }
         )
 
@@ -316,8 +325,9 @@ class TestProviderBitbucket(unittest.TestCase):
         mk_vdc.return_value = [True, '']
         valid, _ = bitbucket.Client.validate_spec(
             {
-                'scope': 'deployment',
-                'config': {}
+                'config': {
+                    'scope': 'deployment'
+                }
             }
         )
 
@@ -327,8 +337,9 @@ class TestProviderBitbucket(unittest.TestCase):
         mk_bvc.return_value = [False, '']
         valid, _ = bitbucket.Client.validate_spec(
             {
-                'scope': 'deployment',
-                'config': {}
+                'config': {
+                    'scope': 'deployment'
+                }
             }
         )
 

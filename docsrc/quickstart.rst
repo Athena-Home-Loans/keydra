@@ -142,11 +142,9 @@ Deploy Keydra to AWS
     * `IAM Role Arn` - This is the ARN to an AWS IAM role that you'll use to run Keydra, from step 5.
     * `repo account name` - The code repo account or organisation name from the first section.
     * `secrets repo name` - The repository name. In this example, this is `KeydraConfiguration`.
-    * `path to secrets.yaml` - The path to our secrets. For our example, this is `src/main/config/secrets.yaml` for Bitbucket,
-       or `main/config/secrets.yaml` for Github.
+    * `path to secrets.yaml` - The path to our secrets. For our example, this is `src/main/config/secrets.yaml` for Bitbucket, or `main/config/secrets.yaml` for Github.
     * `environments repo name` - We'll use the same repo, use `KeydraConfiguration`.
-    * `path to environments.yaml` - The path to our environments definition. For our example, this is 
-       `src/main/config/environments.yaml` for Bitbucket, or `main/config/environments.yaml` for Github.
+    * `path to environments.yaml` - The path to our environments definition. For our example, this is `src/main/config/environments.yaml` for Bitbucket, or `main/config/environments.yaml` for Github.
 
 8. Build and deploy with SAM. Make sure Docker is installed/running first!
 

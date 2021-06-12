@@ -14,17 +14,21 @@ CONFIG = [
         'distribute': [
             {
                 'provider': 'bitbucket',
-                'scope': 'account',
                 'key': 'DEV_AWS_ACCESS_ID',
                 'source': 'key',
-                'config': {'account_username': 'acct_user'}
+                'config': {
+                    'account_username': 'acct_user',
+                    'scope': 'account'
+                }
             },
             {
                 'provider': 'bitbucket',
-                'scope': 'account',
                 'key': 'DEV_AWS_SECRET_ACCESS_KEY',
                 'source': 'secret',
-                'config': {'account_username': 'acct_user'}
+                'config': {
+                    'account_username': 'acct_user',
+                    'scope': 'account'
+                }
             }
         ]
     }
@@ -53,9 +57,11 @@ SUCCESS = [
                     'value': {
                         'key': 'DEV_AWS_ACCESS_KEY_ID',
                         'provider': 'bitbucket',
-                        'scope': 'account',
                         'source': 'key',
-                        'envs': ['*']
+                        'envs': ['*'],
+                        'config': {
+                            'scope': 'account'
+                        }
                     }
                 },
                 {
@@ -63,9 +69,11 @@ SUCCESS = [
                     'value': {
                         'key': 'DEV_AWS_SECRET_ACCESS_KEY',
                         'provider': 'bitbucket',
-                        'scope': 'account',
                         'source': 'secret',
-                        'envs': ['*']
+                        'envs': ['*'],
+                        'config': {
+                            'scope': 'account'
+                        }
                     }
                 }
             ]

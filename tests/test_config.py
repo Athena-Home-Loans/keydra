@@ -58,38 +58,46 @@ SECRETS = {
             {
                 'key': 'KM_{ENV}_AWS_ACCESS_ID',
                 'provider': 'bitbucket',
-                'scope': 'account',
                 'source': 'key',
                 'envs': [
                   '*'
-                ]
+                ],
+                'config': {
+                    'scope': 'account'
+                }
             },
             {
                 'key': 'KM_{ENV}_AWS_SECRET_ACCESS_KEY',
                 'provider': 'bitbucket',
-                'scope': 'account',
                 'source': 'secret',
                 'envs': [
                     '*'
-                ]
+                ],
+                'config': {
+                    'scope': 'account'
+                }
             },
             {
                 'key': 'KM_MANAGED_AWS_ACCESS_ID',
                 'provider': 'bitbucket',
-                'scope': 'account',
                 'source': 'key',
                 'envs': [
                     'dev'
-                ]
+                ],
+                'config': {
+                    'scope': 'account'
+                }
             },
             {
                 'key': 'KM_MANAGED_AWS_SECRET_ACCESS_KEY',
                 'provider': 'bitbucket',
-                'scope': 'account',
                 'source': 'secret',
                 'envs': [
                     'dev'
-                ]
+                ],
+                'config': {
+                    'scope': 'account'
+                }
             }
         ]
     },

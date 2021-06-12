@@ -63,6 +63,9 @@
         <a href='providers.html'>Supported Providers</a>
     </li>
     <li>
+        <a href='config_providers.html'>Configuration Providers</a>
+    </li>
+    <li>
         <a href='developing.html'>Developing</a>
     </li>
 </ul>
@@ -322,17 +325,9 @@ This is a nice SAM template that will make this easy!</p></li>
 <li><p><cite>IAM Role Arn</cite> - This is the ARN to an AWS IAM role that you’ll use to run Keydra, from step 5.</p></li>
 <li><p><cite>repo account name</cite> - The code repo account or organisation name from the first section.</p></li>
 <li><p><cite>secrets repo name</cite> - The repository name. In this example, this is <cite>KeydraConfiguration</cite>.</p></li>
-<li><dl class="simple">
-<dt><cite>path to secrets.yaml</cite> - The path to our secrets. For our example, this is <cite>src/main/config/secrets.yaml</cite> for Bitbucket,</dt><dd><p>or <cite>main/config/secrets.yaml</cite> for Github.</p>
-</dd>
-</dl>
-</li>
+<li><p><cite>path to secrets.yaml</cite> - The path to our secrets. For our example, this is <cite>src/main/config/secrets.yaml</cite> for Bitbucket, or <cite>main/config/secrets.yaml</cite> for Github.</p></li>
 <li><p><cite>environments repo name</cite> - We’ll use the same repo, use <cite>KeydraConfiguration</cite>.</p></li>
-<li><dl class="simple">
-<dt><cite>path to environments.yaml</cite> - The path to our environments definition. For our example, this is</dt><dd><p><cite>src/main/config/environments.yaml</cite> for Bitbucket, or <cite>main/config/environments.yaml</cite> for Github.</p>
-</dd>
-</dl>
-</li>
+<li><p><cite>path to environments.yaml</cite> - The path to our environments definition. For our example, this is <cite>src/main/config/environments.yaml</cite> for Bitbucket, or <cite>main/config/environments.yaml</cite> for Github.</p></li>
 </ul>
 </li>
 <li><p>Build and deploy with SAM. Make sure Docker is installed/running first!</p></li>

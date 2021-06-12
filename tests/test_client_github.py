@@ -1,5 +1,6 @@
 import unittest
 import requests
+import json
 
 from unittest.mock import patch
 from unittest.mock import MagicMock
@@ -14,7 +15,7 @@ PUBKEY = {
 }
 
 
-class TestQualysClient(unittest.TestCase):
+class TestGithubClient(unittest.TestCase):
     def test__init(self):
         cli = github.GithubClient(
             user='username',
@@ -35,7 +36,7 @@ class TestQualysClient(unittest.TestCase):
             passwd='secret'
         )
         cli._query = MagicMock()
-        cli._query.return_value = PUBKEY
+        cli._query.return_value = json.dumps(PUBKEY)
 
         self.assertEqual(cli._get_repo_public_key('org', 'repo'), PUBKEY)
 
@@ -79,7 +80,7 @@ class TestQualysClient(unittest.TestCase):
             passwd='secret'
         )
 
-        mk_put().json.return_value = {'test': 'response'}
+        mk_put().text = {'test': 'response'}
         self.assertEqual(cli._put(url='test', json={}), {'test': 'response'})
 
     @patch.object(github.requests, 'get')
@@ -88,7 +89,7 @@ class TestQualysClient(unittest.TestCase):
             user='username',
             passwd='secret'
         )
-        mk_get().json.return_value = {'test': 'response'}
+        mk_get().text = {'test': 'response'}
         self.assertEqual(cli._query(url='test'), {'test': 'response'})
 
     @patch.object(github.requests, 'post')
@@ -97,7 +98,7 @@ class TestQualysClient(unittest.TestCase):
             user='username',
             passwd='secret'
         )
-        mk_post().json.return_value = {'test': 'response'}
+        mk_post().text = {'test': 'response'}
         self.assertEqual(cli._post(url='test'), {'test': 'response'})
 
     @patch.object(github.requests, 'delete')
@@ -107,7 +108,7 @@ class TestQualysClient(unittest.TestCase):
             passwd='secret'
         )
         mk_del().status_code = 200
-        mk_del().text = 'woot'
+        mk_del().text = {'status': 200, 'text': 'woot'}
         self.assertEqual(
             cli._delete(url='test'), {'status': 200, 'text': 'woot'}
         )
@@ -118,7 +119,7 @@ class TestQualysClient(unittest.TestCase):
             user='username',
             passwd='secret'
         )
-        mk_get().json.return_value = {
+        mk_get().text = {
             "total_count": 2,
             "secrets": [
               {
@@ -180,7 +181,7 @@ class TestQualysClient(unittest.TestCase):
             user='username',
             passwd='secret'
         )
-        mk_get().json.return_value = {'woot': 'yeah'}
+        mk_get().text = {'woot': 'yeah'}
         self.assertEqual(
             cli.fetch_file_from_repository(
                 org='org',

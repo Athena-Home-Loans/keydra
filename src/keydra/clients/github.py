@@ -1,4 +1,5 @@
 import requests
+import json
 
 from copy import deepcopy
 
@@ -37,44 +38,35 @@ class GithubClient(object):
 
         resp.raise_for_status()
 
-        try:
-            return resp.json()
-        except ValueError:
-            return resp.text
+        return resp.text
 
     def _post(self, url, **kwargs):
         resp = requests.post(url, auth=self._authorizer, **kwargs)
 
         resp.raise_for_status()
 
-        try:
-            return resp.json()
-        except ValueError:
-            return resp.text
+        return resp.text
 
     def _put(self, url, **kwargs):
         resp = requests.put(url, headers=self._authorizer, **kwargs)
 
         resp.raise_for_status()
 
-        try:
-            return resp.json()
-        except ValueError:
-            return resp.text
+        return resp.text
 
     def _delete(self, url):
         resp = requests.delete(url, auth=self._authorizer)
 
         resp.raise_for_status()
 
-        return {'status': resp.status_code, 'text': resp.text}
+        return resp.text
 
     def _get_repo_public_key(self, org, repo):
         url = '{}/repos/{}/{}/actions/secrets/public-key'.format(
             API_URL, org, repo
         )
 
-        return self._query(url)
+        return json.loads(self._query(url))
 
     def _encrypt_secret(self, secret, public_key):
         '''
@@ -165,15 +157,16 @@ class GithubClient(object):
         Reads file from Github
         https://docs.github.com/rest/reference/repos#get-repository-content
 
+        :param org: GH account name
+        :type org: :class:`str`
         :param repo: Name of the repository to fetch file from
         :type repo: :class:`str`
         :param path: Path to the file in the repo
         :type repo: :class:`str`
-        :param account: GH account name
-        :type account: :class:`str`
         :returns: Content of the file
         :rtype: :class:`str`
         '''
+
         extras = {
             'Accept': 'application/vnd.github.v4.raw'
         }

@@ -51,6 +51,6 @@ Create a Personal Access Token
 
 7.  You can leave encryption settings as default, or update to your needs. Click `Next`.
 
-8.  Call your secret `keydra/github`, and add a tag of 'managedby'='keydra'. Click `Next`.
+8.  Call your secret `keydra/github`.
 
 9.  Auto rotation is not required (Keydra will do this), so just click `Next` on the next screen, then `Store` on the one after.

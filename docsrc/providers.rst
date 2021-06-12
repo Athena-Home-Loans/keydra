@@ -84,6 +84,8 @@ to the following scopes:
 In the future will also
 support `rotate` keys as its own secrets should be rotated by Keydra.
 
+It is also a config provider. See :ref:`About Config Providers <cfg_providers>`.
+
 `bitbucket` requires 1:1 mapping of the secret, this is done via `source`.
 
 .. automodule:: keydra.providers.bitbucket
@@ -121,7 +123,7 @@ Uses client :ref:`Contentful <client_contentful>`.
 Github
 ======
 
-*Github* can `distribute` secrets to the `repository` scope only. It is also a config provider, and can be used as a 
+*Github* can `distribute` secrets to the `repository` scope only. It is also a config provider (see :ref:`About Config Providers <cfg_providers>`), and can be used as a 
 source for your secret and environment specs. In your SAM template, use `KEYDRA_CFG_PROVIDER=github` to 
 tell Keydra to look in Github for secrets to manage.
 

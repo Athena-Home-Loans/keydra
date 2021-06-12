@@ -60,6 +60,6 @@ Create app credentials
 
 6.  You can leave encryption settings as default, or update to your needs. Click `Next`.
 
-7.  Call your secret `keydra/bitbucket`, and add a tag of 'managedby'='keydra'. Click `Next`.
+7.  Call your secret `keydra/bitbucket`.
 
 8.  Auto rotation is not required (Keydra will do this), so just click `Next` on the next screen, then `Store` on the one after.
