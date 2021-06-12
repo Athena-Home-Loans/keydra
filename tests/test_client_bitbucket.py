@@ -6,7 +6,7 @@ from unittest.mock import patch
 from keydra.clients import bitbucket
 
 
-class TestGithubClient(unittest.TestCase):
+class TestBitbucketClient(unittest.TestCase):
     def test__init(self):
         cli = bitbucket.BitbucketClient(
             user='username',
