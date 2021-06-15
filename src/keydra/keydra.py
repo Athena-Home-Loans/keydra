@@ -116,6 +116,12 @@ class Keydra(object):
             return self._success(km.rotate(secret), action=action)
 
         except Exception as e:
+            LOGGER.error(
+                "Failed to rotate key '{}' for provider '{}'!".format(
+                    secret['key'],
+                    secret['provider']
+                )
+            )
             return self._fail(e, action=action)
 
     @timed('bulk_distribution', specialise=False)
@@ -194,6 +200,12 @@ class Keydra(object):
             return self._success(km.distribute(secret, target))
 
         except Exception as e:
+            LOGGER.error(
+                "Failed to distribute key '{}' for provider '{}'!".format(
+                    target['key'],
+                    target['provider']
+                )
+            )
             return self._fail(e)
 
     def _default_response(self, status, action=None, msg=None, value=None):
