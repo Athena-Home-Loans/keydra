@@ -64,23 +64,25 @@ Setup a configuration repository
             groups:
               - MyDeploymentGroup
           distribute:
-          - config:
+          -
+            config:
               repository: keydraconfiguration
               account_username: <your repo org or user name>
+              scope: repository
             envs:
-            - dev
+                - dev
             key: AWS_ACCESS_KEY_ID
             provider: <bitbucket OR github>
-            scope: repository
             source: key
-          - config:
+          -
+            config:
               repository: keydraconfiguration
               account_username: <your repo org or user name>
+              scope: repository
             envs:
-            - dev
+                - dev
             key: AWS_SECRET_ACCESS_KEY
             provider: <bitbucket OR github>
-            scope: repository
             source: secret
 
 6.  Now push your config up to the repo.

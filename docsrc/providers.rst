@@ -147,20 +147,20 @@ For example, for a secret spec of:
       - config:
             repository: keydraconfiguration
             account_username: me
+            scope: repository
          envs:
             - dev
          key: AWS_ACCESS_KEY_ID
          provider: github
-         scope: repository
          source: key
       - config:
             repository: keydraconfiguration
             account_username: me
+            scope: repository
          envs:
             - dev
          key: AWS_SECRET_ACCESS_KEY
          provider: github
-         scope: repository
          source: secret
 
 The provider will take the AWS IAM user credentials and, using an access token from the AWS Secrets Manager secret
