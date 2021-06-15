@@ -66,6 +66,9 @@
         <a href='config_providers.html'>Configuration Providers</a>
     </li>
     <li>
+        <a href='spec_examples.html'>Examples</a>
+    </li>
+    <li>
         <a href='developing.html'>Developing</a>
     </li>
 </ul>
@@ -251,23 +254,25 @@ repo organisation or user name, and update the <cite>provider</cite> key to matc
         <span class="nt">groups</span><span class="p">:</span>
           <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">MyDeploymentGroup</span>
       <span class="nt">distribute</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="nt">config</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span>
+        <span class="nt">config</span><span class="p">:</span>
           <span class="nt">repository</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydraconfiguration</span>
           <span class="nt">account_username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your repo org or user name&gt;</span>
+          <span class="nt">scope</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">repository</span>
         <span class="nt">envs</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">dev</span>
+            <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">dev</span>
         <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS_ACCESS_KEY_ID</span>
         <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;bitbucket OR github&gt;</span>
-        <span class="nt">scope</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">repository</span>
         <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">key</span>
-      <span class="p p-Indicator">-</span> <span class="nt">config</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span>
+        <span class="nt">config</span><span class="p">:</span>
           <span class="nt">repository</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydraconfiguration</span>
           <span class="nt">account_username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your repo org or user name&gt;</span>
+          <span class="nt">scope</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">repository</span>
         <span class="nt">envs</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">dev</span>
+            <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">dev</span>
         <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS_SECRET_ACCESS_KEY</span>
         <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;bitbucket OR github&gt;</span>
-        <span class="nt">scope</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">repository</span>
         <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
 </pre></div>
 </div>
