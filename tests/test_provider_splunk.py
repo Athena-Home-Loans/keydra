@@ -25,6 +25,21 @@ SPLUNK_SPEC = {
     'rotate': 'nightly'
 }
 
+SPLUNK_HECSPEC = {
+    'description': 'Test',
+    'key': 'keydra/splunk',
+    'config': {
+        'hosts': ['127.0.0.1'],
+        'type': 'hectoken',
+        'rotatewith': {
+            'key': 'blah',
+            'provider': 'secretsmanager'
+        }
+    },
+    'provider': 'splunk',
+    'rotate': 'nightly'
+}
+
 MULTI_SPEC = {
     'description': 'Test',
     'key': 'keydra/splunk',
@@ -78,6 +93,30 @@ class TestProviderSplunk(unittest.TestCase):
         cli._rotate_secret(SPLUNK_SPEC)
 
         self.assertEqual(mk_splunk().change_passwd.call_count, 1)
+
+    @patch('json.loads')
+    @patch.object(splunk, 'SplunkClient')
+    def test__rotate_hec(self,  mk_splunk, mk_loads):
+        cli = splunk.Client(credentials=SPLUNK_CREDS, session=MagicMock(),
+                            region_name='ap-southeast-2', verify=False)
+        cli._smclient = MagicMock()
+        mk_loads.return_value = {'key': 'test', 'secret': 'sshhh'}
+        cli._rotate_secret(SPLUNK_HECSPEC)
+
+        self.assertEqual(mk_splunk().rotate_hectoken.call_count, 1)
+
+    @patch('json.loads')
+    @patch.object(splunk, 'SplunkClient')
+    def test__rotate_hec_fail(self,  mk_splunk, mk_loads):
+        cli = splunk.Client(credentials=SPLUNK_CREDS, session=MagicMock(),
+                            region_name='ap-southeast-2', verify=False)
+        cli._smclient = MagicMock()
+
+        mk_splunk().rotate_hectoken.side_effect = Exception('boom')
+        mk_loads.return_value = {'key': 'test', 'secret': 'sshhh'}
+
+        with self.assertRaises(RotationException):
+            cli._rotate_secret(SPLUNK_HECSPEC)
 
     @patch.object(splunk, 'SplunkClient')
     def test__rotate_account_multi_dest(self, mk_splunk):
@@ -157,6 +196,11 @@ class TestProviderSplunk(unittest.TestCase):
         self.assertEqual(r_result_1, (False,
                          'Host {} not valid'.format(
                                             spec_bad_ip['config']['hosts'][0])))
+
+    def test_validate_hec(self):
+        r_result_hec = splunk.Client.validate_spec(SPLUNK_HECSPEC)
+
+        self.assertEqual(r_result_hec, (True, 'It is valid!'))
 
     def test__validate_spec_good(self):
         r_result_1 = splunk.Client.validate_spec(MULTI_SPEC)
