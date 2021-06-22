@@ -305,8 +305,8 @@ Uses client :ref:`Salesforce <client_salesforce>`.
 Splunk
 ======
 
-Provides password rotation and distribution support for Splunk. Rotation allows for Splunk account 
-passwords to be rotated, while Distribute allows you to save passwords from other providers in Splunk
+Provides password rotation and distribution support for Splunk. Rotation allows for Splunk account
+passwords or HEC tokens to be rotated, while Distribute allows you to save passwords from other providers in Splunk
 apps, like Qualys or AWS.
 
 Rotation generates a new 32 character password (using AWS Secrets Manager) and changes the Splunk password
@@ -322,8 +322,9 @@ An example secret spec to rotate a Splunk user password and store in AWS Secrets
    custodians: your_team
    provider: splunk
    rotate: nightly
-   hosts:
-   - your.splunkhostname.com
+   config:
+      hosts:
+      - your.splunkhostname.com
    distribute:
    -
       key: keydra/splunk/splunkuser
@@ -341,6 +342,31 @@ The Secrets Manager entry format is as follows:
    "key": "splunkuser",
    "secret": "abcdefghijklmnopqrstuvwxyz1234567890"
    }
+
+You can also rotate tokens for HEC inputs. Like the Qualys provider, this requires you to specify a `rotatewith` value, which is where Keydra can
+find creds with which to access Splunk and make the change. For HEC tokens, Keydra can only rotate for one host, as HEC tokens are unique to the Splunk instance.
+
+.. code-block:: yaml
+
+   key: hec1
+   description: Splunk HEC Rotation Example
+   custodians: your_team
+   provider: splunk
+   rotate: nightly
+   config:
+      hosts:
+         - your.splunkhostname.com
+      type: hectoken
+      rotatewith:
+         key: keydra/splunk/admin
+         provider: secretsmanager
+   distribute:
+   -
+      key: keydra/splunk/hec1
+      provider: secretsmanager
+      source: secret
+      envs:
+         - prod
 
 Distribution is a little more complex; configuring a Splunk App or Add-On with a service account to be
 used by that app to connect to various data sources. Only one destination host can be specified; if you need to

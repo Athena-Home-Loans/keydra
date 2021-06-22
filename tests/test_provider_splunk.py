@@ -18,7 +18,9 @@ SPLUNK_CREDS = {
 SPLUNK_SPEC = {
     'description': 'Test',
     'key': 'keydra/splunk',
-    'hosts': ['127.0.0.1'],
+    'config': {
+        'hosts': ['127.0.0.1']
+    },
     'provider': 'splunk',
     'rotate': 'nightly'
 }
@@ -26,7 +28,9 @@ SPLUNK_SPEC = {
 MULTI_SPEC = {
     'description': 'Test',
     'key': 'keydra/splunk',
-    'hosts': ['127.0.0.1', '10.0.0.1', '172.16.0.1'],
+    'config': {
+        'hosts': ['127.0.0.1', '10.0.0.1', '172.16.0.1']
+    },
     'provider': 'splunk',
     'rotate': 'nightly'
 }
@@ -83,7 +87,7 @@ class TestProviderSplunk(unittest.TestCase):
         cli._rotate_secret(MULTI_SPEC)
 
         self.assertEqual(mk_splunk().change_passwd.call_count,
-                         len(MULTI_SPEC['hosts']))
+                         len(MULTI_SPEC['config']['hosts']))
 
     @patch.object(splunk.Client, '_rotate_secret')
     def test_rotate(self, mk_rotate_secret):
@@ -120,49 +124,13 @@ class TestProviderSplunk(unittest.TestCase):
 
         self.assertEqual(r_result, result)
 
-    def test_validate_spec_overlength(self):
-        spec_overlength = {
-            'description': 'Lorem ipsum dolor sit amet, '
-                           'consectetur adipiscing elit, '
-                           'sed do eiusmod tempor incididunt'
-                           'ut labore et dolore magna'
-                           'aliqua. Ut enim ad minim veniam,'
-                           'quis nostrud exercitation'
-                           ' ullamco laboris nisi ut aliquip'
-                           'ex ea commodo consequat. '
-                           'Duis aute irure dolor in reprehenderit'
-                           'in voluptate velit esse cillum dolore eu'
-                           'fugiat nulla pariatur. Excepteur sint'
-                           ' occaecat cupidatat non proident, sunt in'
-                           'culpa qui officia deserunt mollit anim '
-                           'id est laborum.',
-            'key': 'keydra/splunk',
-            'hosts': ['127.0.0.1'],
-            'provider': 'splunk',
-            'rotate': 'nightly'
-        }
-
-        r_result = splunk.Client.validate_spec(spec_overlength)
-        self.assertEqual(r_result, (False,
-                         'Value for key description failed length checks'))
-
-    def test_validate_spec_underlength(self):
-        spec_underlength = {
-            'e': 'e',
-            'key': 'keydra/splunk',
-            'hosts': ['127.0.0.1'],
-            'provider': 'splunk',
-            'rotate': 'nightly'
-        }
-
-        r_result = splunk.Client.validate_spec(spec_underlength)
-        self.assertEqual(r_result, (False, 'Key e failed length checks'))
-
     def test_validate_spec_bad_domain(self):
         spec_bad_domain = {
             'description': 'Test',
             'key': 'keydra/splunk',
-            'hosts': ['corp.com/com.corp'],
+            'config': {
+                'hosts': ['corp.com/com.corp']
+            },
             'provider': 'splunk',
             'rotate': 'nightly'
         }
@@ -171,13 +139,15 @@ class TestProviderSplunk(unittest.TestCase):
 
         self.assertEqual(r_result, (False,
                          'Host {} not valid'.format(
-                            spec_bad_domain['hosts'][0])))
+                            spec_bad_domain['config']['hosts'][0])))
 
     def test_validate_spec_bad_ip(self):
         spec_bad_ip = {
             'description': 'Test',
             'key': 'keydra/splunk',
-            'hosts': ['10.256.0.1'],
+            'config': {
+                'hosts': ['10.256.0.1']
+            },
             'provider': 'splunk',
             'rotate': 'nightly'
         }
@@ -186,7 +156,7 @@ class TestProviderSplunk(unittest.TestCase):
 
         self.assertEqual(r_result_1, (False,
                          'Host {} not valid'.format(
-                                            spec_bad_ip['hosts'][0])))
+                                            spec_bad_ip['config']['hosts'][0])))
 
     def test__validate_spec_good(self):
         r_result_1 = splunk.Client.validate_spec(MULTI_SPEC)

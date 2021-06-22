@@ -1,4 +1,9 @@
+import json
+
 import splunklib.client as splunkclient
+
+import urllib.parse as urlparse
+
 from splunklib.binding import HTTPError
 
 
@@ -204,6 +209,37 @@ class SplunkClient(object):
             )
 
         return True
+
+    def rotate_hectoken(self, inputname):
+        '''
+        Rotate a Splunk HEC token
+
+        :param inputname: The name of the HTTP input
+        :type inputname: :class:`string`
+
+        :returns: New token value if successful
+        :rtype: :class:`string`
+        '''
+        response = self._service.get(
+            '/services/data/inputs/http',
+            output_mode='json'
+        )
+        inputs = json.loads(response['body'].read())
+
+        for entry in inputs['entry']:
+            if entry['name'] == 'http://'+inputname:
+                rotresp = self._service.post(
+                    urlparse.unquote(entry['links']['edit']+'/rotate'),
+                    output_mode='json'
+                )
+                newconfig = json.loads(rotresp['body'].read())['entry'][0]
+
+                return newconfig['content']['token']
+
+        raise Exception(
+            'Error rotating HEC token {} on Splunk host '
+            '{}. Input was not found!'.format(inputname, self._service.host)
+        )
 
 
 class AppNotInstalledException(Exception):
