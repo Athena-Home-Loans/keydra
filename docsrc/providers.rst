@@ -335,12 +335,11 @@ An example secret spec to rotate a Splunk user password and store in AWS Secrets
 
 The Secrets Manager entry format is as follows:
 
-.. code-block:: yaml
+.. code-block:: json
 
    {
-   "provider": "splunk",
-   "key": "splunkuser",
-   "secret": "abcdefghijklmnopqrstuvwxyz1234567890"
+   "username": "splunkuser",
+   "password": "abcdefghijklmnopqrstuvwxyz1234567890"
    }
 
 Distribution is a little more complex; configuring a Splunk App or Add-On with a service account to be
@@ -469,8 +468,8 @@ If your app uses storage passwords (like the Qualys app), the distribution stanz
 
 Uses client :ref:`Splunk <client_splunk>`.
 
-Splunk
-======
+Splunk HEC
+==========
 
 Provides rotation support for Splunk Http Event Collector (HEC) tokens. Distribution is not supported by this provider.
 
@@ -482,7 +481,7 @@ find creds with which to access Splunk and make the change.
    key: hec1
    description: Splunk HEC Rotation Example
    custodians: your_team
-   provider: splunk
+   provider: splunk_hec
    rotate: nightly
    config:
       host: your.splunkhostname.com
@@ -499,12 +498,11 @@ find creds with which to access Splunk and make the change.
 
 The Secrets Manager entry format is as follows:
 
-.. code-block:: yaml
+.. code-block:: json
 
    {
-   "provider": "splunk",
-   "key": "HEC Input Name",
-   "secret": "abcdefghijklmnopqrstuvwxyz1234567890"
+   "hecInputName": "HEC Input Name",
+   "hecToken": "13e58a8a-ab69-4c89-8941-51b26d797e5a"
    }
 
 .. automodule:: keydra.providers.splunk_hec

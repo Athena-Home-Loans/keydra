@@ -57,8 +57,8 @@ class Client(BaseProvider):
         :returns: New secret ready to distribute
         :rtype: :class:`dict`
         '''
-        username = self._credentials['key']
-        current_passwd = self._credentials['secret']
+        username = self._credentials['username']
+        current_passwd = self._credentials['password']
 
         # Generate new random password from SecretsManager
         new_passwd = self._generate_splunk_passwd(32)
@@ -92,9 +92,8 @@ class Client(BaseProvider):
         )
 
         return {
-            'provider': 'splunk',
-            'key': username,
-            'secret': new_passwd
+            'username': username,
+            'password': new_passwd
         }
 
     @exponential_backoff_retry(3)

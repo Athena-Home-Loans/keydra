@@ -80,9 +80,8 @@ class Client(BaseProvider):
             )
 
         return {
-            'provider': 'splunk',
-            'key': secret['key'],
-            'secret': newtoken
+            'hecInputName': secret['key'],
+            'hecToken': newtoken
         }
 
     @exponential_backoff_retry(3)

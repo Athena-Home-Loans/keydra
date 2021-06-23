@@ -201,8 +201,8 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id2">
-   Splunk
+  <a class="reference internal nav-link" href="#splunk-hec">
+   Splunk HEC
   </a>
  </li>
 </ul>
@@ -1080,11 +1080,10 @@ for the account corresponding to the “key” value in the secret. This change 
 </pre></div>
 </div>
 <p>The Secrets Manager entry format is as follows:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-<span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;splunk&quot;</span><span class="p p-Indicator">,</span>
-<span class="s">&quot;key&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;splunkuser&quot;</span><span class="p p-Indicator">,</span>
-<span class="s">&quot;secret&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;abcdefghijklmnopqrstuvwxyz1234567890&quot;</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="nt">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;splunkuser&quot;</span><span class="p">,</span>
+<span class="nt">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;abcdefghijklmnopqrstuvwxyz1234567890&quot;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>Distribution is a little more complex; configuring a Splunk App or Add-On with a service account to be
@@ -1095,8 +1094,8 @@ destination Splunk TA/app. For example, the AWS app for Splunk uses the custom m
 storage passwords.</p>
 <p>The destination app must already be installed on the Splunk instance, though the config entry / storage password
 will be created if it doesn’t already exist.</p>
-<table class="colwidths-given table" id="id3">
-<caption><span class="caption-text">Splunk Provider Distribution Format</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<table class="colwidths-given table" id="id2">
+<caption><span class="caption-text">Splunk Provider Distribution Format</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col style="width: 25%" />
 <col style="width: 25%" />
@@ -1139,8 +1138,8 @@ the example below, a field of “secret_key” will be used in the Splunk post, 
 </tbody>
 </table>
 <p>In the <cite>config</cite> section:</p>
-<table class="colwidths-given table" id="id4">
-<caption><span class="caption-text">Config Format</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<table class="colwidths-given table" id="id3">
+<caption><span class="caption-text">Config Format</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col style="width: 25%" />
 <col style="width: 25%" />
@@ -1319,15 +1318,15 @@ section after mapping them from the secret. As in, the <cite>key</cite> value fr
 
 <p>Uses client <a class="reference internal" href="clients.html#client-splunk"><span class="std std-ref">Splunk</span></a>.</p>
 </div>
-<div class="section" id="id2">
-<h2>Splunk<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="splunk-hec">
+<h2>Splunk HEC<a class="headerlink" href="#splunk-hec" title="Permalink to this headline">¶</a></h2>
 <p>Provides rotation support for Splunk Http Event Collector (HEC) tokens. Distribution is not supported by this provider.</p>
 <p>Like the Qualys provider, the spec requires you to specify a <cite>rotatewith</cite> value, which is where Keydra can
 find creds with which to access Splunk and make the change.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hec1</span>
 <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Splunk HEC Rotation Example</span>
 <span class="nt">custodians</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">your_team</span>
-<span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunk</span>
+<span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunk_hec</span>
 <span class="nt">rotate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nightly</span>
 <span class="nt">config</span><span class="p">:</span>
    <span class="nt">host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">your.splunkhostname.com</span>
@@ -1344,11 +1343,10 @@ find creds with which to access Splunk and make the change.</p>
 </pre></div>
 </div>
 <p>The Secrets Manager entry format is as follows:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-<span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;splunk&quot;</span><span class="p p-Indicator">,</span>
-<span class="s">&quot;key&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;HEC</span><span class="nv"> </span><span class="s">Input</span><span class="nv"> </span><span class="s">Name&quot;</span><span class="p p-Indicator">,</span>
-<span class="s">&quot;secret&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;abcdefghijklmnopqrstuvwxyz1234567890&quot;</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="nt">&quot;hecInputName&quot;</span><span class="p">:</span> <span class="s2">&quot;HEC Input Name&quot;</span><span class="p">,</span>
+<span class="nt">&quot;hecToken&quot;</span><span class="p">:</span> <span class="s2">&quot;13e58a8a-ab69-4c89-8941-51b26d797e5a&quot;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <span class="target" id="module-keydra.providers.splunk_hec"></span><dl class="py class">
