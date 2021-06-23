@@ -19,36 +19,12 @@ SPLUNK_SPEC = {
     'description': 'Test',
     'key': 'keydra/splunk',
     'config': {
-        'hosts': ['127.0.0.1']
+        'host': '127.0.0.1'
     },
     'provider': 'splunk',
     'rotate': 'nightly'
 }
 
-SPLUNK_HECSPEC = {
-    'description': 'Test',
-    'key': 'keydra/splunk',
-    'config': {
-        'hosts': ['127.0.0.1'],
-        'type': 'hectoken',
-        'rotatewith': {
-            'key': 'blah',
-            'provider': 'secretsmanager'
-        }
-    },
-    'provider': 'splunk',
-    'rotate': 'nightly'
-}
-
-MULTI_SPEC = {
-    'description': 'Test',
-    'key': 'keydra/splunk',
-    'config': {
-        'hosts': ['127.0.0.1', '10.0.0.1', '172.16.0.1']
-    },
-    'provider': 'splunk',
-    'rotate': 'nightly'
-}
 
 SF_CREDS = {
   "provider": "salesforce",
@@ -94,40 +70,6 @@ class TestProviderSplunk(unittest.TestCase):
 
         self.assertEqual(mk_splunk().change_passwd.call_count, 1)
 
-    @patch('json.loads')
-    @patch.object(splunk, 'SplunkClient')
-    def test__rotate_hec(self,  mk_splunk, mk_loads):
-        cli = splunk.Client(credentials=SPLUNK_CREDS, session=MagicMock(),
-                            region_name='ap-southeast-2', verify=False)
-        cli._smclient = MagicMock()
-        mk_loads.return_value = {'key': 'test', 'secret': 'sshhh'}
-        cli._rotate_secret(SPLUNK_HECSPEC)
-
-        self.assertEqual(mk_splunk().rotate_hectoken.call_count, 1)
-
-    @patch('json.loads')
-    @patch.object(splunk, 'SplunkClient')
-    def test__rotate_hec_fail(self,  mk_splunk, mk_loads):
-        cli = splunk.Client(credentials=SPLUNK_CREDS, session=MagicMock(),
-                            region_name='ap-southeast-2', verify=False)
-        cli._smclient = MagicMock()
-
-        mk_splunk().rotate_hectoken.side_effect = Exception('boom')
-        mk_loads.return_value = {'key': 'test', 'secret': 'sshhh'}
-
-        with self.assertRaises(RotationException):
-            cli._rotate_secret(SPLUNK_HECSPEC)
-
-    @patch.object(splunk, 'SplunkClient')
-    def test__rotate_account_multi_dest(self, mk_splunk):
-        cli = splunk.Client(credentials=SPLUNK_CREDS, session=MagicMock(),
-                            region_name='ap-southeast-2', verify=False)
-        cli._client = MagicMock()
-        cli._rotate_secret(MULTI_SPEC)
-
-        self.assertEqual(mk_splunk().change_passwd.call_count,
-                         len(MULTI_SPEC['config']['hosts']))
-
     @patch.object(splunk.Client, '_rotate_secret')
     def test_rotate(self, mk_rotate_secret):
         cli = splunk.Client(credentials=SPLUNK_CREDS, session=MagicMock(),
@@ -168,7 +110,7 @@ class TestProviderSplunk(unittest.TestCase):
             'description': 'Test',
             'key': 'keydra/splunk',
             'config': {
-                'hosts': ['corp.com/com.corp']
+                'host': 'corp.com/com.corp'
             },
             'provider': 'splunk',
             'rotate': 'nightly'
@@ -177,15 +119,15 @@ class TestProviderSplunk(unittest.TestCase):
         r_result = splunk.Client.validate_spec(spec_bad_domain)
 
         self.assertEqual(r_result, (False,
-                         'Host {} not valid'.format(
-                            spec_bad_domain['config']['hosts'][0])))
+                         'Host {} must be a valid IP or domain name'.format(
+                            spec_bad_domain['config']['host'])))
 
     def test_validate_spec_bad_ip(self):
         spec_bad_ip = {
             'description': 'Test',
             'key': 'keydra/splunk',
             'config': {
-                'hosts': ['10.256.0.1']
+                'host': '10.256.0.1'
             },
             'provider': 'splunk',
             'rotate': 'nightly'
@@ -194,19 +136,8 @@ class TestProviderSplunk(unittest.TestCase):
         r_result_1 = splunk.Client.validate_spec(spec_bad_ip)
 
         self.assertEqual(r_result_1, (False,
-                         'Host {} not valid'.format(
-                                            spec_bad_ip['config']['hosts'][0])))
-
-    def test_validate_hec(self):
-        r_result_hec = splunk.Client.validate_spec(SPLUNK_HECSPEC)
-
-        self.assertEqual(r_result_hec, (True, 'It is valid!'))
-
-    def test__validate_spec_good(self):
-        r_result_1 = splunk.Client.validate_spec(MULTI_SPEC)
-
-        self.assertEqual(r_result_1, (True,
-                         'It is valid!'))
+                         'Host {} must be a valid IP or domain name'.format(
+                                            spec_bad_ip['config']['host'])))
 
     @patch.object(splunk, 'SplunkClient')
     def test__rotate_except(self, mk_splunk):

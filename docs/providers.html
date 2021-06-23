@@ -200,6 +200,11 @@
    Splunk
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   Splunk
+  </a>
+ </li>
 </ul>
 
             </nav>
@@ -1052,11 +1057,11 @@ before added here.</p>
 <div class="section" id="splunk">
 <h2>Splunk<a class="headerlink" href="#splunk" title="Permalink to this headline">¶</a></h2>
 <p>Provides password rotation and distribution support for Splunk. Rotation allows for Splunk account
-passwords or HEC tokens to be rotated, while Distribute allows you to save passwords from other providers in Splunk
+passwords to be rotated, while Distribute allows you to save passwords from other providers in Splunk
 apps, like Qualys or AWS.</p>
+<p>Rotation can be done on only one Splunk instance at a time.</p>
 <p>Rotation generates a new 32 character password (using AWS Secrets Manager) and changes the Splunk password
-for the account corresponding to the “key” value in the secret. This change is made on all Splunk hosts defined
-in the “hosts” key of the secret.</p>
+for the account corresponding to the “key” value in the secret. This change is made on the Splunk host defined within the “config” section) of the secret.</p>
 <p>An example secret spec to rotate a Splunk user password and store in AWS Secrets Manager:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunkuser</span>
 <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Splunk Rotation Example</span>
@@ -1064,8 +1069,7 @@ in the “hosts” key of the secret.</p>
 <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunk</span>
 <span class="nt">rotate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nightly</span>
 <span class="nt">config</span><span class="p">:</span>
-   <span class="nt">hosts</span><span class="p">:</span>
-   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">your.splunkhostname.com</span>
+   <span class="nt">host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">your.splunkhostname.com</span>
 <span class="nt">distribute</span><span class="p">:</span>
 <span class="p p-Indicator">-</span>
    <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra/splunk/splunkuser</span>
@@ -1083,29 +1087,6 @@ in the “hosts” key of the secret.</p>
 <span class="p p-Indicator">}</span>
 </pre></div>
 </div>
-<p>You can also rotate tokens for HEC inputs. Like the Qualys provider, this requires you to specify a <cite>rotatewith</cite> value, which is where Keydra can
-find creds with which to access Splunk and make the change. For HEC tokens, Keydra can only rotate for one host, as HEC tokens are unique to the Splunk instance.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hec1</span>
-<span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Splunk HEC Rotation Example</span>
-<span class="nt">custodians</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">your_team</span>
-<span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunk</span>
-<span class="nt">rotate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nightly</span>
-<span class="nt">config</span><span class="p">:</span>
-   <span class="nt">hosts</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">your.splunkhostname.com</span>
-   <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hectoken</span>
-   <span class="nt">rotatewith</span><span class="p">:</span>
-      <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra/splunk/admin</span>
-      <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secretsmanager</span>
-<span class="nt">distribute</span><span class="p">:</span>
-<span class="p p-Indicator">-</span>
-   <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra/splunk/hec1</span>
-   <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secretsmanager</span>
-   <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
-   <span class="nt">envs</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">prod</span>
-</pre></div>
-</div>
 <p>Distribution is a little more complex; configuring a Splunk App or Add-On with a service account to be
 used by that app to connect to various data sources. Only one destination host can be specified; if you need to
 send to more Splunk hosts you will need another distribution entry. The provider supports either Splunk storage
@@ -1114,8 +1095,8 @@ destination Splunk TA/app. For example, the AWS app for Splunk uses the custom m
 storage passwords.</p>
 <p>The destination app must already be installed on the Splunk instance, though the config entry / storage password
 will be created if it doesn’t already exist.</p>
-<table class="colwidths-given table" id="id2">
-<caption><span class="caption-text">Splunk Provider Distribution Format</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<table class="colwidths-given table" id="id3">
+<caption><span class="caption-text">Splunk Provider Distribution Format</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col style="width: 25%" />
 <col style="width: 25%" />
@@ -1158,8 +1139,8 @@ the example below, a field of “secret_key” will be used in the Splunk post, 
 </tbody>
 </table>
 <p>In the <cite>config</cite> section:</p>
-<table class="colwidths-given table" id="id3">
-<caption><span class="caption-text">Config Format</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<table class="colwidths-given table" id="id4">
+<caption><span class="caption-text">Config Format</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col style="width: 25%" />
 <col style="width: 25%" />
@@ -1298,14 +1279,9 @@ section after mapping them from the secret. As in, the <cite>key</cite> value fr
 </dd></dl>
 
 <dl class="py method">
-<dt id="keydra.providers.splunk.Client._rotate_hec_secret">
-<code class="sig-name descname"><span class="pre">_rotate_hec_secret</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.splunk.Client._rotate_hec_secret" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
 <dt id="keydra.providers.splunk.Client._rotate_secret">
 <code class="sig-name descname"><span class="pre">_rotate_secret</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.splunk.Client._rotate_secret" title="Permalink to this definition">¶</a></dt>
-<dd><p>Rotate password for an account on a list of Spunk servers</p>
+<dd><p>Rotate password for an account on a single Spunk server</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>secret</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – The spec from the secrets yaml</p>
@@ -1318,11 +1294,6 @@ section after mapping them from the secret. As in, the <cite>key</cite> value fr
 </dd>
 </dl>
 </dd></dl>
-
-<dl class="py method">
-<dt id="keydra.providers.splunk.Client._rotate_user">
-<code class="sig-name descname"><span class="pre">_rotate_user</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newpasswd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.splunk.Client._rotate_user" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt id="keydra.providers.splunk.Client.distribute">
@@ -1342,6 +1313,87 @@ section after mapping them from the secret. As in, the <cite>key</cite> value fr
 <dl class="py method">
 <dt id="keydra.providers.splunk.Client.validate_spec">
 <em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">validate_spec</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.splunk.Client.validate_spec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<p>Uses client <a class="reference internal" href="clients.html#client-splunk"><span class="std std-ref">Splunk</span></a>.</p>
+</div>
+<div class="section" id="id2">
+<h2>Splunk<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>Provides rotation support for Splunk Http Event Collector (HEC) tokens. Distribution is not supported by this provider.</p>
+<p>Like the Qualys provider, the spec requires you to specify a <cite>rotatewith</cite> value, which is where Keydra can
+find creds with which to access Splunk and make the change.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hec1</span>
+<span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Splunk HEC Rotation Example</span>
+<span class="nt">custodians</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">your_team</span>
+<span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunk</span>
+<span class="nt">rotate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nightly</span>
+<span class="nt">config</span><span class="p">:</span>
+   <span class="nt">host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">your.splunkhostname.com</span>
+   <span class="nt">rotatewith</span><span class="p">:</span>
+      <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra/splunk/admin</span>
+      <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secretsmanager</span>
+<span class="nt">distribute</span><span class="p">:</span>
+<span class="p p-Indicator">-</span>
+   <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra/splunk/hec1</span>
+   <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secretsmanager</span>
+   <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+   <span class="nt">envs</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">prod</span>
+</pre></div>
+</div>
+<p>The Secrets Manager entry format is as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+<span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;splunk&quot;</span><span class="p p-Indicator">,</span>
+<span class="s">&quot;key&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;HEC</span><span class="nv"> </span><span class="s">Input</span><span class="nv"> </span><span class="s">Name&quot;</span><span class="p p-Indicator">,</span>
+<span class="s">&quot;secret&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;abcdefghijklmnopqrstuvwxyz1234567890&quot;</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<span class="target" id="module-keydra.providers.splunk_hec"></span><dl class="py class">
+<dt id="keydra.providers.splunk_hec.Client">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.providers.splunk_hec.</span></code><code class="sig-name descname"><span class="pre">Client</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.splunk_hec.Client" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt id="keydra.providers.splunk_hec.Client._abc_impl">
+<code class="sig-name descname"><span class="pre">_abc_impl</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;_abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#keydra.providers.splunk_hec.Client._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.splunk_hec.Client._rotate_secret">
+<code class="sig-name descname"><span class="pre">_rotate_secret</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.splunk_hec.Client._rotate_secret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate token for a HEC input on a single Spunk server</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>secret</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – The spec from the secrets yaml</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>New secret ready to distribute</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.splunk_hec.Client.distribute">
+<code class="sig-name descname"><span class="pre">distribute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.splunk_hec.Client.distribute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.splunk_hec.Client.redact_result">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">redact_result</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.splunk_hec.Client.redact_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.splunk_hec.Client.rotate">
+<code class="sig-name descname"><span class="pre">rotate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.splunk_hec.Client.rotate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.splunk_hec.Client.validate_spec">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">validate_spec</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.splunk_hec.Client.validate_spec" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
