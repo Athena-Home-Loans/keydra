@@ -83,14 +83,13 @@ class TestProviderSplunk(unittest.TestCase):
             'status': 'success',
             'action': 'rotate_secret',
             'value': {
-                'provider': 'splunk',
-                'key': 'KEY_ID',
-                'secret': 'THIS_IS_SECRET'
+                'username': 'KEY_ID',
+                'password': 'THIS_IS_SECRET'
             }
         }
 
         r_result = splunk.Client.redact_result(result)
-        r_value = r_result['value']['secret']
+        r_value = r_result['value']['password']
 
         self.assertNotEqual(r_value, 'THIS_IS_SECRET')
 

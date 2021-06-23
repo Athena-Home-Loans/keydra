@@ -246,7 +246,7 @@ class Client(BaseProvider):
 
     @classmethod
     def redact_result(cls, result, spec=None):
-        if 'value' in result and 'secret' in result['value']:
-            result['value']['secret'] = '***'
+        if 'value' in result and 'password' in result['value']:
+            result['value']['password'] = '***'
 
         return result
