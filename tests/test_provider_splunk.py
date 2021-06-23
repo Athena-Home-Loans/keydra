@@ -10,9 +10,8 @@ from unittest.mock import MagicMock
 from unittest.mock import patch
 
 SPLUNK_CREDS = {
-    "provider": "splunk",
-    "key": "admin_key",
-    "secret": "test"
+    "username": "admin_key",
+    "password": "test"
 }
 
 SPLUNK_SPEC = {

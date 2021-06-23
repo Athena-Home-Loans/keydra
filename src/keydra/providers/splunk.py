@@ -162,8 +162,8 @@ class Client(BaseProvider):
         # Connect to Splunk
         try:
             sp_client = SplunkClient(
-                username=self._credentials['key'],
-                password=self._credentials['secret'],
+                username=self._credentials['username'],
+                password=self._credentials['password'],
                 host=destination['config']['host'],
                 verify=self._verify
             )
