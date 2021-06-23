@@ -49,7 +49,7 @@ class Client(BaseProvider):
 
     def _rotate_secret(self, secret):
         '''
-        Rotate password for an account on a list of Spunk servers
+        Rotate password for an account on a single Spunk server
 
         :param secret: The spec from the secrets yaml
         :type secret: :class:`dict`
@@ -57,44 +57,43 @@ class Client(BaseProvider):
         :returns: New secret ready to distribute
         :rtype: :class:`dict`
         '''
-        username = self._credentials['key']
-        current_passwd = self._credentials['secret']
+        username = self._credentials['username']
+        current_passwd = self._credentials['password']
 
         # Generate new random password from SecretsManager
         new_passwd = self._generate_splunk_passwd(32)
 
-        # Change password on each Splunk host listed in the secret
-        for host in secret['hosts']:
-            try:
-                sp_client = SplunkClient(
-                    username=username,
-                    password=current_passwd,
-                    host=host,
-                    verify=self._verify
-                )
-                sp_client.change_passwd(
-                    username=username,
-                    oldpasswd=current_passwd,
-                    newpasswd=new_passwd
-                )
-            except Exception as e:
-                raise RotationException(
-                    'Error rotating user {} on Splunk host '
-                    '{} - {}'.format(username, host, e)
-                )
-
-            LOGGER.info(
-                'Successfully changed Splunk user {} ({}) on server {}'.format(
-                    username,
-                    secret['key'],
-                    host
-                )
+        # Change password on the specified Splunk host listed in the secret
+        host = secret['config']['host']
+        try:
+            sp_client = SplunkClient(
+                username=username,
+                password=current_passwd,
+                host=host,
+                verify=self._verify
+            )
+            sp_client.change_passwd(
+                username=username,
+                oldpasswd=current_passwd,
+                newpasswd=new_passwd
+            )
+        except Exception as e:
+            raise RotationException(
+                'Error rotating user {} on Splunk host '
+                '{} - {}'.format(username, host, e)
             )
 
+        LOGGER.info(
+            'Successfully changed Splunk user {} ({}) on server {}'.format(
+                username,
+                secret['key'],
+                host
+            )
+        )
+
         return {
-            'provider': 'splunk',
-            'key': username,
-            'secret': new_passwd
+            'username': username,
+            'password': new_passwd
         }
 
     @exponential_backoff_retry(3)
@@ -163,8 +162,8 @@ class Client(BaseProvider):
         # Connect to Splunk
         try:
             sp_client = SplunkClient(
-                username=self._credentials['key'],
-                password=self._credentials['secret'],
+                username=self._credentials['username'],
+                password=self._credentials['password'],
                 host=destination['config']['host'],
                 verify=self._verify
             )
@@ -233,21 +232,15 @@ class Client(BaseProvider):
 
     @classmethod
     def validate_spec(cls, spec):
+        if 'config' not in spec:
+            return (False, "Required section 'config' not present in spec")
 
-        for k, v in spec.items():
-            if not validators.length(k, min=2, max=75):
-                return False, 'Key {} failed length checks'.format(k)
+        if 'host' not in spec['config']:
+            return (False, "Config must contain 'host'")
 
-            # Don't key check lists, as it will check length of list not str
-            if (not isinstance(v, list) and
-                    not validators.length(v, min=2, max=75)):
-                return (False,
-                        'Value for key {} failed length checks'.format(k))
-
-        if 'hosts' in spec:
-            for host in spec['hosts']:
-                if not validators.domain(host) and not validators.ipv4(host):
-                    return (False, 'Host {} not valid'.format(host))
+        host = spec['config']['host']
+        if not validators.domain(host) and not validators.ipv4(host):
+            return (False, 'Host {} must be a valid IP or domain name'.format(host))
 
         return True, 'It is valid!'
 

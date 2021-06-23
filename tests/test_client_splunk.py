@@ -278,6 +278,52 @@ class TestSplunkClient(unittest.TestCase):
         )
         self.assertEqual(c_result, True)
 
+    @patch('json.loads')
+    @patch.object(splunkclient, 'Service')
+    def test__rotatetoken(self, mk_splunk, mk_loads):
+        sp_client = SplunkClient(
+                username=SPLUNK_CREDS['key'],
+                password=SPLUNK_CREDS['secret'],
+                host='127.0.0.1',
+                verify=False
+            )
+
+        mk_loads.return_value = {
+            'entry': [{
+                'name': 'http://test',
+                'links': {'edit': 'blah'},
+                'content': {'token': '1234'}
+            }]
+        }
+
+        sp_client._service.post.return_value.status = 200
+        sp_client._service.get.return_value.status = 200
+
+        c_result = sp_client.rotate_hectoken('test')
+
+        sp_client._service.post.assert_called_once_with(
+            'blah/rotate',
+            output_mode='json'
+        )
+        self.assertEqual(c_result, '1234')
+
+    @patch('json.loads')
+    @patch.object(splunkclient, 'Service')
+    def test__rotatetoken_notfound(self, mk_splunk, mk_loads):
+        sp_client = SplunkClient(
+                username=SPLUNK_CREDS['key'],
+                password=SPLUNK_CREDS['secret'],
+                host='127.0.0.1',
+                verify=False
+            )
+
+        mk_loads.return_value = {'entry': [{'name': 'test'}]}
+
+        sp_client._service.post.return_value.status = 200
+
+        with self.assertRaises(Exception):
+            sp_client.rotate_hectoken('test')
+
     @patch.object(splunkclient, 'Service')
     def test__change_pass_fail(self, mk_splunk):
         sp_client = SplunkClient(

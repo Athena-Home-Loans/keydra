@@ -10,26 +10,20 @@ from unittest.mock import MagicMock
 from unittest.mock import patch
 
 SPLUNK_CREDS = {
-    "provider": "splunk",
-    "key": "admin_key",
-    "secret": "test"
+    "username": "admin_key",
+    "password": "test"
 }
 
 SPLUNK_SPEC = {
     'description': 'Test',
     'key': 'keydra/splunk',
-    'hosts': ['127.0.0.1'],
+    'config': {
+        'host': '127.0.0.1'
+    },
     'provider': 'splunk',
     'rotate': 'nightly'
 }
 
-MULTI_SPEC = {
-    'description': 'Test',
-    'key': 'keydra/splunk',
-    'hosts': ['127.0.0.1', '10.0.0.1', '172.16.0.1'],
-    'provider': 'splunk',
-    'rotate': 'nightly'
-}
 
 SF_CREDS = {
   "provider": "salesforce",
@@ -75,16 +69,6 @@ class TestProviderSplunk(unittest.TestCase):
 
         self.assertEqual(mk_splunk().change_passwd.call_count, 1)
 
-    @patch.object(splunk, 'SplunkClient')
-    def test__rotate_account_multi_dest(self, mk_splunk):
-        cli = splunk.Client(credentials=SPLUNK_CREDS, session=MagicMock(),
-                            region_name='ap-southeast-2', verify=False)
-        cli._client = MagicMock()
-        cli._rotate_secret(MULTI_SPEC)
-
-        self.assertEqual(mk_splunk().change_passwd.call_count,
-                         len(MULTI_SPEC['hosts']))
-
     @patch.object(splunk.Client, '_rotate_secret')
     def test_rotate(self, mk_rotate_secret):
         cli = splunk.Client(credentials=SPLUNK_CREDS, session=MagicMock(),
@@ -120,49 +104,13 @@ class TestProviderSplunk(unittest.TestCase):
 
         self.assertEqual(r_result, result)
 
-    def test_validate_spec_overlength(self):
-        spec_overlength = {
-            'description': 'Lorem ipsum dolor sit amet, '
-                           'consectetur adipiscing elit, '
-                           'sed do eiusmod tempor incididunt'
-                           'ut labore et dolore magna'
-                           'aliqua. Ut enim ad minim veniam,'
-                           'quis nostrud exercitation'
-                           ' ullamco laboris nisi ut aliquip'
-                           'ex ea commodo consequat. '
-                           'Duis aute irure dolor in reprehenderit'
-                           'in voluptate velit esse cillum dolore eu'
-                           'fugiat nulla pariatur. Excepteur sint'
-                           ' occaecat cupidatat non proident, sunt in'
-                           'culpa qui officia deserunt mollit anim '
-                           'id est laborum.',
-            'key': 'keydra/splunk',
-            'hosts': ['127.0.0.1'],
-            'provider': 'splunk',
-            'rotate': 'nightly'
-        }
-
-        r_result = splunk.Client.validate_spec(spec_overlength)
-        self.assertEqual(r_result, (False,
-                         'Value for key description failed length checks'))
-
-    def test_validate_spec_underlength(self):
-        spec_underlength = {
-            'e': 'e',
-            'key': 'keydra/splunk',
-            'hosts': ['127.0.0.1'],
-            'provider': 'splunk',
-            'rotate': 'nightly'
-        }
-
-        r_result = splunk.Client.validate_spec(spec_underlength)
-        self.assertEqual(r_result, (False, 'Key e failed length checks'))
-
     def test_validate_spec_bad_domain(self):
         spec_bad_domain = {
             'description': 'Test',
             'key': 'keydra/splunk',
-            'hosts': ['corp.com/com.corp'],
+            'config': {
+                'host': 'corp.com/com.corp'
+            },
             'provider': 'splunk',
             'rotate': 'nightly'
         }
@@ -170,14 +118,16 @@ class TestProviderSplunk(unittest.TestCase):
         r_result = splunk.Client.validate_spec(spec_bad_domain)
 
         self.assertEqual(r_result, (False,
-                         'Host {} not valid'.format(
-                            spec_bad_domain['hosts'][0])))
+                         'Host {} must be a valid IP or domain name'.format(
+                            spec_bad_domain['config']['host'])))
 
     def test_validate_spec_bad_ip(self):
         spec_bad_ip = {
             'description': 'Test',
             'key': 'keydra/splunk',
-            'hosts': ['10.256.0.1'],
+            'config': {
+                'host': '10.256.0.1'
+            },
             'provider': 'splunk',
             'rotate': 'nightly'
         }
@@ -185,14 +135,8 @@ class TestProviderSplunk(unittest.TestCase):
         r_result_1 = splunk.Client.validate_spec(spec_bad_ip)
 
         self.assertEqual(r_result_1, (False,
-                         'Host {} not valid'.format(
-                                            spec_bad_ip['hosts'][0])))
-
-    def test__validate_spec_good(self):
-        r_result_1 = splunk.Client.validate_spec(MULTI_SPEC)
-
-        self.assertEqual(r_result_1, (True,
-                         'It is valid!'))
+                         'Host {} must be a valid IP or domain name'.format(
+                                            spec_bad_ip['config']['host'])))
 
     @patch.object(splunk, 'SplunkClient')
     def test__rotate_except(self, mk_splunk):

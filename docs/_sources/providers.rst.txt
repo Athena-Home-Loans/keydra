@@ -305,13 +305,14 @@ Uses client :ref:`Salesforce <client_salesforce>`.
 Splunk
 ======
 
-Provides password rotation and distribution support for Splunk. Rotation allows for Splunk account 
+Provides password rotation and distribution support for Splunk. Rotation allows for Splunk account
 passwords to be rotated, while Distribute allows you to save passwords from other providers in Splunk
 apps, like Qualys or AWS.
 
+Rotation can be done on only one Splunk instance at a time.
+
 Rotation generates a new 32 character password (using AWS Secrets Manager) and changes the Splunk password
-for the account corresponding to the "key" value in the secret. This change is made on all Splunk hosts defined
-in the "hosts" key of the secret.
+for the account corresponding to the "key" value in the secret. This change is made on the Splunk host defined within the "config" section) of the secret.
 
 An example secret spec to rotate a Splunk user password and store in AWS Secrets Manager:
 
@@ -322,8 +323,8 @@ An example secret spec to rotate a Splunk user password and store in AWS Secrets
    custodians: your_team
    provider: splunk
    rotate: nightly
-   hosts:
-   - your.splunkhostname.com
+   config:
+      host: your.splunkhostname.com
    distribute:
    -
       key: keydra/splunk/splunkuser
@@ -334,12 +335,11 @@ An example secret spec to rotate a Splunk user password and store in AWS Secrets
 
 The Secrets Manager entry format is as follows:
 
-.. code-block:: yaml
+.. code-block:: json
 
    {
-   "provider": "splunk",
-   "key": "splunkuser",
-   "secret": "abcdefghijklmnopqrstuvwxyz1234567890"
+   "username": "splunkuser",
+   "password": "abcdefghijklmnopqrstuvwxyz1234567890"
    }
 
 Distribution is a little more complex; configuring a Splunk App or Add-On with a service account to be
@@ -465,5 +465,49 @@ If your app uses storage passwords (like the Qualys app), the distribution stanz
    :undoc-members:
    :private-members:
 
+
+Uses client :ref:`Splunk <client_splunk>`.
+
+Splunk HEC
+==========
+
+Provides rotation support for Splunk Http Event Collector (HEC) tokens. Distribution is not supported by this provider.
+
+Like the Qualys provider, the spec requires you to specify a `rotatewith` value, which is where Keydra can
+find creds with which to access Splunk and make the change. 
+
+.. code-block:: yaml
+
+   key: hec1
+   description: Splunk HEC Rotation Example
+   custodians: your_team
+   provider: splunk_hec
+   rotate: nightly
+   config:
+      host: your.splunkhostname.com
+      rotatewith:
+         key: keydra/splunk/admin
+         provider: secretsmanager
+   distribute:
+   -
+      key: keydra/splunk/hec1
+      provider: secretsmanager
+      source: secret
+      envs:
+         - prod
+
+The Secrets Manager entry format is as follows:
+
+.. code-block:: json
+
+   {
+   "hecInputName": "HEC Input Name",
+   "hecToken": "13e58a8a-ab69-4c89-8941-51b26d797e5a"
+   }
+
+.. automodule:: keydra.providers.splunk_hec
+   :members:
+   :undoc-members:
+   :private-members:
 
 Uses client :ref:`Splunk <client_splunk>`.
