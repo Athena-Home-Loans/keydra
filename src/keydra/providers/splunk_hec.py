@@ -17,6 +17,9 @@ from keydra.logging import get_logger
 
 LOGGER = get_logger()
 
+USER_FIELD = 'hecInputName'
+PW_FIELD = 'hecToken'
+
 
 class Client(BaseProvider):
     def __init__(self, session=None, credentials=None,
@@ -80,8 +83,8 @@ class Client(BaseProvider):
             )
 
         return {
-            'hecInputName': secret['key'],
-            'hecToken': newtoken
+            f'{USER_FIELD}': secret['key'],
+            f'{PW_FIELD}': newtoken
         }
 
     @exponential_backoff_retry(3)
@@ -108,14 +111,15 @@ class Client(BaseProvider):
         if 'rotatewith' not in spec['config']:
             return (False, "Config must contain 'rotatewith' section")
         else:
-            if not all(k in spec['config']['rotatewith'] for k in ['key', 'provider']):
+            if not all(k in spec['config']['rotatewith']
+                       for k in ['key', 'provider']):
                 return (False, "'rotatewith' must contain 'provider' and 'key'")
 
         return True, 'It is valid!'
 
     @classmethod
     def redact_result(cls, result, spec=None):
-        if 'value' in result and 'secret' in result['value']:
-            result['value']['secret'] = '***'
+        if 'value' in result and PW_FIELD in result['value']:
+            result['value'][PW_FIELD] = '***'
 
         return result

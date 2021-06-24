@@ -8,6 +8,8 @@ from keydra.exceptions import RotationException
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
+from keydra.providers.splunk_hec import PW_FIELD
+
 SPLUNK_CREDS = {
     "provider": "splunk",
     "key": "admin_key",
@@ -30,12 +32,12 @@ SPLUNK_HECSPEC = {
 }
 
 SF_CREDS = {
-  "provider": "salesforce",
-  "key": "splunk.api@corp.com.au.dev11",
-  "secret": "abcdefghijklmnopqrstuvwxyz1234567890",
-  "token": "abcdefghijklmnopqrstuvwxyz",
-  "env": "dev11",
-  "domain": "test"
+    "provider": "salesforce",
+    "key": "splunk.api@corp.com.au.dev11",
+    "secret": "abcdefghijklmnopqrstuvwxyz1234567890",
+    "token": "abcdefghijklmnopqrstuvwxyz",
+    "env": "dev11",
+    "domain": "test"
 }
 
 DEST = {
@@ -112,12 +114,12 @@ class TestProviderSplunkHEC(unittest.TestCase):
             'value': {
                 'provider': 'splunk',
                 'key': 'KEY_ID',
-                'secret': 'THIS_IS_SECRET'
+                f'{PW_FIELD}': 'THIS_IS_SECRET'
             }
         }
 
         r_result = splunk_hec.Client.redact_result(result)
-        r_value = r_result['value']['secret']
+        r_value = r_result['value'][PW_FIELD]
 
         self.assertNotEqual(r_value, 'THIS_IS_SECRET')
 

@@ -1,4 +1,5 @@
 import boto3
+import boto3.session
 import json
 
 from keydra.clients.qualys import QualysClient
@@ -14,6 +15,9 @@ from keydra.exceptions import RotationException
 from keydra.logging import get_logger
 
 LOGGER = get_logger()
+
+USER_FIELD = 'username'
+PW_FIELD = 'password'
 
 
 class Client(BaseProvider):
@@ -63,27 +67,27 @@ class Client(BaseProvider):
 
         qclient = QualysClient(
             platform=operator_creds['platform'],
-            username=operator_creds['username'],
-            password=operator_creds['password']
+            username=operator_creds[USER_FIELD],
+            password=operator_creds[PW_FIELD]
         )
 
         try:
-            resp['password'] = qclient.change_passwd(
-                username=self._credentials['username']
+            resp[PW_FIELD] = qclient.change_passwd(
+                username=self._credentials[USER_FIELD]
             )
 
         except Exception as e:
             raise RotationException(
                 'Error rotating user {} (with user {}). Reason: {}'.format(
-                    self._credentials['username'],
-                    operator_creds['username'],
+                    self._credentials[USER_FIELD],
+                    operator_creds[USER_FIELD],
                     e
                 )
             )
 
         LOGGER.info(
             'Successfully changed Qualys user {}'.format(
-                self._credentials['username']
+                self._credentials[USER_FIELD]
             )
         )
 
@@ -119,7 +123,7 @@ class Client(BaseProvider):
 
     @classmethod
     def redact_result(cls, result, spec=None):
-        if 'value' in result and 'password' in result['value']:
-            result['value']['password'] = '***'
+        if 'value' in result and PW_FIELD in result['value']:
+            result['value'][PW_FIELD] = '***'
 
         return result

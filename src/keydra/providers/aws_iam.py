@@ -14,12 +14,14 @@ from keydra.logging import get_logger
 
 LOGGER = get_logger()
 
+PW_FIELD = 'secret'
+
 
 def _explain_secret(aws_secret):
     return {
         'provider': 'iam',
         'key': aws_secret['AccessKeyId'],
-        'secret': aws_secret['SecretAccessKey']
+        f'{PW_FIELD}': aws_secret['SecretAccessKey']
     }
 
 
@@ -260,8 +262,8 @@ class Client(BaseProvider):
 
     @classmethod
     def redact_result(cls, result, spec=None):
-        if 'value' in result and 'secret' in result['value']:
-            result['value']['secret'] = '***'
+        if 'value' in result and PW_FIELD in result['value']:
+            result['value'][PW_FIELD] = '***'
 
         return result
 
