@@ -20,8 +20,6 @@ LOGGER = get_logger()
 
 ACCT_USERNAME_TAG = 'account_username'
 
-COMMON_USER_KEYS = ['key', 'username']
-
 
 class Client(BaseProvider):
     def __init__(self, session=None, credentials=None, **kwargs):
@@ -81,8 +79,7 @@ class Client(BaseProvider):
         except Exception as e:  # pragma: no cover
             raise DistributionException(e)
 
-        for key in COMMON_USER_KEYS:
-            keyname = secret.get(key)
+        keyname = secret.get('key', secret.get('username'))
 
         LOGGER.info(
             'Successfully distributed {}[{}] to variable {} in Bitbucket '
@@ -205,8 +202,7 @@ class Client(BaseProvider):
         except Exception as e:  # pragma: no cover
             raise DistributionException(e)
 
-        for key in COMMON_USER_KEYS:
-            keyname = secret.get(key)
+        keyname = secret.get('key', secret.get('username'))
 
         LOGGER.info(
             "Successfully distributed {}[{}] to variable {} for Bitbucket deployment in repo "
@@ -281,8 +277,7 @@ class Client(BaseProvider):
             LOGGER.warn('Failed to distribute secret: {}'.format(e))
             raise DistributionException(e)
 
-        for key in COMMON_USER_KEYS:
-            keyname = secret.get(key)
+        keyname = secret.get('key', secret.get('username'))
 
         LOGGER.info(
             "Successfully distributed {}[{}] to variable {} in Bitbucket repository "
