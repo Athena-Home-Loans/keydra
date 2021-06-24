@@ -312,7 +312,7 @@ apps, like Qualys or AWS.
 Rotation can be done on only one Splunk instance at a time.
 
 Rotation generates a new 32 character password (using AWS Secrets Manager) and changes the Splunk password
-for the account corresponding to the "key" value in the secret. This change is made on the Splunk host defined within the "config" section) of the secret.
+for the account corresponding to the "key" value in the secret. This change is made on the Splunk host defined within the "config" section of the secret.
 
 An example secret spec to rotate a Splunk user password and store in AWS Secrets Manager:
 

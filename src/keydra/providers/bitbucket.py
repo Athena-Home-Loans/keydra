@@ -79,13 +79,14 @@ class Client(BaseProvider):
         except Exception as e:  # pragma: no cover
             raise DistributionException(e)
 
+        keyname = secret.get('key', secret.get('username'))
+
         LOGGER.info(
-            'Successfully distributed {}{} to Bitbucket[ACCOUNT] from '
-            '{} - {}'.format(
-                dest['key'],
-                ' ({})'.format(secret['key']) if 'key' in secret else '',
+            'Successfully distributed {}[{}] to variable {} in Bitbucket '
+            'account'.format(
+                keyname if keyname else '',
                 dest['source'],
-                secret['provider']
+                dest['key'],
             )
         )
 
@@ -201,15 +202,15 @@ class Client(BaseProvider):
         except Exception as e:  # pragma: no cover
             raise DistributionException(e)
 
+        keyname = secret.get('key', secret.get('username'))
+
         LOGGER.info(
-            'Successfully distributed {}{} to Bitbucket[{}::{}] from '
-            '{} - {}'.format(
-                dest['key'],
-                ' ({})'.format(secret['key']) if 'key' in secret else '',
+            "Successfully distributed {}[{}] to variable {} for Bitbucket deployment in repo "
+            "'{}'".format(
+                keyname if keyname else '',
                 dest['source'],
-                secret['provider'],
-                config['repository'],
-                environment
+                dest['key'],
+                config['repository']
             )
         )
 
@@ -276,14 +277,15 @@ class Client(BaseProvider):
             LOGGER.warn('Failed to distribute secret: {}'.format(e))
             raise DistributionException(e)
 
+        keyname = secret.get('key', secret.get('username'))
+
         LOGGER.info(
-            'Successfully distributed {}{} to Bitbucket[{}] from '
-            '{} - {}'.format(
-                dest['key'],
-                ' ({})'.format(secret['key']) if 'key' in secret else '',
+            "Successfully distributed {}[{}] to variable {} in Bitbucket repository "
+            "'{}'".format(
+                keyname if keyname else '',
                 dest['source'],
-                secret['provider'],
-                config['repository'],
+                dest['key'],
+                config['repository']
             )
         )
 
