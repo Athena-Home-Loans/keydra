@@ -10,11 +10,13 @@ from keydra.logging import get_logger
 
 LOGGER = get_logger()
 
+PW_FIELD = 'secret'
+
 
 class Client(BaseProvider):
     def __init__(self, session=None, credentials=None, region_name=None):
         self._secret_key = credentials['key']
-        self._cfclient = ContentfulClient(token=credentials['secret'])
+        self._cfclient = ContentfulClient(token=credentials[PW_FIELD])
 
     def _rotate_secret(self, secret):
         try:
@@ -65,7 +67,7 @@ class Client(BaseProvider):
         return {
             'provider': 'contentful',
             'key': self._secret_key,
-            'secret': new_token.token,
+            f'{PW_FIELD}': new_token.token,
         }
 
     @exponential_backoff_retry(3)
@@ -77,7 +79,7 @@ class Client(BaseProvider):
 
     @classmethod
     def redact_result(cls, result, spec=None):
-        if 'value' in result and 'secret' in result['value']:
-            result['value']['secret'] = '***'
+        if 'value' in result and PW_FIELD in result['value']:
+            result['value'][PW_FIELD] = '***'
 
         return result

@@ -16,6 +16,9 @@ from keydra.logging import get_logger
 
 LOGGER = get_logger()
 
+USER_FIELD = 'username'
+PW_FIELD = 'password'
+
 
 class Client(BaseProvider):
     def __init__(self, session=None, credentials=None,
@@ -57,8 +60,8 @@ class Client(BaseProvider):
         :returns: New secret ready to distribute
         :rtype: :class:`dict`
         '''
-        username = self._credentials['username']
-        current_passwd = self._credentials['password']
+        username = self._credentials[USER_FIELD]
+        current_passwd = self._credentials[PW_FIELD]
 
         # Generate new random password from SecretsManager
         new_passwd = self._generate_splunk_passwd(32)
@@ -92,8 +95,8 @@ class Client(BaseProvider):
         )
 
         return {
-            'username': username,
-            'password': new_passwd
+            f"{USER_FIELD}": username,
+            f"{PW_FIELD}": new_passwd
         }
 
     @exponential_backoff_retry(3)
@@ -105,7 +108,7 @@ class Client(BaseProvider):
             result = client.update_app_storepass(
                 app=destination['config']['app'],
                 username=data['name'],
-                password=data['password'],
+                password=data[PW_FIELD],
                 realm=destination['config'].get('realm')
             )
 
@@ -162,8 +165,8 @@ class Client(BaseProvider):
         # Connect to Splunk
         try:
             sp_client = SplunkClient(
-                username=self._credentials['username'],
-                password=self._credentials['password'],
+                username=self._credentials[USER_FIELD],
+                password=self._credentials[PW_FIELD],
                 host=destination['config']['host'],
                 verify=self._verify
             )
@@ -246,7 +249,7 @@ class Client(BaseProvider):
 
     @classmethod
     def redact_result(cls, result, spec=None):
-        if 'value' in result and 'password' in result['value']:
-            result['value']['password'] = '***'
+        if 'value' in result and PW_FIELD in result['value']:
+            result['value'][PW_FIELD] = '***'
 
         return result
