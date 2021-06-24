@@ -20,6 +20,8 @@ LOGGER = get_logger()
 
 ACCT_USERNAME_TAG = 'account_username'
 
+COMMON_USER_KEYS = ['key', 'username']
+
 
 class Client(BaseProvider):
     def __init__(self, session=None, credentials=None, **kwargs):
@@ -79,13 +81,15 @@ class Client(BaseProvider):
         except Exception as e:  # pragma: no cover
             raise DistributionException(e)
 
+        for key in COMMON_USER_KEYS:
+            keyname = secret.get(key)
+
         LOGGER.info(
-            'Successfully distributed {}{} to Bitbucket[ACCOUNT] from '
-            '{} - {}'.format(
-                dest['key'],
-                ' ({})'.format(secret['key']) if 'key' in secret else '',
+            'Successfully distributed {}[{}] to variable {} in Bitbucket '
+            'account'.format(
+                keyname if keyname else '',
                 dest['source'],
-                secret['provider']
+                dest['key'],
             )
         )
 
@@ -201,15 +205,16 @@ class Client(BaseProvider):
         except Exception as e:  # pragma: no cover
             raise DistributionException(e)
 
+        for key in COMMON_USER_KEYS:
+            keyname = secret.get(key)
+
         LOGGER.info(
-            'Successfully distributed {}{} to Bitbucket[{}::{}] from '
-            '{} - {}'.format(
-                dest['key'],
-                ' ({})'.format(secret['key']) if 'key' in secret else '',
+            "Successfully distributed {}[{}] to variable {} for Bitbucket deployment in repo "
+            "'{}'".format(
+                keyname if keyname else '',
                 dest['source'],
-                secret['provider'],
-                config['repository'],
-                environment
+                dest['key'],
+                config['repository']
             )
         )
 
@@ -276,14 +281,16 @@ class Client(BaseProvider):
             LOGGER.warn('Failed to distribute secret: {}'.format(e))
             raise DistributionException(e)
 
+        for key in COMMON_USER_KEYS:
+            keyname = secret.get(key)
+
         LOGGER.info(
-            'Successfully distributed {}{} to Bitbucket[{}] from '
-            '{} - {}'.format(
-                dest['key'],
-                ' ({})'.format(secret['key']) if 'key' in secret else '',
+            "Successfully distributed {}[{}] to variable {} in Bitbucket repository "
+            "'{}'".format(
+                keyname if keyname else '',
                 dest['source'],
-                secret['provider'],
-                config['repository'],
+                dest['key'],
+                config['repository']
             )
         )
 

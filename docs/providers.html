@@ -1061,7 +1061,7 @@ passwords to be rotated, while Distribute allows you to save passwords from othe
 apps, like Qualys or AWS.</p>
 <p>Rotation can be done on only one Splunk instance at a time.</p>
 <p>Rotation generates a new 32 character password (using AWS Secrets Manager) and changes the Splunk password
-for the account corresponding to the “key” value in the secret. This change is made on the Splunk host defined within the “config” section) of the secret.</p>
+for the account corresponding to the “key” value in the secret. This change is made on the Splunk host defined within the “config” section of the secret.</p>
 <p>An example secret spec to rotate a Splunk user password and store in AWS Secrets Manager:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunkuser</span>
 <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Splunk Rotation Example</span>
