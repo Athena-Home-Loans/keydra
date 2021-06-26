@@ -237,12 +237,15 @@ touch environments.yaml secrets.yaml
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">sample</span>
 </pre></div>
 </div>
-<ol class="arabic simple" start="4">
+<ol class="arabic" start="4">
 <li><p>For this example, we’ve told Keydra that this account is a <cite>dev</cite> one, but could also be <cite>production</cite> or <cite>uat</cite>.
 The <cite>sample</cite> line tells Keydra to manage that secret in this environment, which we’ll now define!
 You can add lots of environments (i.e. AWS accounts) to this file, just follow the same format and append.</p></li>
 <li><p>Edit <cite>secrets.yaml</cite>. This file tells Keydra about our secrets, just one for the time being - update with your
-repo organisation or user name, and update the <cite>provider</cite> key to match your code repo type. Note that the repository name here needs to be all lower case.</p></li>
+repo organisation or user name, and update the <cite>provider</cite> key to match your code repo type. Note that the repository name here needs to be all lower case.</p>
+<p>Note: What is the <cite>custodians</cite> key all about? This is just a free text value that can be used to indicate which person/team is
+the ‘owner’ of this secret. Can be handy in a larger environment where secrets are not managed by one central team.</p>
+</li>
 </ol>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sample</span><span class="p">:</span>
       <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra_managed_sample</span>

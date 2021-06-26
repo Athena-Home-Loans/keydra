@@ -161,6 +161,11 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#aws-kinesis-firehose">
+   AWS Kinesis Firehose
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#aws-secrets-manager">
    AWS Secrets Manager
   </a>
@@ -372,6 +377,80 @@ keys in the format:</p>
 <dd></dd></dl>
 
 <p>Uses client <a class="reference internal" href="clients.html#client-iam"><span class="std std-ref">AWS IAM</span></a></p>
+</div>
+<div class="section" id="aws-kinesis-firehose">
+<h2>AWS Kinesis Firehose<a class="headerlink" href="#aws-kinesis-firehose" title="Permalink to this headline">¶</a></h2>
+<p><em>AWS Kinesis Firehose</em> (declared as <cite>firehose</cite>): can only <cite>distribute</cite> secrets to Firehose destinations. It doesn’t
+make sense for it to rotate! The distribute spec looks like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">distribute</span><span class="p">:</span>
+<span class="p p-Indicator">-</span>
+    <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">streamname</span>
+    <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">firehose</span>
+    <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret_key</span>
+    <span class="nt">config</span><span class="p">:</span>
+        <span class="nt">dest_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunk | http</span>
+    <span class="nt">envs</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">dev</span>
+</pre></div>
+</div>
+<p>This will distribute a secret to a Firehose delivery stream destination of type <cite>dest_type</cite>, for a stream name of <cite>key</cite>.</p>
+<p>Valid values for <cite>dest_type</cite> are ‘splunk’ or ‘http’, corresponding to those options supported by AWS (<a class="reference external" href="https://docs.aws.amazon.com/firehose/latest/dev/create-destination.html">https://docs.aws.amazon.com/firehose/latest/dev/create-destination.html</a>).
+The provider will take the key from the secret specified by <cite>source</cite>, and save it to the token or password of the Firehose destination.</p>
+<p>As an example, the Firehose Splunk destination sends events to a Splunk HTTP Event Collector (HEC), so the following would
+rotate a HEC token nightly, and save the value to a Firehose stream:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sample</span><span class="p">:</span>
+   <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra_managed_sample</span>
+   <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Example</span>
+   <span class="nt">custodians</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_team</span>
+   <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunk_hec</span>
+   <span class="nt">rotate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nightly</span>
+   <span class="nt">config</span><span class="p">:</span>
+      <span class="nt">host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my.splunkhost</span>
+      <span class="nt">rotatewith</span><span class="p">:</span>
+         <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra/splunk/admin</span>
+         <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secretsmanager</span>
+   <span class="nt">distribute</span><span class="p">:</span>
+   <span class="p p-Indicator">-</span>
+      <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">streamname</span>
+      <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">firehose</span>
+      <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hecToken</span>
+      <span class="nt">config</span><span class="p">:</span>
+         <span class="nt">dest_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunk</span>
+      <span class="nt">envs</span><span class="p">:</span>
+         <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">dev</span>
+</pre></div>
+</div>
+<span class="target" id="module-keydra.providers.aws_kinesisfirehose"></span><dl class="py class">
+<dt id="keydra.providers.aws_kinesisfirehose.Client">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.providers.aws_kinesisfirehose.</span></code><code class="sig-name descname"><span class="pre">Client</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_kinesisfirehose.Client" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt id="keydra.providers.aws_kinesisfirehose.Client._abc_impl">
+<code class="sig-name descname"><span class="pre">_abc_impl</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;_abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#keydra.providers.aws_kinesisfirehose.Client._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.aws_kinesisfirehose.Client._distribute">
+<code class="sig-name descname"><span class="pre">_distribute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_kinesisfirehose.Client._distribute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.aws_kinesisfirehose.Client.distribute">
+<code class="sig-name descname"><span class="pre">distribute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_kinesisfirehose.Client.distribute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.aws_kinesisfirehose.Client.rotate">
+<code class="sig-name descname"><span class="pre">rotate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_kinesisfirehose.Client.rotate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.aws_kinesisfirehose.Client.validate_spec">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">validate_spec</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_kinesisfirehose.Client.validate_spec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<p>Uses client <a class="reference internal" href="clients.html#client-firehose"><span class="std std-ref">AWS Kinesis Firehose</span></a></p>
 </div>
 <div class="section" id="aws-secrets-manager">
 <h2>AWS Secrets Manager<a class="headerlink" href="#aws-secrets-manager" title="Permalink to this headline">¶</a></h2>

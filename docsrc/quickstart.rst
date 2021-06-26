@@ -52,6 +52,9 @@ Setup a configuration repository
 5.  Edit `secrets.yaml`. This file tells Keydra about our secrets, just one for the time being - update with your 
     repo organisation or user name, and update the `provider` key to match your code repo type. Note that the repository name here needs to be all lower case.
 
+    Note: What is the `custodians` key all about? This is just a free text value that can be used to indicate which person/team is
+    the 'owner' of this secret. Can be handy in a larger environment where secrets are not managed by one central team.
+
 .. code-block:: yaml
 
     sample:

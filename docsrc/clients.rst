@@ -30,6 +30,17 @@ AWS IAM
    :private-members:
 
 
+.. _client_firehose:
+
+AWS Kinesis Firehose
+====================
+
+.. automodule:: keydra.clients.aws.kinesisfirehose
+   :members:
+   :undoc-members:
+   :private-members:
+
+
 .. _client_secretsmanager:
 
 AWS Secrets Manager
