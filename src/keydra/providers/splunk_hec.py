@@ -62,8 +62,8 @@ class Client(BaseProvider):
                 secret_id=secret['config']['rotatewith']['key']
             )
         )
-        username = operator_creds['key']
-        passwd = operator_creds['secret']
+        username = operator_creds['username']
+        passwd = operator_creds['password']
 
         try:
             sp_client = SplunkClient(
@@ -73,17 +73,21 @@ class Client(BaseProvider):
                 verify=self._verify
             )
             newtoken = sp_client.rotate_hectoken(
-                inputname=secret['key']
+                inputname=self._credentials[USER_FIELD]
             )
 
         except Exception as e:
             raise RotationException(
                 'Error rotating HEC token for input {} on Splunk host '
-                '{} - {}'.format(secret['key'], host, e)
+                '{} - {}'.format(
+                    self._credentials[USER_FIELD],
+                    host,
+                    e
+                )
             )
 
         return {
-            f'{USER_FIELD}': secret['key'],
+            f'{USER_FIELD}': self._credentials[USER_FIELD],
             f'{PW_FIELD}': newtoken
         }
 

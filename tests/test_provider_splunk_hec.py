@@ -15,6 +15,11 @@ SPLUNK_CREDS = {
     "password": "test"
 }
 
+HEC_SM_SECRET = {
+    'hecInputName': 'myInput',
+    'hecToken': '1234'
+}
+
 SPLUNK_HECSPEC = {
     'description': 'Test',
     'key': 'keydra/splunk',
@@ -67,12 +72,12 @@ class TestProviderSplunkHEC(unittest.TestCase):
     @patch.object(splunk_hec, 'SplunkClient')
     def test__rotate_hec(self,  mk_splunk, mk_loads):
         cli = splunk_hec.Client(
-            credentials=SPLUNK_CREDS,
+            credentials=HEC_SM_SECRET,
             session=MagicMock(),
             region_name='ap-southeast-2',
             verify=False
         )
-        mk_loads.return_value = {'key': 'test', 'secret': 'sshhh'}
+        mk_loads.return_value = SPLUNK_CREDS
         cli._rotate_secret(SPLUNK_HECSPEC)
 
         self.assertEqual(mk_splunk().rotate_hectoken.call_count, 1)
@@ -81,14 +86,14 @@ class TestProviderSplunkHEC(unittest.TestCase):
     @patch.object(splunk_hec, 'SplunkClient')
     def test__rotate_hec_fail(self,  mk_splunk, mk_loads):
         cli = splunk_hec.Client(
-            credentials=SPLUNK_CREDS,
+            credentials=HEC_SM_SECRET,
             session=MagicMock(),
             region_name='ap-southeast-2',
             verify=False
         )
 
         mk_splunk().rotate_hectoken.side_effect = Exception('boom')
-        mk_loads.return_value = {'key': 'test', 'secret': 'sshhh'}
+        mk_loads.return_value = SPLUNK_CREDS
 
         with self.assertRaises(RotationException):
             cli._rotate_secret(SPLUNK_HECSPEC)
@@ -96,7 +101,7 @@ class TestProviderSplunkHEC(unittest.TestCase):
     @patch.object(splunk_hec.Client, '_rotate_secret')
     def test_rotate(self, mk_rotate_secret):
         cli = splunk_hec.Client(
-            credentials=SPLUNK_CREDS,
+            credentials=HEC_SM_SECRET,
             session=MagicMock(),
             region_name='ap-southeast-2',
             verify=False
@@ -185,7 +190,7 @@ class TestProviderSplunkHEC(unittest.TestCase):
 
     def test__distribute(self):
         cli = splunk_hec.Client(
-            credentials=SPLUNK_CREDS,
+            credentials=HEC_SM_SECRET,
             session=MagicMock(),
             region_name='ap-southeast-2',
             verify=False
