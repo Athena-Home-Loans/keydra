@@ -161,6 +161,11 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-keydra.clients.aws.kinesisfirehose">
+   AWS Kinesis Firehose
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-keydra.clients.aws.secretsmanager">
    AWS Secrets Manager
   </a>
@@ -423,6 +428,101 @@
 </div>
 <div class="section" id="aws-iam">
 <span id="client-iam"></span><h2>AWS IAM<a class="headerlink" href="#aws-iam" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-keydra.clients.aws.kinesisfirehose">
+<span id="aws-kinesis-firehose"></span><span id="client-firehose"></span><h2>AWS Kinesis Firehose<a class="headerlink" href="#module-keydra.clients.aws.kinesisfirehose" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="keydra.clients.aws.kinesisfirehose.FirehoseClient">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.aws.kinesisfirehose.</span></code><code class="sig-name descname"><span class="pre">FirehoseClient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.kinesisfirehose.FirehoseClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="keydra.clients.aws.kinesisfirehose.FirehoseClient._get_HttpEndpointConfiguration">
+<code class="sig-name descname"><span class="pre">_get_HttpEndpointConfiguration</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">streamname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destId</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.kinesisfirehose.FirehoseClient._get_HttpEndpointConfiguration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.aws.kinesisfirehose.FirehoseClient._get_stream_ids">
+<code class="sig-name descname"><span class="pre">_get_stream_ids</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">streamname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desttype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.kinesisfirehose.FirehoseClient._get_stream_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the version Id of a stream, and the dest Id of its destination</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>streamname</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of the Firehose Delivery Stream</p></li>
+<li><p><strong>desttype</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The destination type - ‘Splunk’ or ‘HTTPEndpoint’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple with version and dest Id, or None if stream/dest not found</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.aws.kinesisfirehose.FirehoseClient.stream_exists">
+<code class="sig-name descname"><span class="pre">stream_exists</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">streamname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.kinesisfirehose.FirehoseClient.stream_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check it a stream exists</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>streamname</strong> – Name of the Firehose Delivery Stream</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if stream exists, else False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.aws.kinesisfirehose.FirehoseClient.update_http_accesskey">
+<code class="sig-name descname"><span class="pre">update_http_accesskey</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">streamname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.kinesisfirehose.FirehoseClient.update_http_accesskey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the access key of a Firehose HTTP destination</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>streamname</strong> – Name of the Firehose Delivery Stream</p></li>
+<li><p><strong>token</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Secret value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictonary with response (bypass from boto)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.aws.kinesisfirehose.FirehoseClient.update_splunk_hectoken">
+<code class="sig-name descname"><span class="pre">update_splunk_hectoken</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">streamname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.aws.kinesisfirehose.FirehoseClient.update_splunk_hectoken" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the HEC Token of a Firehose Splunk destination</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>streamname</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of the Firehose Delivery Stream</p></li>
+<li><p><strong>token</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Secret value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictonary with response (bypass from boto)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt id="keydra.clients.aws.kinesisfirehose.UpdateSecretException">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.aws.kinesisfirehose.</span></code><code class="sig-name descname"><span class="pre">UpdateSecretException</span></code><a class="headerlink" href="#keydra.clients.aws.kinesisfirehose.UpdateSecretException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 <div class="section" id="module-keydra.clients.aws.secretsmanager">
 <span id="aws-secrets-manager"></span><span id="client-secretsmanager"></span><h2>AWS Secrets Manager<a class="headerlink" href="#module-keydra.clients.aws.secretsmanager" title="Permalink to this headline">¶</a></h2>

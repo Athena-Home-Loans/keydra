@@ -11,9 +11,8 @@ from unittest.mock import patch
 from keydra.providers.splunk_hec import PW_FIELD
 
 SPLUNK_CREDS = {
-    "provider": "splunk",
-    "key": "admin_key",
-    "secret": "test"
+    "username": "admin_key",
+    "password": "test"
 }
 
 SPLUNK_HECSPEC = {

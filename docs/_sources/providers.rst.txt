@@ -52,6 +52,62 @@ keys in the format:
 
 Uses client :ref:`AWS IAM <client_iam>`
 
+AWS Kinesis Firehose
+====================
+
+*AWS Kinesis Firehose* (declared as `firehose`): can only `distribute` secrets to Firehose destinations. It doesn't
+make sense for it to rotate! The distribute spec looks like this:
+
+.. code-block:: yaml
+
+    distribute:
+    -
+        key: streamname
+        provider: firehose
+        source: secret_key
+        config:
+            dest_type: splunk | http
+        envs:
+            - dev
+
+This will distribute a secret to a Firehose delivery stream destination of type `dest_type`, for a stream name of `key`.
+
+Valid values for `dest_type` are 'splunk' or 'http', corresponding to those options supported by AWS (https://docs.aws.amazon.com/firehose/latest/dev/create-destination.html). 
+The provider will take the key from the secret specified by `source`, and save it to the token or password of the Firehose destination. 
+
+As an example, the Firehose Splunk destination sends events to a Splunk HTTP Event Collector (HEC), so the following would
+rotate a HEC token nightly, and save the value to a Firehose stream:
+
+.. code-block:: yaml
+
+   sample:
+      key: keydra_managed_sample
+      description: Example
+      custodians: my_team
+      provider: splunk_hec
+      rotate: nightly
+      config:
+         host: my.splunkhost
+         rotatewith:
+            key: keydra/splunk/admin
+            provider: secretsmanager
+      distribute:
+      -
+         key: streamname
+         provider: firehose
+         source: hecToken
+         config:
+            dest_type: splunk
+         envs:
+            - dev
+
+.. automodule:: keydra.providers.aws_kinesisfirehose
+   :members:
+   :undoc-members:
+   :private-members:
+
+Uses client :ref:`AWS Kinesis Firehose <client_firehose>`
+
 AWS Secrets Manager
 ===================
 

@@ -26,12 +26,14 @@ SECRETS_MANAGER = SecretsManagerClient(region_name=DEFAULT_REGION_NAME)
 
 LOCAL_PROVIDERS = {
     'appsync': 'aws_appsync',
+    'firehose': 'aws_kinesisfirehose',
     'iam': 'aws_iam',
     'secretsmanager': 'aws_secretsmanager'
 }
 
 LOCAL_CLIENTS = {
     'appsync': 'aws.appsync',
+    'firehose': 'aws.kinesisfirehose',
     'iam': 'aws.iam',
     'secretsmanager': 'aws.secretsmanager'
 }
