@@ -3,6 +3,8 @@ import boto3.session
 import json
 import validators
 
+import keydra.providers.splunk
+
 from keydra import loader
 
 from keydra.clients.splunk import SplunkClient
@@ -19,6 +21,8 @@ LOGGER = get_logger()
 
 USER_FIELD = 'hecInputName'
 PW_FIELD = 'hecToken'
+SPLUNK_USER_FIELD = keydra.providers.splunk.USER_FIELD
+SPLUNK_PW_FIELD = keydra.providers.splunk.PW_FIELD
 
 
 class Client(BaseProvider):
@@ -62,8 +66,8 @@ class Client(BaseProvider):
                 secret_id=secret['config']['rotatewith']['key']
             )
         )
-        username = operator_creds['username']
-        passwd = operator_creds['password']
+        username = operator_creds[SPLUNK_USER_FIELD]
+        passwd = operator_creds[SPLUNK_PW_FIELD]
 
         try:
             sp_client = SplunkClient(
