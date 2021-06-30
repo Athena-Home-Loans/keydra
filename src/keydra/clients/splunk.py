@@ -238,7 +238,11 @@ class SplunkClient(object):
 
         raise Exception(
             'Error rotating HEC token {} on Splunk host '
-            '{}. Input was not found!'.format(inputname, self._service.host)
+            '{}. Input was not found! Input list: {}'.format(
+                inputname,
+                self._service.host,
+                inputs
+            )
         )
 
 
