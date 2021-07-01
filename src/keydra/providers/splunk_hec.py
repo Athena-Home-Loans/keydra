@@ -76,9 +76,14 @@ class Client(BaseProvider):
                 host=host,
                 verify=self._verify
             )
-            newtoken = sp_client.rotate_hectoken(
-                inputname=self._credentials[USER_FIELD]
-            )
+            if host.endswith('splunkcloud.com'):
+                newtoken = sp_client.rotate_hectoken_cloud(
+                    inputname=self._credentials[USER_FIELD]
+                )
+            else:
+                newtoken = sp_client.rotate_hectoken(
+                    inputname=self._credentials[USER_FIELD]
+                )
 
         except Exception as e:
             raise RotationException(

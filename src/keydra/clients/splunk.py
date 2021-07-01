@@ -212,7 +212,7 @@ class SplunkClient(object):
 
     def rotate_hectoken(self, inputname):
         '''
-        Rotate a Splunk HEC token
+        Rotate a Splunk HEC token for Splunk Enterprise
 
         :param inputname: The name of the HTTP input
         :type inputname: :class:`string`
@@ -244,6 +244,53 @@ class SplunkClient(object):
                 inputs
             )
         )
+
+    def rotate_hectoken_cloud(self, inputname):
+        '''
+        Rotate a Splunk HEC token on Splunk Cloud (Classic)
+
+        :param inputname: The name of the HTTP input
+        :type inputname: :class:`string`
+
+        :returns: New token value if successful
+        :rtype: :class:`string`
+
+        https://docs.splunk.com/Documentation/SplunkCloud/8.2.2105/Admin/ManageHECtokens
+
+        '''
+        response = self._service.get(
+            '/services/dmc/config/inputs/__indexers/http/{}'.format(inputname),
+            output_mode='json'
+        )
+        if response.status != 200:
+            inputlist = self._service.get(
+                '/services/dmc/config/inputs/-/http',
+                output_mode='json'
+            )['body'].read()
+
+            raise Exception(
+                'Error rotating HEC token {} on Splunk host '
+                '{}. Input was not found! Input list: {}'.format(
+                    inputname,
+                    self._service.host,
+                    inputlist
+                )
+            )
+
+        config = json.loads(response['body'].read())['entry'][0]
+        config.pop('token', None)
+
+        self._service.delete(
+            '/services/dmc/config/inputs/__indexers/http/{}'.format(inputname),
+            output_mode='json'
+        )
+        createresp = self._service.post(
+            '/services/dmc/config/inputs/__indexers/http',
+            **config
+        )
+        newconfig = json.loads(createresp['body'].read())['entry'][0]
+
+        return newconfig['content']['token']
 
 
 class AppNotInstalledException(Exception):
