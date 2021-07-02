@@ -307,13 +307,12 @@ class SplunkClient(object):
         except Exception as e:
             raise Exception(
                 'Error creating new HEC token {} on Splunk host '
-                '{}. {} Response: {}'.format(
+                '{}. Response: {}'.format(
                     inputname,
                     self._service.host,
-                    e,
                     createresp['body'].read()
                 )
-            )
+            ) from e
 
 
 class AppNotInstalledException(Exception):
