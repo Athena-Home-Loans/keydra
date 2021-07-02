@@ -280,17 +280,38 @@ class SplunkClient(object):
         config = json.loads(response['body'].read())['entry'][0]
         config.pop('token', None)
 
-        self._service.delete(
+        delresp = self._service.delete(
             '/services/dmc/config/inputs/__indexers/http/{}'.format(inputname),
             output_mode='json'
         )
-        createresp = self._service.post(
-            '/services/dmc/config/inputs/__indexers/http',
-            **config
-        )
-        newconfig = json.loads(createresp['body'].read())['entry'][0]
 
-        return newconfig['content']['token']
+        if delresp.status != 200:
+            raise Exception(
+                'Error deleting HEC token {} on Splunk host '
+                '{}. Response: {}'.format(
+                    inputname,
+                    self._service.host,
+                    delresp['body'].read()
+                )
+            )
+
+        try:
+            createresp = self._service.post(
+                '/services/dmc/config/inputs/__indexers/http',
+                **config
+            )
+            newconfig = json.loads(createresp['body'].read())['entry'][0]
+
+            return newconfig['content']['token']
+
+        except Exception as e:
+            raise Exception(
+                'Error creating new HEC token {} on Splunk host '
+                '{}. Response: {}'.format(
+                    inputname,
+                    self._service.host,
+                    createresp['body'].read()
+                )
 
 
 class AppNotInstalledException(Exception):
