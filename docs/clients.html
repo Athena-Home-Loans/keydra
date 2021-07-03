@@ -1499,6 +1499,88 @@ username in the form of an email address.</p>
 <dt id="keydra.clients.splunk.SplunkClient">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.splunk.</span></code><code class="sig-name descname"><span class="pre">SplunkClient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8089</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
+<dt id="keydra.clients.splunk.SplunkClient._create_splunkcloud_httpinput">
+<code class="sig-name descname"><span class="pre">_create_splunkcloud_httpinput</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputconfig</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient._create_splunkcloud_httpinput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Splunk HEC input on Splunk Cloud (Classic)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputname</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>) – The name of the HTTP input</p></li>
+<li><p><strong>inputconfig</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – The configuration of the new HEC Input</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple of Deployment task Id and deployed configuration</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.splunk.SplunkClient._delete_splunkcloud_httpinput">
+<code class="sig-name descname"><span class="pre">_delete_splunkcloud_httpinput</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient._delete_splunkcloud_httpinput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a Splunk HEC token on Splunk Cloud (Classic)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>inputname</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>) – The name of the HTTP input</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Deployment task Id</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.splunk.SplunkClient._get_last_splunkcloud_deploytask">
+<code class="sig-name descname"><span class="pre">_get_last_splunkcloud_deploytask</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient._get_last_splunkcloud_deploytask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the last deployment task to be run on Splunk Cloud (Classic)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Last deployment task Id</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.splunk.SplunkClient._get_splunkcloud_httpinput">
+<code class="sig-name descname"><span class="pre">_get_splunkcloud_httpinput</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient._get_splunkcloud_httpinput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get details for a Splunk HEC token on Splunk Cloud (Classic)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>inputname</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>) – The name of the HTTP input</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Entry details, or an empty list if input not found</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.splunk.SplunkClient._wait_for_splunkcloud_task">
+<code class="sig-name descname"><span class="pre">_wait_for_splunkcloud_task</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">180</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient._wait_for_splunkcloud_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for a Splunk Cloud (Classic) deployment task to complete</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>) – The task Id to wait for</p></li>
+<li><p><strong>timeout</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – How many seconds to wait for before giving up</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="keydra.clients.splunk.SplunkClient.app_exists">
 <code class="sig-name descname"><span class="pre">app_exists</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">appname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient.app_exists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if a Splunk app exists</p>
@@ -1539,7 +1621,27 @@ username in the form of an email address.</p>
 <dl class="py method">
 <dt id="keydra.clients.splunk.SplunkClient.rotate_hectoken">
 <code class="sig-name descname"><span class="pre">rotate_hectoken</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient.rotate_hectoken" title="Permalink to this definition">¶</a></dt>
-<dd><p>Rotate a Splunk HEC token</p>
+<dd><p>Rotate a Splunk HEC token for Splunk Enterprise</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>inputname</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>) – The name of the HTTP input</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>New token value if successful</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.splunk.SplunkClient.rotate_hectoken_cloud">
+<code class="sig-name descname"><span class="pre">rotate_hectoken_cloud</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient.rotate_hectoken_cloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate a Splunk HEC token on Splunk Cloud (Classic)</p>
+<p>Unfortunately you can rotate in place on Splunk Cloud, so we have
+to delete and recreate the HTTP input in order to get a new token.</p>
+<p><a class="reference external" href="https://docs.splunk.com/Documentation/SplunkCloud/8.2.2105/Admin/ManageHECtokens">https://docs.splunk.com/Documentation/SplunkCloud/8.2.2105/Admin/ManageHECtokens</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>inputname</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>) – The name of the HTTP input</p>

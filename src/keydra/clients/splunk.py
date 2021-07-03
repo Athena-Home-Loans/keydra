@@ -1,10 +1,15 @@
 import json
+import time
 
 import splunklib.client as splunkclient
 
 import urllib.parse as urlparse
 
 from splunklib.binding import HTTPError
+
+from keydra.logging import get_logger
+
+LOGGER = get_logger()
 
 
 class SplunkClient(object):
@@ -245,9 +250,144 @@ class SplunkClient(object):
             )
         )
 
+    def _get_splunkcloud_httpinput(self, inputname):
+        '''
+        Get details for a Splunk HEC token on Splunk Cloud (Classic)
+
+        :param inputname: The name of the HTTP input
+        :type inputname: :class:`string`
+
+        :returns: Entry details, or an empty list if input not found
+        :rtype: :class:`list`
+        '''
+        getresp = self._service.get(
+            '/services/dmc/config/inputs/__indexers/http/{}'.format(inputname),
+            output_mode='json'
+        )['body'].read()
+
+        return json.loads(getresp)['entry']
+
+    def _get_last_splunkcloud_deploytask(self):
+        '''
+        Gets the last deployment task to be run on Splunk Cloud (Classic)
+
+        :returns: Last deployment task Id
+        :rtype: :class:`string`
+
+        '''
+        taskresp = self._service.get(
+            '/services/dmc/deploy',
+            output_mode='json'
+        )['body'].read()
+        tasks = json.loads(taskresp)['entry']
+
+        if tasks[0]['name'] == 'lastDeploy':
+            return tasks[0]['content']['taskId']
+        else:
+            raise Exception(
+                "Could not fetch last task Id! Task with name 'lastDeploy' was not "
+                "found in the Splunk response. Unexpected response from server."
+            )
+
+    def _wait_for_splunkcloud_task(self, id, timeout=180):
+        '''
+        Wait for a Splunk Cloud (Classic) deployment task to complete
+
+        :param id: The task Id to wait for
+        :type id: :class:`string`
+        :param timeout: How many seconds to wait for before giving up
+        :type timeout: :class:`int`
+
+        '''
+        attempt = 1
+        while attempt < timeout:
+            try:
+                statusresp = self._service.get(
+                    '/services/dmc/tasks/{}'.format(id),
+                    output_mode='json'
+                )['body'].read()
+            except HTTPError:
+                raise Exception('Could not fetch status for task {}'.format(id))
+
+            status = json.loads(statusresp)['entry'][0]
+
+            LOGGER.debug("Task {} is currently '{}' after {} seconds.".format(
+                    id,
+                    status['content']['state'],
+                    attempt
+                )
+            )
+            if status['content']['state'] == 'completed':
+                LOGGER.info("Deployment task {} completed in {} seconds.".format(id, attempt))
+                return
+
+            time.sleep(1)
+            attempt += 1
+
+        raise Exception(
+            'Deployment task did not complete within {} seconds! Aborting.'.format(timeout)
+        )
+
+    def _delete_splunkcloud_httpinput(self, inputname):
+        '''
+        Delete a Splunk HEC token on Splunk Cloud (Classic)
+
+        :param inputname: The name of the HTTP input
+        :type inputname: :class:`string`
+
+        :returns: Deployment task Id
+        :rtype: :class:`string`
+
+        '''
+        try:
+            self._service.delete(
+                '/services/dmc/config/inputs/__indexers/http/{}'.format(inputname),
+                output_mode='json'
+            )
+        except HTTPError:
+            raise Exception('Error sending HEC token delete request')
+
+        return self._get_last_splunkcloud_deploytask()
+
+    def _create_splunkcloud_httpinput(self, inputname, inputconfig):
+        '''
+        Create a Splunk HEC input on Splunk Cloud (Classic)
+
+        :param inputname: The name of the HTTP input
+        :type inputname: :class:`string`
+        :param inputconfig: The configuration of the new HEC Input
+        :type inputconfig: :class:`dict`
+
+        :returns: Tuple of Deployment task Id and deployed configuration
+        :rtype: :class:`tuple`
+
+        '''
+
+        try:
+            createresp = self._service.post(
+                '/services/dmc/config/inputs/__indexers/http',
+                headers=[('Content-Type', 'application/json')],
+                output_mode='json',
+                body=json.dumps(inputconfig)
+            )
+
+        except HTTPError as error:
+            raise Exception(
+                'Error creating input: {}'.format(error)
+            )
+
+        response = json.loads(createresp['body'].read())
+
+        return self._get_last_splunkcloud_deploytask(), response['entry'][0]
+
     def rotate_hectoken_cloud(self, inputname):
         '''
         Rotate a Splunk HEC token on Splunk Cloud (Classic)
+
+        Unfortunately you can rotate in place on Splunk Cloud, so we have
+        to delete and recreate the HTTP input in order to get a new token.
+
+        https://docs.splunk.com/Documentation/SplunkCloud/8.2.2105/Admin/ManageHECtokens
 
         :param inputname: The name of the HTTP input
         :type inputname: :class:`string`
@@ -255,64 +395,42 @@ class SplunkClient(object):
         :returns: New token value if successful
         :rtype: :class:`string`
 
-        https://docs.splunk.com/Documentation/SplunkCloud/8.2.2105/Admin/ManageHECtokens
-
         '''
-        response = self._service.get(
-            '/services/dmc/config/inputs/__indexers/http/{}'.format(inputname),
-            output_mode='json'
+        LOGGER.debug('Getting input details for {}'.format(inputname))
+
+        inputs = self._get_splunkcloud_httpinput(inputname)
+
+        if len(inputs) == 0:
+            raise Exception('Input {} was not found!'.format(inputname))
+        else:
+            httpinput = inputs[0]
+
+        LOGGER.debug('Found input.')
+
+        config = {
+            'name': httpinput['name'],
+        }
+        content = httpinput['content']
+        content.pop('token', None)
+        content.pop('host', None)
+
+        config.update(content)
+
+        LOGGER.debug('Using config {}'.format(config))
+
+        taskId = self._delete_splunkcloud_httpinput(inputname)
+        LOGGER.info('Input {} delete in progress under task Id {}'.format(inputname, taskId))
+
+        self._wait_for_splunkcloud_task(id=taskId)
+        LOGGER.debug('Deleted input successfully')
+
+        createTaskId, newconfig = self._create_splunkcloud_httpinput(
+            inputname=inputname,
+            inputconfig=config
         )
-        if response.status != 200:
-            inputlist = self._service.get(
-                '/services/dmc/config/inputs/-/http',
-                output_mode='json'
-            )['body'].read()
+        LOGGER.info('Input {} create in progress under task Id {}'.format(inputname, taskId))
 
-            raise Exception(
-                'Error rotating HEC token {} on Splunk host '
-                '{}. Input was not found! Input list: {}'.format(
-                    inputname,
-                    self._service.host,
-                    inputlist
-                )
-            )
-
-        config = json.loads(response['body'].read())['entry'][0]
-        config.pop('token', None)
-
-        delresp = self._service.delete(
-            '/services/dmc/config/inputs/__indexers/http/{}'.format(inputname),
-            output_mode='json'
-        )
-
-        if delresp.status != 200:
-            raise Exception(
-                'Error deleting HEC token {} on Splunk host '
-                '{}. Response: {}'.format(
-                    inputname,
-                    self._service.host,
-                    delresp['body'].read()
-                )
-            )
-
-        try:
-            createresp = self._service.post(
-                '/services/dmc/config/inputs/__indexers/http',
-                **config
-            )
-            newconfig = json.loads(createresp['body'].read())['entry'][0]
-
-            return newconfig['content']['token']
-
-        except Exception as e:
-            raise Exception(
-                'Error creating new HEC token {} on Splunk host '
-                '{}. Response: {}'.format(
-                    inputname,
-                    self._service.host,
-                    createresp['body'].read()
-                )
-            ) from e
+        return newconfig['content']['token']
 
 
 class AppNotInstalledException(Exception):

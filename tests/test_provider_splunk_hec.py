@@ -35,6 +35,21 @@ SPLUNK_HECSPEC = {
     'rotate': 'nightly'
 }
 
+SPLUNK_HECSPEC_CLOUD = {
+    'description': 'Test',
+    'key': 'keydra/splunk',
+    'config': {
+        'host': 'test.splunkcloud.com',
+        'type': 'hectoken',
+        'rotatewith': {
+            'key': 'blah',
+            'provider': 'secretsmanager'
+        }
+    },
+    'provider': 'splunk',
+    'rotate': 'nightly'
+}
+
 SF_CREDS = {
     "provider": "salesforce",
     "key": "splunk.api@corp.com.au.dev11",
@@ -81,6 +96,20 @@ class TestProviderSplunkHEC(unittest.TestCase):
         cli._rotate_secret(SPLUNK_HECSPEC)
 
         self.assertEqual(mk_splunk().rotate_hectoken.call_count, 1)
+
+    @patch('json.loads')
+    @patch.object(splunk_hec, 'SplunkClient')
+    def test__rotate_hec_cloud(self,  mk_splunk, mk_loads):
+        cli = splunk_hec.Client(
+            credentials=HEC_SM_SECRET,
+            session=MagicMock(),
+            region_name='ap-southeast-2',
+            verify=False
+        )
+        mk_loads.return_value = SPLUNK_CREDS
+        cli._rotate_secret(SPLUNK_HECSPEC_CLOUD)
+
+        self.assertEqual(mk_splunk().rotate_hectoken_cloud.call_count, 1)
 
     @patch('json.loads')
     @patch.object(splunk_hec, 'SplunkClient')
