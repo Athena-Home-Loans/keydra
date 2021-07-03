@@ -1402,6 +1402,10 @@ section after mapping them from the secret. As in, the <cite>key</cite> value fr
 <p>Provides rotation support for Splunk Http Event Collector (HEC) tokens. Distribution is not supported by this provider.</p>
 <p>Like the Qualys provider, the spec requires you to specify a <cite>rotatewith</cite> value, which is where Keydra can
 find creds with which to access Splunk and make the change.</p>
+<p>Both Splunk Enterprise and Splunk Cloud are supported, but only the ‘Classic’ experience for the latter. If using with Splunk
+Cloud, make sure the Splunk user you are rotating with has a role with the <cite>dmc_deploy_token_http</cite> and <cite>list_token_http</cite> capabilities.</p>
+<p>An additional note on Splunk Cloud, which uses a DMC to distribute content to the indexes; rotating HEC tokens can take up to
+5 minutes due to the cluster synchoronisation requirements.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hec1</span>
 <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Splunk HEC Rotation Example</span>
 <span class="nt">custodians</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">your_team</span>

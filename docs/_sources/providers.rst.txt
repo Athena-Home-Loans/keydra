@@ -530,7 +530,13 @@ Splunk HEC
 Provides rotation support for Splunk Http Event Collector (HEC) tokens. Distribution is not supported by this provider.
 
 Like the Qualys provider, the spec requires you to specify a `rotatewith` value, which is where Keydra can
-find creds with which to access Splunk and make the change. 
+find creds with which to access Splunk and make the change.
+
+Both Splunk Enterprise and Splunk Cloud are supported, but only the 'Classic' experience for the latter. If using with Splunk
+Cloud, make sure the Splunk user you are rotating with has a role with the `dmc_deploy_token_http` and `list_token_http` capabilities.
+
+An additional note on Splunk Cloud, which uses a DMC to distribute content to the indexes; rotating HEC tokens can take up to 
+5 minutes due to the cluster synchoronisation requirements.
 
 .. code-block:: yaml
 
