@@ -284,7 +284,10 @@ class SplunkClient(object):
         if tasks[0]['name'] == 'lastDeploy':
             return tasks[0]['content']['taskId']
         else:
-            raise Exception('Could not fetch last task Id!')
+            raise Exception(
+                "Could not fetch last task Id! Task with name 'lastDeploy' was not "
+                "found in the Splunk response. Unexpected response from server."
+            )
 
     def _wait_for_splunkcloud_task(self, id, timeout=180):
         '''
@@ -398,7 +401,7 @@ class SplunkClient(object):
         inputs = self._get_splunkcloud_httpinput(inputname)
 
         if len(inputs) == 0:
-            raise Exception('Input was not found!')
+            raise Exception('Input {} was not found!'.format(inputname))
         else:
             httpinput = inputs[0]
 
