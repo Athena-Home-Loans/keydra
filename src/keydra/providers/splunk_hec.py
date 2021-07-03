@@ -70,22 +70,36 @@ class Client(BaseProvider):
         passwd = operator_creds[SPLUNK_PW_FIELD]
 
         try:
+            LOGGER.debug('Connecting to Splunk')
+
             sp_client = SplunkClient(
                 username=username,
                 password=passwd,
                 host=host,
                 verify=self._verify
             )
+
+            LOGGER.debug(
+                'Successfully connected to Splunk host {}'.format(
+                    host
+                )
+            )
+
             if host.endswith('splunkcloud.com'):
+                LOGGER.debug('Rotating for Splunk Cloud.')
+
                 newtoken = sp_client.rotate_hectoken_cloud(
                     inputname=self._credentials[USER_FIELD]
                 )
             else:
+                LOGGER.debug('Rotating for Splunk Enterprise.')
+
                 newtoken = sp_client.rotate_hectoken(
                     inputname=self._credentials[USER_FIELD]
                 )
 
         except Exception as e:
+            LOGGER.error('Error: {}'.format(e))
             raise RotationException(
                 'Error rotating HEC token for input {} on Splunk host '
                 '{} - {}'.format(
@@ -93,7 +107,7 @@ class Client(BaseProvider):
                     host,
                     e
                 )
-            )
+            ) from e
 
         return {
             f'{USER_FIELD}': self._credentials[USER_FIELD],
