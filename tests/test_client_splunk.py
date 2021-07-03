@@ -1,3 +1,4 @@
+import json
 import unittest
 
 from unittest.mock import MagicMock
@@ -309,6 +310,43 @@ class TestSplunkClient(unittest.TestCase):
 
     @patch('json.loads')
     @patch.object(splunkclient, 'Service')
+    def test__rotatetoken_cloud(self, mk_splunk, mk_loads):
+        sp_client = SplunkClient(
+                username=SPLUNK_CREDS['key'],
+                password=SPLUNK_CREDS['secret'],
+                host='test.splunkcloud.com',
+                verify=False
+            )
+
+        response = {
+            'entry': [{
+                'name': 'test',
+                'content': {'token': '1234'}
+            }]
+        }
+
+        newresponse = {
+            'entry': [{
+                'name': 'test',
+                'content': {'token': '5678'}
+            }]
+        }
+        createresp = '1234-5678-90abc', newresponse['entry'][0]
+
+        sp_client._service.post.return_value.status = 200
+        sp_client._service.get.return_value.status = 200
+        sp_client._get_splunkcloud_httpinput = MagicMock()
+        sp_client._get_splunkcloud_httpinput.return_value = response['entry']
+        sp_client._wait_for_splunkcloud_task = MagicMock()
+        sp_client._get_last_splunkcloud_deploytask = MagicMock()
+        sp_client._create_splunkcloud_httpinput = MagicMock()
+        sp_client._create_splunkcloud_httpinput.return_value = createresp
+        c_result = sp_client.rotate_hectoken_cloud('test')
+
+        self.assertEqual(c_result, '5678')
+
+    @patch('json.loads')
+    @patch.object(splunkclient, 'Service')
     def test__rotatetoken_notfound(self, mk_splunk, mk_loads):
         sp_client = SplunkClient(
                 username=SPLUNK_CREDS['key'],
@@ -337,3 +375,117 @@ class TestSplunkClient(unittest.TestCase):
 
         with self.assertRaises(Exception):
             sp_client.change_passwd('admin', 'old', 'new')
+
+    @patch.object(splunkclient, 'Service')
+    def test__get_cloudtask(self, mk_splunk):
+        sp_client = SplunkClient(
+                username=SPLUNK_CREDS['key'],
+                password=SPLUNK_CREDS['secret'],
+                host='test.splunkcloud.com',
+                verify=False
+            )
+        sp_client._service.get.return_value['body'] = MagicMock()
+        sp_client._service.get.return_value['body'].read.return_value = json.dumps(
+            {
+                'entry': [{'name': 'lastDeploy', 'content': {'taskId': '7777'}}]
+            }
+        )
+
+        t_result = sp_client._get_last_splunkcloud_deploytask()
+
+        self.assertEqual(t_result, '7777')
+
+    @patch.object(splunkclient, 'Service')
+    def test__get_cloudtask_fail(self, mk_splunk):
+        sp_client = SplunkClient(
+                username=SPLUNK_CREDS['key'],
+                password=SPLUNK_CREDS['secret'],
+                host='test.splunkcloud.com',
+                verify=False
+            )
+        sp_client._service.get.return_value['body'] = MagicMock()
+        sp_client._service.get.return_value['body'].read.return_value = json.dumps(
+            {
+                'entry': [{'name': 'NotlastDeploy', 'content': {'taskId': '7777'}}]
+            }
+        )
+
+        with self.assertRaises(Exception):
+            sp_client._get_last_splunkcloud_deploytask()
+
+    @patch.object(splunkclient, 'Service')
+    def test__create_cloudinput(self, mk_splunk):
+        sp_client = SplunkClient(
+                username=SPLUNK_CREDS['key'],
+                password=SPLUNK_CREDS['secret'],
+                host='test.splunkcloud.com',
+                verify=False
+            )
+
+        sp_client._get_last_splunkcloud_deploytask = MagicMock()
+
+        sp_client._service.post.return_value['body'] = MagicMock()
+        sp_client._service.post.return_value['body'].read.return_value = json.dumps(
+            {
+                'entry': [{'name': 'Woot'}]
+            }
+        )
+
+        c_id, c_result = sp_client._create_splunkcloud_httpinput('test', {})
+        print(c_result)
+        self.assertEqual(c_result, {'name': 'Woot'})
+
+    @patch.object(splunkclient, 'Service')
+    def test__create_cloudinput_fail(self, mk_splunk):
+        sp_client = SplunkClient(
+                username=SPLUNK_CREDS['key'],
+                password=SPLUNK_CREDS['secret'],
+                host='test.splunkcloud.com',
+                verify=False
+            )
+
+        sp_client._get_last_splunkcloud_deploytask = MagicMock()
+        httpResponse = response(
+            status=400, reason="go away", body=body('does not exist')
+        )
+        sp_client._service.post.side_effect = HTTPError(response=httpResponse)
+
+        with self.assertRaises(Exception):
+            sp_client._create_splunkcloud_httpinput('test', {})
+
+    @patch.object(splunkclient, 'Service')
+    def test__delete_cloudinput_fail(self, mk_splunk):
+        sp_client = SplunkClient(
+                username=SPLUNK_CREDS['key'],
+                password=SPLUNK_CREDS['secret'],
+                host='test.splunkcloud.com',
+                verify=False
+            )
+
+        sp_client._get_last_splunkcloud_deploytask = MagicMock()
+        httpResponse = response(
+            status=400, reason="go away", body=body('does not exist')
+        )
+        sp_client._service.delete.side_effect = HTTPError(response=httpResponse)
+
+        with self.assertRaises(Exception):
+            sp_client._delete_splunkcloud_httpinput('test')
+
+    @patch.object(splunkclient, 'Service')
+    def test__get_cloudinput(self, mk_splunk):
+        sp_client = SplunkClient(
+                username=SPLUNK_CREDS['key'],
+                password=SPLUNK_CREDS['secret'],
+                host='test.splunkcloud.com',
+                verify=False
+            )
+        sp_client._service.get.return_value['body'] = MagicMock()
+        sp_client._service.get.return_value['body'].read.return_value = json.dumps(
+            {
+                'entry': [{'name': 'WootyTooty'}]
+            }
+        )
+
+        t_result = sp_client._get_splunkcloud_httpinput('test')
+
+        self.assertEqual(t_result[0]['name'], 'WootyTooty')
