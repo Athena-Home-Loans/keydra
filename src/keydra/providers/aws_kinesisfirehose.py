@@ -65,7 +65,8 @@ class Client(BaseProvider):
             raise DistributionException(e)
 
         LOGGER.info(
-            'Successfully distributed {} to Kinesis Firehose'.format(
+            'Successfully distributed {} to Kinesis Firehose destination {}'.format(
+                target['source'],
                 target['key']
             )
         )
