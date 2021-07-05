@@ -19,18 +19,26 @@ class Client(BaseProvider):
         if session is None:
             session = boto3.session.Session()
 
+        self._session = session
+        self._init_client(region_name)
+
+    def _init_client(self, region):
         self._client = FirehoseClient(
-            session=session,
-            region_name=region_name
+            session=self._session,
+            region_name=region
         )
 
     def rotate(self, secret):
         raise RotationException('AWS Kinesis Firehose provider does not support rotation')
 
     def _distribute(self, secret, target):
+        # Use the specified region if provided, else use the region Keydra is running in
+        if target['config'].get('region') is not None:
+            self._init_client(target['config']['region'])
+
         if not self._client.stream_exists(target['key']):
             raise DistributionException(
-                "Stream '{}' not found! Does not exist or a you have a permissions issue".format(
+                "Stream '{}' not found! Does not exist or you have a permissions issue".format(
                     target['key']
                 )
             )
@@ -56,6 +64,14 @@ class Client(BaseProvider):
         except Exception as e:
             raise DistributionException(e)
 
+        LOGGER.info(
+            'Successfully distributed {} to Kinesis Firehose'.format(
+                target['key']
+            )
+        )
+
+        return target
+
     @exponential_backoff_retry(3)
     def distribute(self, secret, target):
         return self._distribute(secret, target)
@@ -77,3 +93,7 @@ class Client(BaseProvider):
             return False, 'Unsupported dest type, must be splunk|http'
 
         return True, 'It is valid!'  # pragma: no cover
+
+    @classmethod
+    def has_creds(cls):
+        return False

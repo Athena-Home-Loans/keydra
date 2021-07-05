@@ -237,16 +237,18 @@ touch environments.yaml secrets.yaml
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">sample</span>
 </pre></div>
 </div>
-<ol class="arabic" start="4">
+<ol class="arabic simple" start="4">
 <li><p>For this example, we’ve told Keydra that this account is a <cite>dev</cite> one, but could also be <cite>production</cite> or <cite>uat</cite>.
 The <cite>sample</cite> line tells Keydra to manage that secret in this environment, which we’ll now define!
 You can add lots of environments (i.e. AWS accounts) to this file, just follow the same format and append.</p></li>
 <li><p>Edit <cite>secrets.yaml</cite>. This file tells Keydra about our secrets, just one for the time being - update with your
-repo organisation or user name, and update the <cite>provider</cite> key to match your code repo type. Note that the repository name here needs to be all lower case.</p>
-<p>Note: What is the <cite>custodians</cite> key all about? This is just a free text value that can be used to indicate which person/team is
-the ‘owner’ of this secret. Can be handy in a larger environment where secrets are not managed by one central team.</p>
-</li>
+repo organisation or user name, and update the <cite>provider</cite> key to match your code repo type. Note that the repository name here needs to be all lower case.</p></li>
 </ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>What is the <cite>custodians</cite> key all about? This is just a free text value that can be used to indicate which person/team is
+the ‘owner’ of this secret. Can be handy in a larger environment where secrets are not managed by one central team.</p>
+</div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sample</span><span class="p">:</span>
       <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra_managed_sample</span>
       <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">A example secret which exists in IAM</span>
@@ -312,9 +314,14 @@ pip install -r src/requirements.txt
 <li><p>Friends don’t let friends use admin for everything!! Login to your AWS account console, and create a new IAM user called <cite>keydra_deploy</cite>, with programmatic access only and
 a policy like that in <cite>docsrc/KeydraDeploy.json</cite>.</p></li>
 <li><p>Create an access key for the <cite>keydra_deploy</cite> user and stash the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY as <a class="reference external" href="https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials_environment.html">enviroment variables in your terminal.</a></p></li>
-<li><p>Now, we’re going to use <a class="reference external" href="https://aws.amazon.com/serverless/sam/">AWS SAM</a> to deploy two CloudFormation stacks. The first one (<cite>keydraExecRole</cite>)sets up a least privilege role to run Keydra with.
+<li><p>Now, we’re going to use <a class="reference external" href="https://aws.amazon.com/serverless/sam/">AWS SAM</a> to deploy two CloudFormation stacks. The first one (<cite>keydraExecRole</cite>) sets up a least privilege role to run Keydra with.
 Execute the following on your local machine, changing the region to match your needs.</p></li>
 </ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We’ve added some additional restrictions to this sample role. This requires all Keydra managed secrets in AWS Secrets Manager
+to be tagged with “managedby: keydra”. If this annoys you, delete lines 52-54 to provide Keydra will perms to all secrets.</p>
+</div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sam build -t docsrc/KeydraExecRole.yaml
 sam deploy -t docsrc/KeydraExecRole.yaml --stack-name keydraExecRole --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM --region ap-southeast-2
 </pre></div>

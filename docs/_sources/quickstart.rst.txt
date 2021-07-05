@@ -52,7 +52,8 @@ Setup a configuration repository
 5.  Edit `secrets.yaml`. This file tells Keydra about our secrets, just one for the time being - update with your 
     repo organisation or user name, and update the `provider` key to match your code repo type. Note that the repository name here needs to be all lower case.
 
-    Note: What is the `custodians` key all about? This is just a free text value that can be used to indicate which person/team is
+.. note::
+    What is the `custodians` key all about? This is just a free text value that can be used to indicate which person/team is
     the 'owner' of this secret. Can be handy in a larger environment where secrets are not managed by one central team.
 
 .. code-block:: yaml
@@ -125,8 +126,12 @@ Deploy Keydra to AWS
 
 3.  Create an access key for the `keydra_deploy` user and stash the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY as `enviroment variables in your terminal. <https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials_environment.html>`_
 
-4.  Now, we're going to use `AWS SAM <https://aws.amazon.com/serverless/sam/>`_ to deploy two CloudFormation stacks. The first one (`keydraExecRole`)sets up a least privilege role to run Keydra with. 
+4.  Now, we're going to use `AWS SAM <https://aws.amazon.com/serverless/sam/>`_ to deploy two CloudFormation stacks. The first one (`keydraExecRole`) sets up a least privilege role to run Keydra with. 
     Execute the following on your local machine, changing the region to match your needs.
+
+.. note::
+    We've added some additional restrictions to this sample role. This requires all Keydra managed secrets in AWS Secrets Manager
+    to be tagged with "managedby: keydra". If this annoys you, delete lines 52-54 to provide Keydra will perms to all secrets.
 
 .. code-block:: bash
 

@@ -106,6 +106,19 @@ Resources:
                   - appsync:GetGraphqlApi
                 Resource: "*"
 
+        -
+          PolicyName: runtime.firehose
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - firehose:DescribeDeliveryStream
+                  - firehose:ListDeliveryStreams
+                  - firehose:UpdateDestination
+                Resource: "*"
+
 Outputs:
   KeydraExecRole:
     Description: "Keydra Exec Role ARN"

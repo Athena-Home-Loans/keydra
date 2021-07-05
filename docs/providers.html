@@ -389,6 +389,7 @@ make sense for it to rotate! The distribute spec looks like this:</p>
     <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret_key</span>
     <span class="nt">config</span><span class="p">:</span>
         <span class="nt">dest_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunk | http</span>
+        <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS Region</span>
     <span class="nt">envs</span><span class="p">:</span>
         <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">dev</span>
 </pre></div>
@@ -396,8 +397,10 @@ make sense for it to rotate! The distribute spec looks like this:</p>
 <p>This will distribute a secret to a Firehose delivery stream destination of type <cite>dest_type</cite>, for a stream name of <cite>key</cite>.</p>
 <p>Valid values for <cite>dest_type</cite> are ‘splunk’ or ‘http’, corresponding to those options supported by AWS (<a class="reference external" href="https://docs.aws.amazon.com/firehose/latest/dev/create-destination.html">https://docs.aws.amazon.com/firehose/latest/dev/create-destination.html</a>).
 The provider will take the key from the secret specified by <cite>source</cite>, and save it to the token or password of the Firehose destination.</p>
+<p>Region is an optional value and can be used to specify which AWS region the stream lives in - if omitted Keydra will just use
+the region it is running in.</p>
 <p>As an example, the Firehose Splunk destination sends events to a Splunk HTTP Event Collector (HEC), so the following would
-rotate a HEC token nightly, and save the value to a Firehose stream:</p>
+rotate a HEC token nightly, and save the value to a Firehose stream located in region <cite>us-east-1</cite>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sample</span><span class="p">:</span>
    <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra_managed_sample</span>
    <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Example</span>
@@ -416,6 +419,7 @@ rotate a HEC token nightly, and save the value to a Firehose stream:</p>
       <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hecToken</span>
       <span class="nt">config</span><span class="p">:</span>
          <span class="nt">dest_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunk</span>
+         <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">us-east-1</span>
       <span class="nt">envs</span><span class="p">:</span>
          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">dev</span>
 </pre></div>
@@ -434,8 +438,18 @@ rotate a HEC token nightly, and save the value to a Firehose stream:</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="keydra.providers.aws_kinesisfirehose.Client._init_client">
+<code class="sig-name descname"><span class="pre">_init_client</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_kinesisfirehose.Client._init_client" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="keydra.providers.aws_kinesisfirehose.Client.distribute">
 <code class="sig-name descname"><span class="pre">distribute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_kinesisfirehose.Client.distribute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.providers.aws_kinesisfirehose.Client.has_creds">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">has_creds</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.aws_kinesisfirehose.Client.has_creds" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
