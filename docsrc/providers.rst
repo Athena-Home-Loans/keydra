@@ -67,16 +67,20 @@ make sense for it to rotate! The distribute spec looks like this:
         source: secret_key
         config:
             dest_type: splunk | http
+            region: AWS Region
         envs:
             - dev
 
 This will distribute a secret to a Firehose delivery stream destination of type `dest_type`, for a stream name of `key`.
 
 Valid values for `dest_type` are 'splunk' or 'http', corresponding to those options supported by AWS (https://docs.aws.amazon.com/firehose/latest/dev/create-destination.html). 
-The provider will take the key from the secret specified by `source`, and save it to the token or password of the Firehose destination. 
+The provider will take the key from the secret specified by `source`, and save it to the token or password of the Firehose destination.
+
+Region is an optional value and can be used to specify which AWS region the stream lives in - if omitted Keydra will just use
+the region it is running in.
 
 As an example, the Firehose Splunk destination sends events to a Splunk HTTP Event Collector (HEC), so the following would
-rotate a HEC token nightly, and save the value to a Firehose stream:
+rotate a HEC token nightly, and save the value to a Firehose stream located in region `us-east-1`:
 
 .. code-block:: yaml
 
@@ -98,6 +102,7 @@ rotate a HEC token nightly, and save the value to a Firehose stream:
          source: hecToken
          config:
             dest_type: splunk
+            region: us-east-1
          envs:
             - dev
 
