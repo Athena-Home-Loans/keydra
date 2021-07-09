@@ -340,6 +340,9 @@ class SplunkClient(object):
 
         '''
         try:
+            # Allow any existing in progress tasks to complete first
+            self._wait_for_splunkcloud_task(id=self._get_last_splunkcloud_deploytask())
+
             self._service.delete(
                 '/services/dmc/config/inputs/__indexers/http/{}'.format(inputname),
                 output_mode='json'
