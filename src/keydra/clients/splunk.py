@@ -289,7 +289,7 @@ class SplunkClient(object):
                 "found in the Splunk response. Unexpected response from server."
             )
 
-    def _wait_for_splunkcloud_task(self, id, timeout=180):
+    def _wait_for_splunkcloud_task(self, id, timeout=240):
         '''
         Wait for a Splunk Cloud (Classic) deployment task to complete
 
@@ -339,10 +339,9 @@ class SplunkClient(object):
         :rtype: :class:`string`
 
         '''
+        # Allow any existing in progress tasks to complete first
+        self._wait_for_splunkcloud_task(id=self._get_last_splunkcloud_deploytask())
         try:
-            # Allow any existing in progress tasks to complete first
-            self._wait_for_splunkcloud_task(id=self._get_last_splunkcloud_deploytask())
-
             self._service.delete(
                 '/services/dmc/config/inputs/__indexers/http/{}'.format(inputname),
                 output_mode='json'
