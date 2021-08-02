@@ -1,6 +1,7 @@
 import json
 import time
 import math
+import random
 
 from abc import ABC
 from abc import abstractmethod
@@ -8,10 +9,10 @@ from abc import abstractmethod
 from keydra.exceptions import ConfigException
 
 
-def exponential_backoff_retry(attempts, delay=2):
+def exponential_backoff_retry(attempts, delay=2, max_random=3, exception_type=None):
     '''
     Retries execution while it throws exceptions for the amount of times
-    set up.
+    set up. Adds some randomness to the delay each time.
 
     When giving up, re-raises the original exception.
 
@@ -19,6 +20,10 @@ def exponential_backoff_retry(attempts, delay=2):
     :type attempts: :class:`int`
     :param delay: Number of seconds to delay before retrying
     :type delay: :class:`int`
+    :param max_random: Maximum number of extra seconds to add to the delay
+    :type max_random: :class:`int`
+    :param exception_type: Optional, only retry is exception thrown is of this type
+    :type exception_type: :class:`class`
     :returns: original return of invoked function or method
     '''
     attempts = math.floor(attempts)
@@ -34,8 +39,12 @@ def exponential_backoff_retry(attempts, delay=2):
                     return f(*args, **kwargs)
                 except Exception as e:
                     exc = e
+
+                    if exception_type and not isinstance(e, exception_type):
+                        break
+
                     t_attempts -= 1
-                    time.sleep(t_delay)
+                    time.sleep(t_delay + random.randint(0, max_random))
                     t_delay *= delay
 
             if exc:
