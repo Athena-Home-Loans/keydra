@@ -1,3 +1,4 @@
+from typing import FrozenSet
 import unittest
 
 from botocore.exceptions import ClientError
@@ -339,7 +340,52 @@ class TestProviderAWSIAM(unittest.TestCase):
             UserName='usr', GroupName='G2'
         )
 
-    @ patch.object(aws_iam.Client, '_create_user_if_not_available')
+    @patch.object(aws_iam.Client, '_get_aws_account_id')
+    def test__update_user_policies_not_current(self, gaad):
+        provider = aws_iam.Client(session=MagicMock())
+        provider._client = MagicMock()
+        gaad.return_value = '12345'
+
+        provider._client.list_attached_user_policies.return_value = {
+            'AttachedPolicies': []}
+
+        provider._update_user_policies('usr', frozenset({'test/my_policy'}))
+
+        provider._client.attach_user_policy.assert_has_calls(
+            [call(UserName='usr', PolicyArn='arn:aws:iam::12345:policy/test/my_policy')])
+
+        provider._client.detach_user_policy.assert_not_called()
+
+    @patch.object(aws_iam.Client, '_get_aws_account_id')
+    def test__update_user_policies_not_expected(self, gaad):
+        provider = aws_iam.Client(session=MagicMock())
+        provider._client = MagicMock()
+        gaad.return_value = '12345'
+
+        provider._client.list_attached_user_policies.return_value = {
+            'AttachedPolicies': [{'PolicyArn': 'arn:aws:iam::12345:policy/test/my_policy'}]}
+
+        provider._update_user_policies('usr', frozenset())
+
+        provider._client.detach_user_policy.assert_has_calls(
+            [call(UserName='usr', PolicyArn='arn:aws:iam::12345:policy/test/my_policy')])
+
+        provider._client.attach_user_policy.assert_not_called()
+
+    @patch.object(aws_iam.Client, '_get_aws_account_id')
+    def test__update_user_policies_current_expected(self, gaad):
+        provider = aws_iam.Client(session=MagicMock())
+        provider._client = MagicMock()
+        gaad.return_value = '12345'
+
+        provider._client.list_attached_user_policies.return_value = {
+            'AttachedPolicies': [{'PolicyArn': 'arn:aws:iam::12345:policy/test/my_policy'}]}
+
+        provider._update_user_policies('usr', frozenset({'test/my_policy'}))
+
+        provider._client.detach_user_policy.assert_not_called()
+        provider._client.attach_user_policy.assert_not_called()
+
     @ patch.object(aws_iam.Client, '_fetch_access_keys')
     @ patch.object(aws_iam.Client, '_pick_best_candidate')
     @ patch.object(aws_iam.Client, '_delete_access_key')
@@ -347,7 +393,7 @@ class TestProviderAWSIAM(unittest.TestCase):
     @ patch.object(aws_iam.Client, '_update_user_group_membership')
     @ patch.object(aws_iam.Client, '_create_access_key')
     def test_rotate(
-        self, mk_cak, mk_uugm, mk_uak, mk_dak, mk_pbc, mk_fak, mk_cuina
+        self, mk_cak, mk_uugm, mk_uak, mk_dak, mk_pbc, mk_fak
     ):
         cli = aws_iam.Client(session=MagicMock())
         cli._client = MagicMock()
