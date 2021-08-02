@@ -9,7 +9,18 @@ from splunklib.binding import HTTPError
 
 from keydra.logging import get_logger
 
+from keydra.providers.base import exponential_backoff_retry
+
+
 LOGGER = get_logger()
+
+
+class AppNotInstalledException(Exception):
+    pass
+
+
+class TaskAlreadyInProgressException(Exception):
+    pass
 
 
 class SplunkClient(object):
@@ -328,6 +339,7 @@ class SplunkClient(object):
             'Deployment task did not complete within {} seconds! Aborting.'.format(timeout)
         )
 
+    @exponential_backoff_retry(5, exception_type=TaskAlreadyInProgressException)
     def _delete_splunkcloud_httpinput(self, inputname):
         '''
         Delete a Splunk HEC token on Splunk Cloud (Classic)
@@ -346,11 +358,17 @@ class SplunkClient(object):
                 '/services/dmc/config/inputs/__indexers/http/{}'.format(inputname),
                 output_mode='json'
             )
-        except HTTPError:
-            raise Exception('Error sending HEC token delete request')
+        except HTTPError as error:
+            if 'deployment task is still in progress' in str(error.body):
+                raise TaskAlreadyInProgressException()
+
+            raise Exception(
+                'Error deleting input: {}'.format(error)
+            )
 
         return self._get_last_splunkcloud_deploytask()
 
+    @exponential_backoff_retry(5, exception_type=TaskAlreadyInProgressException)
     def _create_splunkcloud_httpinput(self, inputname, inputconfig):
         '''
         Create a Splunk HEC input on Splunk Cloud (Classic)
@@ -374,6 +392,9 @@ class SplunkClient(object):
             )
 
         except HTTPError as error:
+            if 'deployment task is still in progress' in str(error.body):
+                raise TaskAlreadyInProgressException()
+
             raise Exception(
                 'Error creating input: {}'.format(error)
             )
@@ -433,7 +454,3 @@ class SplunkClient(object):
         LOGGER.info('Input {} create in progress under task Id {}'.format(inputname, taskId))
 
         return newconfig['content']['token']
-
-
-class AppNotInstalledException(Exception):
-    pass
