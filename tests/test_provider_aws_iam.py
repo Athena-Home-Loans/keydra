@@ -1,4 +1,3 @@
-from typing import FrozenSet
 import unittest
 
 from botocore.exceptions import ClientError

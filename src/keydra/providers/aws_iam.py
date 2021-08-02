@@ -233,6 +233,30 @@ class Client(BaseProvider):
     def _make_policy_arn(self, policy_name_with_path: str) -> str:
         return f'arn:aws:iam::{self._get_aws_account_id()}:policy/{policy_name_with_path}'
 
+    def _detach_policy_from_user(self, policy_arn: str, username: str):
+        try:
+            self._client.detach_user_policy(
+                UserName=username,
+                PolicyArn=policy_arn)
+
+            LOGGER.info(
+                f'Detached policy {policy_arn} from user {username}')
+        except ClientError as e:  # pragma: no cover
+            LOGGER.warn(
+                f'Failed detaching policy {policy_arn} from user {username}')
+
+    def _attach_policy_to_user(self, policy_arn: str, username: str):
+        try:
+            self._client.attach_user_policy(
+                UserName=username,
+                PolicyArn=policy_arn)
+
+            LOGGER.info(
+                f'Attached policy {policy_arn} to user {username}')
+        except ClientError as e:  # pragma: no cover
+            LOGGER.warn(
+                f'Failed attaching policy {policy_arn} to user {username}')
+
     def _update_user_policies(
             self, username, expected_policies: FrozenSet[str]):
 
@@ -258,28 +282,10 @@ class Client(BaseProvider):
         union_policy_arns = expected_policy_arns | current_policy_arns
 
         for policy_arn in union_policy_arns - current_policy_arns:
-            try:
-                self._client.attach_user_policy(
-                    UserName=username,
-                    PolicyArn=policy_arn)
-
-                LOGGER.info(
-                    f'Attached policy {policy_arn} to user {username}')
-            except ClientError as e:  # pragma: no cover
-                LOGGER.warn(
-                    f'Failed attaching policy {policy_arn} to user {username}')
+            self._attach_policy_to_user(policy_arn, username)
 
         for policy_arn in union_policy_arns - expected_policy_arns:
-            try:
-                self._client.detach_user_policy(
-                    UserName=username,
-                    PolicyArn=policy_arn)
-
-                LOGGER.info(
-                    f'Detached policy {policy_arn} from user {username}')
-            except ClientError as e:  # pragma: no cover
-                LOGGER.warn(
-                    f'Failed detaching policy {policy_arn} from user {username}')
+            self._detach_policy_from_user(policy_arn, username)
 
     @exponential_backoff_retry(3)
     def rotate(self, secret):
