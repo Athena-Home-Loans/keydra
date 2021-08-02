@@ -1,7 +1,9 @@
+from typing import FrozenSet, List
 import boto3
 import boto3.session
 
 from botocore.exceptions import ClientError
+from mypy_boto3_iam.type_defs import TagTypeDef
 
 from keydra.providers.base import BaseProvider
 from keydra.providers.base import exponential_backoff_retry
@@ -10,6 +12,7 @@ from keydra.exceptions import DistributionException
 from keydra.exceptions import RotationException
 
 from keydra.logging import get_logger
+from mypy_boto3_iam.client import IAMClient
 
 
 LOGGER = get_logger()
@@ -30,7 +33,15 @@ class Client(BaseProvider):
         if session is None:
             session = boto3.session.Session()
 
-        self._client = session.client('iam')
+        self._client: IAMClient = session.client('iam')
+        self._account_id = None
+
+    def _get_aws_account_id(self) -> str:
+        if self._account_id is None:
+            self._account_id = boto3.client(
+                'sts').get_caller_identity().get('Account')
+
+        return self._account_id
 
     def _fetch_access_keys(self, user):
         LOGGER.info('Fetching user keys')
@@ -129,7 +140,7 @@ class Client(BaseProvider):
         )
 
     def _create_user_if_not_available(self, iam_user, options=None):
-        expected_tags = [{
+        expected_tags: List["TagTypeDef"] = [{
             'Key': 'managedby',
             'Value': 'keydra'
         }]
@@ -219,6 +230,63 @@ class Client(BaseProvider):
                     )
                 )
 
+    def _make_policy_arn(self, policy_name_with_path: str) -> str:
+        return f'arn:aws:iam::{self._get_aws_account_id()}:policy/{policy_name_with_path}'
+
+    def _detach_policy_from_user(self, policy_arn: str, username: str):
+        try:
+            self._client.detach_user_policy(
+                UserName=username,
+                PolicyArn=policy_arn)
+
+            LOGGER.info(
+                f'Detached policy {policy_arn} from user {username}')
+        except ClientError as e:  # pragma: no cover
+            LOGGER.warn(
+                f'Failed detaching policy {policy_arn} from user {username}')
+
+    def _attach_policy_to_user(self, policy_arn: str, username: str):
+        try:
+            self._client.attach_user_policy(
+                UserName=username,
+                PolicyArn=policy_arn)
+
+            LOGGER.info(
+                f'Attached policy {policy_arn} to user {username}')
+        except ClientError as e:  # pragma: no cover
+            LOGGER.warn(
+                f'Failed attaching policy {policy_arn} to user {username}')
+
+    def _update_user_policies(
+            self, username, expected_policies: FrozenSet[str]):
+
+        expected_policy_arns: FrozenSet[str] = frozenset({
+            self._make_policy_arn(p) for p in expected_policies})
+
+        LOGGER.debug(
+            f'Expected policies for IAM user {username}: {expected_policy_arns}')
+
+        try:
+            current_policy_arns: FrozenSet[str] = frozenset([
+                p.get('PolicyArn', None)
+                for p in self._client.list_attached_user_policies(
+                    UserName=username)['AttachedPolicies']])
+        except ClientError as e:  # pragma: no cover
+            LOGGER.warn(
+                f'Failed to fetch managed policies attached to IAM user {username}: {e}')
+            return
+
+        LOGGER.debug(
+            f'Current policies for IAM user {username}: {current_policy_arns}')
+
+        union_policy_arns = expected_policy_arns | current_policy_arns
+
+        for policy_arn in union_policy_arns - current_policy_arns:
+            self._attach_policy_to_user(policy_arn, username)
+
+        for policy_arn in union_policy_arns - expected_policy_arns:
+            self._detach_policy_from_user(policy_arn, username)
+
     @exponential_backoff_retry(3)
     def rotate(self, secret):
         try:
@@ -231,12 +299,13 @@ class Client(BaseProvider):
             if len(keys_by_id) > 1:
                 r_candidate = self._pick_best_candidate(keys_by_id)
 
-                self._delete_access_key(
-                    user=r_candidate['UserName'],
-                    key_id=r_candidate['AccessKeyId']
-                )
+                if r_candidate is not None:
+                    self._delete_access_key(
+                        user=r_candidate['UserName'],
+                        key_id=r_candidate['AccessKeyId']
+                    )
 
-                keys_by_id.pop(r_candidate['AccessKeyId'])
+                    keys_by_id.pop(r_candidate['AccessKeyId'])
 
             # Let's make the current key inactive so it is the last one to go
             if len(keys_by_id) == 1:
@@ -251,6 +320,9 @@ class Client(BaseProvider):
             self._update_user_group_membership(
                 secret['key'], secret.get('config', {}).get('groups', [])
             )
+
+            self._update_user_policies(secret['key'], frozenset(secret.get(
+                'config', {}).get('policies', [])))
 
             return _explain_secret(self._create_access_key(secret['key']))
 

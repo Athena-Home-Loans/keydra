@@ -67,6 +67,8 @@ Setup a configuration repository
           config:
             groups:
               - MyDeploymentGroup
+            policies:
+              - a/path/PolicyName
           distribute:
           -
             config:
