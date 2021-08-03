@@ -1,0 +1,15 @@
+name: Test
+
+on: [pull_request, push]
+
+jobs:
+  validate-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - run: pip install -r src/requirements.txt
+      - run: pip install -r requirements-dev.txt
+      - run: mkdir test-results
+      - run: mypy --install-types --non-interactive . || true
+      - run: nosetests -v --with-coverage --xunit-file test-results/nosetests.xml --cover-min 83
