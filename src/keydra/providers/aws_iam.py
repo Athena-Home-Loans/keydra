@@ -348,7 +348,7 @@ class Client(BaseProvider):
             if 'config' not in spec:
                 return True, 'All good!'
 
-            allowed_options = {'tags': dict, 'groups': list}
+            allowed_options = {'tags': dict, 'groups': list, 'policies': list}
 
             for oname, otype in allowed_options.items():
                 provided_option = spec['config'].get(oname)
