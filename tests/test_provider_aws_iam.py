@@ -518,3 +518,17 @@ class TestProviderAWSIAM(unittest.TestCase):
 
         r_result = aws_iam.Client.validate_spec(speci_valid)
         self.assertEqual(r_result[0], False)
+
+    def test_validate_spec_valid_policies(self):
+        speci_valid = {
+            'secret': 'shhhhhhh tell no one',
+            'key': 'treasury',
+            'config': {
+                'policies': ['x', 'y']
+            },
+            'provider': 'IAM',
+            'rotate': 'nightly'
+        }
+
+        r_result = aws_iam.Client.validate_spec(speci_valid)
+        self.assertEqual(r_result[0], True)
