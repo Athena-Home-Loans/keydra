@@ -3,6 +3,7 @@ import boto3
 import boto3.session
 
 from botocore.exceptions import ClientError
+from mypy_boto3_iam.type_defs import TagTypeDef
 
 from keydra.providers.base import BaseProvider
 from keydra.providers.base import exponential_backoff_retry
