@@ -13,3 +13,4 @@ jobs:
       - run: mkdir test-results
       - run: mypy --install-types --non-interactive . || true
       - run: nosetests -v --with-coverage --xunit-file test-results/nosetests.xml --cover-min 83
+      - run: flake8 src tests

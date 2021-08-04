@@ -3,7 +3,6 @@ import boto3
 import boto3.session
 
 from botocore.exceptions import ClientError
-from mypy_boto3_iam.type_defs import TagTypeDef
 
 from keydra.providers.base import BaseProvider
 from keydra.providers.base import exponential_backoff_retry
@@ -243,7 +242,7 @@ class Client(BaseProvider):
                 f'Detached policy {policy_arn} from user {username}')
         except ClientError as e:  # pragma: no cover
             LOGGER.warn(
-                f'Failed detaching policy {policy_arn} from user {username}')
+                    f'Failed detaching policy {policy_arn} from user {username}: {e}')
 
     def _attach_policy_to_user(self, policy_arn: str, username: str):
         try:
@@ -255,7 +254,7 @@ class Client(BaseProvider):
                 f'Attached policy {policy_arn} to user {username}')
         except ClientError as e:  # pragma: no cover
             LOGGER.warn(
-                f'Failed attaching policy {policy_arn} to user {username}')
+                    f'Failed attaching policy {policy_arn} to user {username}: {e}')
 
     def _update_user_policies(
             self, username, expected_policies: FrozenSet[str]):
