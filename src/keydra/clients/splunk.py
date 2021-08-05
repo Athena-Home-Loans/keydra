@@ -382,7 +382,7 @@ class SplunkClient(object):
         :rtype: :class:`tuple`
 
         '''
-
+        self._wait_for_splunkcloud_task(id=self._get_last_splunkcloud_deploytask())
         try:
             createresp = self._service.post(
                 '/services/dmc/config/inputs/__indexers/http',
@@ -393,6 +393,7 @@ class SplunkClient(object):
 
         except HTTPError as error:
             if 'deployment task is still in progress' in str(error.body):
+                LOGGER.info('Could not deploy task, another task is already in progress. Retrying.')
                 raise TaskAlreadyInProgressException()
 
             raise Exception(
