@@ -73,6 +73,9 @@ Resources:
                   - iam:AddUserToGroup
                   - iam:ListGroupsForUser
                   - iam:RemoveUserFromGroup
+                  - iam:ListAttachedUserPolicies
+                  - iam:AttachUserPolicy
+                  - iam:DetachUserPolicy
                 Condition:
                   StringEquals:
                     iam:ResourceTag/managedby: keydra
