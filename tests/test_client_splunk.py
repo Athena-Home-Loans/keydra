@@ -423,7 +423,8 @@ class TestSplunkClient(unittest.TestCase):
             )
 
         sp_client._get_last_splunkcloud_deploytask = MagicMock()
-
+        sp_client._wait_for_splunkcloud_task = MagicMock()
+        
         sp_client._service.post.return_value['body'] = MagicMock()
         sp_client._service.post.return_value['body'].read.return_value = json.dumps(
             {
