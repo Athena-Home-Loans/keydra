@@ -44,6 +44,15 @@ Resources:
             Input: '{"trigger": "nightly"}'
             Enabled: true
 
+        KeydraWeekly:
+          Type: Schedule
+          Properties:
+            Schedule: 'cron(0 14 ? * SUN *)'
+            Name: keydra-weekly
+            Description: Keydra weekly key rotation
+            Input: '{"trigger": "weekly"}'
+            Enabled: true
+
         KeydraMonthly:
           Type: Schedule
           Properties:

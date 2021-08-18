@@ -20,7 +20,7 @@ ENV_TYPE_SPEC = {
 SECRETS_SPEC = ['key', 'provider']
 SECRET_ENV_SPEC = ['key', 'provider', 'source', 'envs']
 
-ALLOWED_ROTATION_SCHEDULES = ['nightly', 'monthly', 'adhoc', 'canaries']
+ALLOWED_ROTATION_SCHEDULES = ['nightly', 'weekly', 'monthly', 'adhoc', 'canaries']
 
 LOGGER = get_logger()
 
