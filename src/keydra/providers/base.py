@@ -101,7 +101,7 @@ class BaseProvider(ABC):
 
 class ConfigProvider(ABC):
     '''
-    Standardised Confif Provider class. Takes in config and validates
+    Standardised Config Provider class. Takes in config and validates
 
     :param config: Keydra config provider config.
     :type config: :class:`dict`
@@ -111,18 +111,22 @@ class ConfigProvider(ABC):
     SECRETS = 'secrets'
     SECRETS_FILETYPE = 'filetype'
     SECRETS_REPO = 'repository'
+    SECRETS_REPO_BRANCH = 'repositorybranch'
     SECRETS_PATH = 'path'
     ENVS = 'environments'
     ENVS_FILETYPE = 'filetype'
     ENVS_REPO = 'repository'
+    ENVS_REPO_BRANCH = 'repositorybranch'
     ENVS_PATH = 'path'
 
     def __init__(self, config):
         self.username = config.get(self.ACCOUNTUSERNAME)
         self.secrets_repo = config.get(self.SECRETS, {}).get(self.SECRETS_REPO)
+        self.secrets_repo_branch = config.get(self.SECRETS, {}).get(self.SECRETS_REPO_BRANCH)
         self.secrets_path = config.get(self.SECRETS, {}).get(self.SECRETS_PATH)
         self.secrets_filetype = config.get(self.SECRETS, {}).get(self.SECRETS_FILETYPE, 'yaml')
         self.envs_repo = config.get(self.ENVS, {}).get(self.ENVS_REPO)
+        self.envs_repo_branch = config.get(self.ENVS, {}).get(self.ENVS_REPO_BRANCH)
         self.envs_path = config.get(self.ENVS, {}).get(self.ENVS_PATH)
         self.envs_filetype = config.get(self.ENVS, {}).get(self.ENVS_FILETYPE, 'yaml')
 
