@@ -41,10 +41,10 @@ class GitlabClient:
         '''
         pm = self._get_project_manager(repo_name)
         if self._is_new_repo_variable(repo_name, key):
-            LOGGER.info('Creating project variable {}...'.format(key))
+            LOGGER.info('{}: Creating variable {}...'.format(repo_name, key))
             pm.variables.create(dict(key=key, value=value, ))
         else:
-            LOGGER.info('Updating project variable {}...'.format(key))
+            LOGGER.info('{}: Updating variable {}...'.format(repo_name, key))
             project_var = pm.variables.get(key)
             project_var.value = value
             project_var.save()

@@ -130,12 +130,11 @@ class Client(BaseProvider):
             SPEC_SCHEMA.validate(spec)
             return True, "Validation succeeded."
         except SchemaError as e:
-            print(e)
+            LOGGER.warn(e)
             return False, str(e)
 
     @ classmethod
     def pre_process_spec(self, spec, context={}):
-        # FIMXE
         specs = []
 
         target = copy.deepcopy(spec)
