@@ -17,7 +17,7 @@ Providers
 
 * :ref:`distribute <distribute>`
 
-... and implement the methods described in `keydra.providers.base`. 
+... and implement the methods described in `keydra.providers.base`.
 See the :ref:`provider documentation <providers>` for more details on what's supported out of the box.
 
 .. _rotate:
@@ -80,7 +80,7 @@ means to your provider) the secrets.
 
 Remember that the secret will come decorated with `provider`, so if you need
 to be specific about how to consume from certain providers you can. BUT...
-if that is happening you probably missed something as the description of a 
+if that is happening you probably missed something as the description of a
 distribution point should be self-explanatory and self-contained.
 
 Clients
@@ -108,6 +108,8 @@ But not so fast!
 
 1. Install deps
 
+(virtual environment recommended)
+
 .. code-block:: bash
 
     pip install -r requirements-dev.txt
@@ -124,4 +126,3 @@ Please ensure tests are passing before creating a PR. We also ask you to be PEP8
 .. code-block:: bash
 
     flake8
-

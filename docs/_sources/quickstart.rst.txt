@@ -9,7 +9,7 @@ You will need
 
 * An AWS account. Don't have one, free tier is fine! Go get a free one at https://aws.amazon.com/free !
 
-* An Atlassian Bitbucket or a Github account, to host your Keydra configuration. We only support Bitbucket and Github right now, but expect to add other code repository providers in the future. 
+* An Atlassian Bitbucket or a Github account, to host your Keydra configuration. We only support Bitbucket and Github right now, but expect to add other code repository providers in the future.
 
 ==================
 Initial Deployment
@@ -22,9 +22,10 @@ Setup a configuration repository
     preferred platform option:
 
     * :ref:`Github <setup_github>`
+    * :ref:`Gitlab <setup_gitlab>`
     * :ref:`Bitbucket <setup_bitbucket>`
 
-2.  Create a new directory called `config`, and initialise your environments and secrets files. 
+2.  Create a new directory called `config`, and initialise your environments and secrets files.
     We'll start with one AWS environment (i.e. account) called `main`, and one sample secret called `sample`.
 
 .. code-block:: bash
@@ -49,7 +50,7 @@ Setup a configuration repository
     The `sample` line tells Keydra to manage that secret in this environment, which we'll now define!
     You can add lots of environments (i.e. AWS accounts) to this file, just follow the same format and append.
 
-5.  Edit `secrets.yaml`. This file tells Keydra about our secrets, just one for the time being - update with your 
+5.  Edit `secrets.yaml`. This file tells Keydra about our secrets, just one for the time being - update with your
     repo organisation or user name, and update the `provider` key to match your code repo type. Note that the repository name here needs to be all lower case.
 
 .. note::
@@ -128,7 +129,7 @@ Deploy Keydra to AWS
 
 3.  Create an access key for the `keydra_deploy` user and stash the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY as `enviroment variables in your terminal. <https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials_environment.html>`_
 
-4.  Now, we're going to use `AWS SAM <https://aws.amazon.com/serverless/sam/>`_ to deploy two CloudFormation stacks. The first one (`keydraExecRole`) sets up a least privilege role to run Keydra with. 
+4.  Now, we're going to use `AWS SAM <https://aws.amazon.com/serverless/sam/>`_ to deploy two CloudFormation stacks. The first one (`keydraExecRole`) sets up a least privilege role to run Keydra with.
     Execute the following on your local machine, changing the region to match your needs.
 
 .. note::
@@ -138,7 +139,7 @@ Deploy Keydra to AWS
 .. code-block:: bash
 
     sam build -t docsrc/KeydraExecRole.yaml
-    sam deploy -t docsrc/KeydraExecRole.yaml --stack-name keydraExecRole --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM --region ap-southeast-2 
+    sam deploy -t docsrc/KeydraExecRole.yaml --stack-name keydraExecRole --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM --region ap-southeast-2
 
 5.  Assuming the SAM run was successful, you should see an outputs block with an Arn for the new role. Note this down, we'll need this for step 7.
 
@@ -195,7 +196,7 @@ Let's do an adhoc trial run of the lambda!
     :alt: Success!
 
 5. What just happened? Keydra created an IAM user in AWS, and then stored the IAM username and password in two separate
-    repository variables in your code repository. You can see the results under your repo; browse to `Repository settings` > 
+    repository variables in your code repository. You can see the results under your repo; browse to `Repository settings` >
     `Repository variables` in Bitbucket, or `Settings` > `Secrets` in Github.
 
 .. image:: _static/repo_vars.png

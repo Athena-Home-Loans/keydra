@@ -152,7 +152,7 @@
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#iam-user-to-ingest-aws-logs-into-splunk">
-   IAM User to Ingest AWS Logs into Splunk
+   IAM User to ingest AWS Logs into Splunk
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -163,6 +163,11 @@
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#github-actions-aws-deployment-credentials">
    Github Actions AWS Deployment Credentials
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gitlab-aws-deployment-credentials">
+   Gitlab AWS Deployment Credentials
   </a>
  </li>
 </ul>
@@ -179,7 +184,7 @@
   <div class="section" id="examples">
 <span id="id1"></span><h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="iam-user-to-ingest-aws-logs-into-splunk">
-<h2>IAM User to Ingest AWS Logs into Splunk<a class="headerlink" href="#iam-user-to-ingest-aws-logs-into-splunk" title="Permalink to this headline">¶</a></h2>
+<h2>IAM User to ingest AWS Logs into Splunk<a class="headerlink" href="#iam-user-to-ingest-aws-logs-into-splunk" title="Permalink to this headline">¶</a></h2>
 <p>Rotate the secrets for an IAM user in AWS daily, creating if the user does not exist.
 Distribute to the AWS Add On of a Splunk instance, using Splunk credentials from Secrets Manager in <cite>keydra/splunk/awssplunk</cite>.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">aws_splunk_integration</span><span class="p">:</span>
@@ -258,6 +263,38 @@ repo of the <cite>me</cite> Github account.</p>
             <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">dev</span>
         <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS_SECRET_ACCESS_KEY</span>
         <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
+        <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="gitlab-aws-deployment-credentials">
+<h2>Gitlab AWS Deployment Credentials<a class="headerlink" href="#gitlab-aws-deployment-credentials" title="Permalink to this headline">¶</a></h2>
+<p>Rotate an AWS IAM user’s AWS_SECRET_ACCESS_KEY; then, using an access token from the AWS Secrets Manager secret
+located at <cite>keydra/gitlab</cite>, store the IAM user’s AK/SAK values as CI/CD variables within the <cite>group/infra/releases</cite> repo.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sample</span><span class="p">:</span>
+    <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydra_managed_sample</span>
+    <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">A secret which exists in IAM</span>
+    <span class="nt">custodians</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_team</span>
+    <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">IAM</span>
+    <span class="nt">rotate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nightly</span>
+    <span class="nt">distribute</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span>
+        <span class="nt">config</span><span class="p">:</span>
+            <span class="nt">repository</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">group/infra/releases</span>
+            <span class="nt">scope</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">repository</span>
+        <span class="nt">envs</span><span class="p">:</span>
+            <span class="p p-Indicator">-</span> <span class="s">&#39;*&#39;</span>
+        <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS_ACCESS_KEY_ID</span>
+        <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gitlab</span>
+        <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">key</span>
+    <span class="p p-Indicator">-</span>
+        <span class="nt">config</span><span class="p">:</span>
+            <span class="nt">repository</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">group/infra/releases</span>
+            <span class="nt">scope</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">repository</span>
+        <span class="nt">envs</span><span class="p">:</span>
+            <span class="p p-Indicator">-</span> <span class="s">&#39;*&#39;</span>
+        <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS_SECRET_ACCESS_KEY</span>
+        <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gitlab</span>
         <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
 </pre></div>
 </div>
