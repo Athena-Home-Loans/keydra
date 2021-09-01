@@ -46,10 +46,11 @@ class Client(BaseProvider):
             raise DistributionException(e)
 
         LOGGER.info(
-            'Successfully distributed {}.{}.key to '
+            'Successfully distributed {}.{}.{} to '
             'gitlab.{}.{} '.format(
                 secret['provider'],
                 secret['key'],
+                dest['source'],
                 config['repository'],
                 dest['key']
             )

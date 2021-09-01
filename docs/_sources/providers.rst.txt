@@ -255,7 +255,7 @@ Gitlab
 
 *Gitlab* can `distribute` secrets to the `repository` scope only. It is also a config provider (see :ref:`About Config Providers <cfg_providers>`), and can be used as a
 source for your secret and environment specs. In your SAM template, use `KEYDRA_CFG_PROVIDER=gitlab` to
-tell Keydra to look in Github for secrets to manage.
+tell Keydra to look in Gitlab for secrets to manage.
 
 This provider has functionality similar to the `Github` provider (see above).
 
@@ -300,7 +300,7 @@ the following in your SAM `template.yaml`:
 .. code-block:: yaml
 
    Variables:
-      KEYDRA_CFG_PROVIDER: github
+      KEYDRA_CFG_PROVIDER: gitlab
       KEYDRA_CFG_CONFIG_SECRETS_REPOSITORY: keydraconfiguration
       KEYDRA_CFG_CONFIG_SECRETS_REPOSITORYBRANCH: main
       KEYDRA_CFG_CONFIG_SECRETS_PATH: config/secrets.yaml

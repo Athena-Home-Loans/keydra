@@ -942,7 +942,7 @@ the following in your SAM <cite>template.yaml</cite>:</p>
 <h2>Gitlab<a class="headerlink" href="#gitlab" title="Permalink to this headline">¶</a></h2>
 <p><em>Gitlab</em> can <cite>distribute</cite> secrets to the <cite>repository</cite> scope only. It is also a config provider (see <a class="reference internal" href="config_providers.html#cfg-providers"><span class="std std-ref">About Config Providers</span></a>), and can be used as a
 source for your secret and environment specs. In your SAM template, use <cite>KEYDRA_CFG_PROVIDER=gitlab</cite> to
-tell Keydra to look in Github for secrets to manage.</p>
+tell Keydra to look in Gitlab for secrets to manage.</p>
 <p>This provider has functionality similar to the <cite>Github</cite> provider (see above).</p>
 <p>For a given secret specification, the <cite>distribute</cite> function will add a repository (CI/CD) variable to the specified repository. See
 <a class="reference external" href="https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project">https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project</a>.</p>
@@ -978,7 +978,7 @@ repo.</p>
 <p>To use Gitlab as your main Keydra source provider, set the relevant environment variables that your Lambda runs as. As in, set
 the following in your SAM <cite>template.yaml</cite>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">Variables</span><span class="p">:</span>
-   <span class="nt">KEYDRA_CFG_PROVIDER</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
+   <span class="nt">KEYDRA_CFG_PROVIDER</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gitlab</span>
    <span class="nt">KEYDRA_CFG_CONFIG_SECRETS_REPOSITORY</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keydraconfiguration</span>
    <span class="nt">KEYDRA_CFG_CONFIG_SECRETS_REPOSITORYBRANCH</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">main</span>
    <span class="nt">KEYDRA_CFG_CONFIG_SECRETS_PATH</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">config/secrets.yaml</span>
