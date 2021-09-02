@@ -73,7 +73,7 @@ make sense for it to rotate! The distribute spec looks like this:
 
 This will distribute a secret to a Firehose delivery stream destination of type `dest_type`, for a stream name of `key`.
 
-Valid values for `dest_type` are 'splunk' or 'http', corresponding to those options supported by AWS (https://docs.aws.amazon.com/firehose/latest/dev/create-destination.html). 
+Valid values for `dest_type` are 'splunk' or 'http', corresponding to those options supported by AWS (https://docs.aws.amazon.com/firehose/latest/dev/create-destination.html).
 The provider will take the key from the secret specified by `source`, and save it to the token or password of the Firehose destination.
 
 Region is an optional value and can be used to specify which AWS region the stream lives in - if omitted Keydra will just use
@@ -184,8 +184,8 @@ Uses client :ref:`Contentful <client_contentful>`.
 Github
 ======
 
-*Github* can `distribute` secrets to the `repository` scope only. It is also a config provider (see :ref:`About Config Providers <cfg_providers>`), and can be used as a 
-source for your secret and environment specs. In your SAM template, use `KEYDRA_CFG_PROVIDER=github` to 
+*Github* can `distribute` secrets to the `repository` scope only. It is also a config provider (see :ref:`About Config Providers <cfg_providers>`), and can be used as a
+source for your secret and environment specs. In your SAM template, use `KEYDRA_CFG_PROVIDER=github` to
 tell Keydra to look in Github for secrets to manage.
 
 This provider is really just an MVP to kickstart Github support, so other secret scopes have not yet
@@ -225,7 +225,7 @@ For example, for a secret spec of:
          source: secret
 
 The provider will take the AWS IAM user credentials and, using an access token from the AWS Secrets Manager secret
-located at `keydra/github`, encrypt the IAM user Id/password values and save them to secrets within the `keydraconfiguration` 
+located at `keydra/github`, encrypt the IAM user Id/password values and save them to secrets within the `keydraconfiguration`
 repo of the `me` organisation or Github account.
 
 To use Github as your main Keydra source provider, set the relevant environment variables that your Lambda runs as. As in, set
@@ -249,6 +249,74 @@ the following in your SAM `template.yaml`:
    :private-members:
 
 Uses client :ref:`Github <client_github>`.
+
+Gitlab
+======
+
+*Gitlab* can `distribute` secrets to the `repository` scope only. It is also a config provider (see :ref:`About Config Providers <cfg_providers>`), and can be used as a
+source for your secret and environment specs. In your SAM template, use `KEYDRA_CFG_PROVIDER=gitlab` to
+tell Keydra to look in Gitlab for secrets to manage.
+
+This provider has functionality similar to the `Github` provider (see above).
+
+For a given secret specification, the `distribute` function will add a repository (CI/CD) variable to the specified repository. See
+https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project.
+
+For example, for a secret spec of:
+
+.. code-block:: yaml
+
+   sample:
+      key: keydra_managed_sample
+      description: A example secret which exists in IAM
+      custodians: my_team
+      provider: IAM
+      rotate: nightly
+      distribute:
+      - config:
+            repository: keydraconfiguration
+            scope: repository
+         envs:
+            - dev
+         key: AWS_ACCESS_KEY_ID
+         provider: gitlab
+         source: key
+      - config:
+            repository: keydraconfiguration
+            scope: repository
+         envs:
+            - dev
+         key: AWS_SECRET_ACCESS_KEY
+         provider: gitlab
+         source: secret
+
+The provider will take the AWS IAM user credentials and, using an access token from the AWS Secrets Manager secret
+located at `keydra/gitlab`, encrypt the IAM user Id/password values and save them to secrets within the `keydraconfiguration`
+repo.
+
+To use Gitlab as your main Keydra source provider, set the relevant environment variables that your Lambda runs as. As in, set
+the following in your SAM `template.yaml`:
+
+.. code-block:: yaml
+
+   Variables:
+      KEYDRA_CFG_PROVIDER: gitlab
+      KEYDRA_CFG_CONFIG_SECRETS_REPOSITORY: keydraconfiguration
+      KEYDRA_CFG_CONFIG_SECRETS_REPOSITORYBRANCH: main
+      KEYDRA_CFG_CONFIG_SECRETS_PATH: config/secrets.yaml
+      KEYDRA_CFG_CONFIG_SECRETS_FILETYPE: yaml
+      KEYDRA_CFG_CONFIG_ENVIRONMENTS_REPOSITORY: keydraconfiguration
+      KEYDRA_CFG_CONFIG_ENVIRONMENTS_REPOSITORYBRANCH: main
+      KEYDRA_CFG_CONFIG_ENVIRONMENTS_PATH: config/environments.yaml
+      KEYDRA_CFG_CONFIG_ENVIRONMENTS_FILETYPE: yaml
+      KEYDRA_CFG_CONFIG_ACCOUNTUSERNAME: notRequired
+
+.. automodule:: keydra.providers.gitlab
+   :members:
+   :undoc-members:
+   :private-members:
+
+Uses client :ref:`Gitlab <client_gitlab>`.
 
 Qualys
 ======
@@ -410,7 +478,7 @@ passwords or a more custom method of actually storing the password on Splunk - w
 destination Splunk TA/app. For example, the AWS app for Splunk uses the custom method, while the Qualys app uses
 storage passwords.
 
-The destination app must already be installed on the Splunk instance, though the config entry / storage password 
+The destination app must already be installed on the Splunk instance, though the config entry / storage password
 will be created if it doesn’t already exist.
 
 .. list-table:: Splunk Provider Distribution Format
@@ -540,7 +608,7 @@ find creds with which to access Splunk and make the change.
 Both Splunk Enterprise and Splunk Cloud are supported, but only the 'Classic' experience for the latter. If using with Splunk
 Cloud, make sure the Splunk user you are rotating with has a role with the `dmc_deploy_token_http` and `list_token_http` capabilities.
 
-An additional note on Splunk Cloud, which uses a DMC to distribute content to the indexes; rotating HEC tokens can take up to 
+An additional note on Splunk Cloud, which uses a DMC to distribute content to the indexes; rotating HEC tokens can take up to
 5 minutes due to the cluster synchoronisation requirements.
 
 .. code-block:: yaml

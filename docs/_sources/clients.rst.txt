@@ -95,6 +95,15 @@ Github
    :undoc-members:
    :private-members:
 
+.. _client_gitlab:
+
+Gitlab
+======
+
+.. automodule:: keydra.clients.gitlab
+   :members:
+   :undoc-members:
+   :private-members:
 
 .. _client_qualys:
 
@@ -127,4 +136,3 @@ Splunk
    :members:
    :undoc-members:
    :private-members:
-

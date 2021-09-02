@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: Keydra - safe and lightweight management of secrets
 
@@ -9,7 +9,7 @@ Globals:
 Resources:
   KeydraLogGroup:
     Type: AWS::Logs::LogGroup
-    DependsOn: [ Keydra ]
+    DependsOn: [Keydra]
     Properties:
       LogGroupName: !Sub /aws/lambda/${Keydra}
       RetentionInDays: 90
@@ -26,19 +26,21 @@ Resources:
       Role: !Sub "<IAM Role Arn>"
       Environment:
         Variables:
-          KEYDRA_CFG_PROVIDER: bitbucket OR github
-          KEYDRA_CFG_CONFIG_ACCOUNTUSERNAME: <bb account name or github org name>
+          KEYDRA_CFG_PROVIDER: bitbucket, github or gitlab
+          KEYDRA_CFG_CONFIG_ACCOUNTUSERNAME: <bb account name or github org name, unused for gitlab>
           KEYDRA_CFG_CONFIG_SECRETS_REPOSITORY: <secrets repo name>
+          KEYDRA_CFG_CONFIG_SECRETS_REPOSITORYBRANCH: <repo branch to fetch secrets from (gitlab only)>
           KEYDRA_CFG_CONFIG_SECRETS_PATH: <path to secrets.yaml>
           KEYDRA_CFG_CONFIG_SECRETS_FILETYPE: yaml
           KEYDRA_CFG_CONFIG_ENVIRONMENTS_REPOSITORY: <environments repo name>
+          KEYDRA_CFG_CONFIG_ENVIRONMENTS_REPOSITORYBRANCH: <repo branch to fetch environments from (gitlab only)>
           KEYDRA_CFG_CONFIG_ENVIRONMENTS_PATH: <path to environments.yaml>
           KEYDRA_CFG_CONFIG_ENVIRONMENTS_FILETYPE: yaml
       Events:
         KeydraNightly:
           Type: Schedule
           Properties:
-            Schedule: 'cron(0 12 ? * * *)'
+            Schedule: "cron(0 12 ? * * *)"
             Name: keydra-nightly
             Description: Keydra nightly key rotation
             Input: '{"trigger": "nightly"}'
@@ -47,7 +49,7 @@ Resources:
         KeydraWeekly:
           Type: Schedule
           Properties:
-            Schedule: 'cron(0 14 ? * SUN *)'
+            Schedule: "cron(0 14 ? * SUN *)"
             Name: keydra-weekly
             Description: Keydra weekly key rotation
             Input: '{"trigger": "weekly"}'
@@ -56,7 +58,7 @@ Resources:
         KeydraMonthly:
           Type: Schedule
           Properties:
-            Schedule: 'cron(30 12 1 * ? *)'
+            Schedule: "cron(30 12 1 * ? *)"
             Name: keydra-monthly
             Description: Keydra monthly key rotation
             Input: '{"trigger": "monthly"}'
@@ -72,8 +74,7 @@ Resources:
       Namespace: Keydra
       Statistic: Sum
       Dimensions:
-        -
-          Name: action
+        - Name: action
           Value: rotate_secret
       Period: 86400
       EvaluationPeriods: 1
@@ -92,8 +93,7 @@ Resources:
       Namespace: Keydra
       Statistic: Sum
       Dimensions:
-        -
-          Name: action
+        - Name: action
           Value: distribute_secret
       Period: 86400
       EvaluationPeriods: 1

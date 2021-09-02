@@ -191,6 +191,11 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-keydra.clients.gitlab">
+   Gitlab
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-keydra.clients.qualys">
    Qualys
   </a>
@@ -1368,6 +1373,60 @@ and access to at least one space</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-keydra.clients.gitlab">
+<span id="gitlab"></span><span id="client-gitlab"></span><h2>Gitlab<a class="headerlink" href="#module-keydra.clients.gitlab" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="keydra.clients.gitlab.GitlabClient">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.gitlab.</span></code><code class="sig-name descname"><span class="pre">GitlabClient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_token</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.gitlab.GitlabClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="keydra.clients.gitlab.GitlabClient._get_project_manager">
+<code class="sig-name descname"><span class="pre">_get_project_manager</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_name</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">gitlab.v4.objects.projects.ProjectManager</span><a class="headerlink" href="#keydra.clients.gitlab.GitlabClient._get_project_manager" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.gitlab.GitlabClient._is_new_repo_variable">
+<code class="sig-name descname"><span class="pre">_is_new_repo_variable</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#keydra.clients.gitlab.GitlabClient._is_new_repo_variable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.gitlab.GitlabClient.fetch_file_from_repository">
+<code class="sig-name descname"><span class="pre">fetch_file_from_repository</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_branch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'main'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#keydra.clients.gitlab.GitlabClient.fetch_file_from_repository" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads file from repository.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Path in repo, e.g. foo/bar/baz.yaml</p></li>
+<li><p><strong>repo_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Full repository name, including group(s) (my-group/my-repo)</p></li>
+<li><p><strong>repo_branch</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Branch to read file from (optional)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Content of the file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.gitlab.GitlabClient.set_repo_variable">
+<code class="sig-name descname"><span class="pre">set_repo_variable</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#keydra.clients.gitlab.GitlabClient.set_repo_variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a variable for a specific repository. Creates new variable or updates existing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo_name</strong> – Full repository name, including group(s) (my-group/my-repo)</p></li>
+<li><p><strong>key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Key for the variable in the repo</p></li>
+<li><p><strong>value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Value for the variable in the repo</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-keydra.clients.qualys">
 <span id="qualys"></span><span id="client-qualys"></span><h2>Qualys<a class="headerlink" href="#module-keydra.clients.qualys" title="Permalink to this headline">¶</a></h2>
 <dl class="py exception">
@@ -1500,40 +1559,13 @@ username in the form of an email address.</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.splunk.</span></code><code class="sig-name descname"><span class="pre">SplunkClient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8089</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
 <dt id="keydra.clients.splunk.SplunkClient._create_splunkcloud_httpinput">
-<code class="sig-name descname"><span class="pre">_create_splunkcloud_httpinput</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputconfig</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient._create_splunkcloud_httpinput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a Splunk HEC input on Splunk Cloud (Classic)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>inputname</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>) – The name of the HTTP input</p></li>
-<li><p><strong>inputconfig</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – The configuration of the new HEC Input</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Tuple of Deployment task Id and deployed configuration</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
-</dd>
-</dl>
-</dd></dl>
+<code class="sig-name descname"><span class="pre">_create_splunkcloud_httpinput</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient._create_splunkcloud_httpinput" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="keydra.clients.splunk.SplunkClient._delete_splunkcloud_httpinput">
-<code class="sig-name descname"><span class="pre">_delete_splunkcloud_httpinput</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient._delete_splunkcloud_httpinput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete a Splunk HEC token on Splunk Cloud (Classic)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>inputname</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>) – The name of the HTTP input</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Deployment task Id</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code></p>
-</dd>
-</dl>
-</dd></dl>
+<code class="sig-name descname"><span class="pre">_delete_splunkcloud_httpinput</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient._delete_splunkcloud_httpinput" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="keydra.clients.splunk.SplunkClient._get_last_splunkcloud_deploytask">
@@ -1701,6 +1733,11 @@ config entry if it does not already exist.</p>
 </dd></dl>
 
 </dd></dl>
+
+<dl class="py exception">
+<dt id="keydra.clients.splunk.TaskAlreadyInProgressException">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">keydra.clients.splunk.</span></code><code class="sig-name descname"><span class="pre">TaskAlreadyInProgressException</span></code><a class="headerlink" href="#keydra.clients.splunk.TaskAlreadyInProgressException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 </div>
