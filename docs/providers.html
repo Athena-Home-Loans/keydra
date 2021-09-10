@@ -1288,12 +1288,14 @@ before added here.</p>
 </div>
 <div class="section" id="splunk">
 <h2>Splunk<a class="headerlink" href="#splunk" title="Permalink to this headline">¶</a></h2>
-<p>Provides password rotation and distribution support for Splunk. Rotation allows for Splunk account
-passwords to be rotated, while Distribute allows you to save passwords from other providers in Splunk
+<p>Provides password (and token!) rotation and distribution support for Splunk. Rotation allows for Splunk account
+passwords/tokens to be rotated, while Distribute allows you to save passwords from other providers in Splunk
 apps, like Qualys or AWS.</p>
 <p>Rotation can be done on only one Splunk instance at a time.</p>
-<p>Rotation generates a new 32 character password (using AWS Secrets Manager) and changes the Splunk password
+<p>When rotating passwords, a new 32 character password is generated (using AWS Secrets Manager) and the provider changes the Splunk password
 for the account corresponding to the “key” value in the secret. This change is made on the Splunk host defined within the “config” section of the secret.</p>
+<p>For Splunk Tokens, the current token for that user is used to create a new token, and delete the old. No additional configuration
+is required - the provider auto detects the type of “password” being rotated, and acts accordingly.</p>
 <p>An example secret spec to rotate a Splunk user password and store in AWS Secrets Manager:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">splunkuser</span>
 <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Splunk Rotation Example</span>
@@ -1512,7 +1514,7 @@ section after mapping them from the secret. As in, the <cite>key</cite> value fr
 <dl class="py method">
 <dt id="keydra.providers.splunk.Client._rotate_secret">
 <code class="sig-name descname"><span class="pre">_rotate_secret</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secret</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.providers.splunk.Client._rotate_secret" title="Permalink to this definition">¶</a></dt>
-<dd><p>Rotate password for an account on a single Spunk server</p>
+<dd><p>Rotate password or token for an account on a single Splunk server</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>secret</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – The spec from the secrets yaml</p>
