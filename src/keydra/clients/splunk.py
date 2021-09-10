@@ -1,4 +1,5 @@
 import json
+import requests
 import time
 
 import splunklib.client as splunkclient
@@ -13,6 +14,7 @@ from keydra.providers.base import exponential_backoff_retry
 
 
 LOGGER = get_logger()
+ADMIN_API = 'https://admin.splunk.com'
 
 
 class AppNotInstalledException(Exception):
@@ -39,14 +41,69 @@ class SplunkClient(object):
         :param verify: Verify TLS
         :type verify: :class:`bool`
         '''
-        self._service = splunkclient.Service(
-            host=host,
-            port=port,
-            username=username,
-            password=password,
-            verify=verify
-        )
-        self._service.login()
+        self.host = host
+        self.port = port
+
+        if password.startswith('eyJ') and len(password) > 32:
+            # We're authenticating with a token
+            self.tokenauth = True
+
+            self._auth_headers = {
+                'Content-Type': 'application/json',
+                'Authorization': f'Bearer {password}'
+            }
+
+        else:
+            self.tokenauth = False
+            self._service = splunkclient.Service(
+                host=host,
+                port=port,
+                username=username,
+                password=password,
+                verify=verify
+            )
+            self._service.login()
+
+        self._instance = host.split('.')[0]
+
+    def _get(self, url, params={}):
+        params['output_mode'] = 'json'
+
+        if not params:
+            params = self.params
+
+        resp = requests.get(url, headers=self._auth_headers, params=params)
+
+        resp.raise_for_status()
+
+        try:
+            return resp.json()
+        except ValueError:
+            return resp.text
+
+    def _post(self, url, data, params={}):
+        params['output_mode'] = 'json'
+
+        resp = requests.post(url, headers=self._auth_headers, params=params, data=data)
+
+        resp.raise_for_status()
+
+        try:
+            return resp.json()
+        except ValueError:
+            return resp.text
+
+    def _delete(self, url, data, params={}):
+        params['output_mode'] = 'json'
+
+        resp = requests.delete(url, headers=self._auth_headers, params=params, data=data)
+
+        resp.raise_for_status()
+
+        try:
+            return resp.json()
+        except ValueError:
+            return resp.text
 
     def update_app_config(self, app, path, obj, data):
         '''
@@ -197,6 +254,61 @@ class SplunkClient(object):
             self._service.apps.list(search='name={}'.format(appname))
         )
         return matching_apps > 0
+
+    def delete_token(self, username, token):
+        url = 'https://{}:{}/services/authorization/tokens/{}'.format(
+            self.host,
+            self.port,
+            username
+        )
+        postdata = {
+            'id': token
+        }
+        self._delete(url, postdata)
+
+    def list_tokens_by_user(self, username):
+        url = 'https://{}:{}/services/authorization/tokens'.format(
+            self.host,
+            self.port,
+        )
+        params = {
+            'username': username
+        }
+        resp = self._get(url, params)
+        LOGGER.debug(f'List token response: {resp}')
+
+        tokens = []
+        for entry in resp['entry']:
+            tokens.append(entry['name'])
+
+        return tokens
+
+    def rotate_token(self, username, lifetime='1d'):
+        url = 'https://{}:{}/services/authorization/tokens'.format(
+            self.host,
+            self.port,
+        )
+        postdata = {
+            'name': username,
+            'audience': 'Managed by Keydra',
+            'expires_on': f'+{lifetime}'
+        }
+        resp = self._post(url, postdata)
+        newtoken = resp['entry'][0]['content']['token']
+        newtokenid = resp['entry'][0]['content']['id']
+
+        if newtoken.startswith('eyJ'):
+            # Move over to the new token to avoid losing access as we cleanup
+            self._auth_headers['Authorization'] = f'Bearer {newtoken}'
+
+            for token in self.list_tokens_by_user(username):
+                if token != newtokenid:
+                    LOGGER.debug(f'Attempting to delete token {token}')
+                    self.delete_token(username, token)
+
+            return newtoken
+        else:
+            raise Exception(f'Error rotating token for user {username}. New token is invalid!')
 
     def change_passwd(self, username, oldpasswd, newpasswd):
         '''
@@ -408,7 +520,7 @@ class SplunkClient(object):
         '''
         Rotate a Splunk HEC token on Splunk Cloud (Classic)
 
-        Unfortunately you can rotate in place on Splunk Cloud, so we have
+        Unfortunately you cannot rotate in place on Splunk Cloud, so we have
         to delete and recreate the HTTP input in order to get a new token.
 
         https://docs.splunk.com/Documentation/SplunkCloud/8.2.2105/Admin/ManageHECtokens

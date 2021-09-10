@@ -64,10 +64,22 @@ class TestProviderSplunk(unittest.TestCase):
                             region_name='ap-southeast-2', verify=False)
         cli._smclient = MagicMock()
         cli._generate_splunk_passwd(2).return_value = "aaa"
+        mk_splunk().tokenauth = False
 
         cli._rotate_secret(SPLUNK_SPEC)
 
         self.assertEqual(mk_splunk().change_passwd.call_count, 1)
+
+    @patch.object(splunk, 'SplunkClient')
+    def test__rotate_token(self,  mk_splunk):
+        cli = splunk.Client(credentials=SPLUNK_CREDS, session=MagicMock(),
+                            region_name='ap-southeast-2', verify=False)
+        cli._smclient = MagicMock()
+        mk_splunk().tokenauth = True
+
+        cli._rotate_secret(SPLUNK_SPEC)
+
+        self.assertEqual(mk_splunk().rotate_token.call_count, 1)
 
     @patch.object(splunk.Client, '_rotate_secret')
     def test_rotate(self, mk_rotate_secret):
@@ -143,6 +155,8 @@ class TestProviderSplunk(unittest.TestCase):
                             region_name='ap-southeast-2', verify=False)
 
         mk_splunk().change_passwd.side_effect = Exception('Boom!')
+        mk_splunk().tokenauth = False
+
         cli._generate_splunk_passwd(32).return_value = "aaaabbbbcccc"
 
         with self.assertRaises(RotationException):
@@ -154,6 +168,7 @@ class TestProviderSplunk(unittest.TestCase):
                             region_name='ap-southeast-2', verify=False)
 
         mk_splunk().change_passwd.side_effect = Exception('woot')
+        mk_splunk().tokenauth = False
 
         with self.assertRaises(RotationException):
             cli._rotate_secret(SPLUNK_SPEC)

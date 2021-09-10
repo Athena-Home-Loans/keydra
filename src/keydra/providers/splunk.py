@@ -52,7 +52,7 @@ class Client(BaseProvider):
 
     def _rotate_secret(self, secret):
         '''
-        Rotate password for an account on a single Spunk server
+        Rotate password or token for an account on a single Splunk server
 
         :param secret: The spec from the secrets yaml
         :type secret: :class:`dict`
@@ -63,11 +63,9 @@ class Client(BaseProvider):
         username = self._credentials[USER_FIELD]
         current_passwd = self._credentials[PW_FIELD]
 
-        # Generate new random password from SecretsManager
-        new_passwd = self._generate_splunk_passwd(32)
-
         # Change password on the specified Splunk host listed in the secret
         host = secret['config']['host']
+
         try:
             sp_client = SplunkClient(
                 username=username,
@@ -75,11 +73,18 @@ class Client(BaseProvider):
                 host=host,
                 verify=self._verify
             )
-            sp_client.change_passwd(
-                username=username,
-                oldpasswd=current_passwd,
-                newpasswd=new_passwd
-            )
+            if sp_client.tokenauth:
+                new_passwd = sp_client.rotate_token(username)
+            else:
+                # Generate new random password from SecretsManager
+                new_passwd = self._generate_splunk_passwd(32)
+
+                sp_client.change_passwd(
+                    username=username,
+                    oldpasswd=current_passwd,
+                    newpasswd=new_passwd
+                )
+
         except Exception as e:
             raise RotationException(
                 'Error rotating user {} on Splunk host '

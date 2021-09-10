@@ -1563,8 +1563,18 @@ username in the form of an email address.</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="keydra.clients.splunk.SplunkClient._delete">
+<code class="sig-name descname"><span class="pre">_delete</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient._delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="keydra.clients.splunk.SplunkClient._delete_splunkcloud_httpinput">
 <code class="sig-name descname"><span class="pre">_delete_splunkcloud_httpinput</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient._delete_splunkcloud_httpinput" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.splunk.SplunkClient._get">
+<code class="sig-name descname"><span class="pre">_get</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient._get" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1597,6 +1607,11 @@ username in the form of an email address.</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.splunk.SplunkClient._post">
+<code class="sig-name descname"><span class="pre">_post</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient._post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="keydra.clients.splunk.SplunkClient._wait_for_splunkcloud_task">
@@ -1651,6 +1666,16 @@ username in the form of an email address.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="keydra.clients.splunk.SplunkClient.delete_token">
+<code class="sig-name descname"><span class="pre">delete_token</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient.delete_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.splunk.SplunkClient.list_tokens_by_user">
+<code class="sig-name descname"><span class="pre">list_tokens_by_user</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient.list_tokens_by_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="keydra.clients.splunk.SplunkClient.rotate_hectoken">
 <code class="sig-name descname"><span class="pre">rotate_hectoken</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient.rotate_hectoken" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rotate a Splunk HEC token for Splunk Enterprise</p>
@@ -1671,7 +1696,7 @@ username in the form of an email address.</p>
 <dt id="keydra.clients.splunk.SplunkClient.rotate_hectoken_cloud">
 <code class="sig-name descname"><span class="pre">rotate_hectoken_cloud</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient.rotate_hectoken_cloud" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rotate a Splunk HEC token on Splunk Cloud (Classic)</p>
-<p>Unfortunately you can rotate in place on Splunk Cloud, so we have
+<p>Unfortunately you cannot rotate in place on Splunk Cloud, so we have
 to delete and recreate the HTTP input in order to get a new token.</p>
 <p><a class="reference external" href="https://docs.splunk.com/Documentation/SplunkCloud/8.2.2105/Admin/ManageHECtokens">https://docs.splunk.com/Documentation/SplunkCloud/8.2.2105/Admin/ManageHECtokens</a></p>
 <dl class="field-list simple">
@@ -1686,6 +1711,11 @@ to delete and recreate the HTTP input in order to get a new token.</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt id="keydra.clients.splunk.SplunkClient.rotate_token">
+<code class="sig-name descname"><span class="pre">rotate_token</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lifetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'1d'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#keydra.clients.splunk.SplunkClient.rotate_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="keydra.clients.splunk.SplunkClient.update_app_config">

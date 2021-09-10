@@ -434,14 +434,17 @@ Uses client :ref:`Salesforce <client_salesforce>`.
 Splunk
 ======
 
-Provides password rotation and distribution support for Splunk. Rotation allows for Splunk account
-passwords to be rotated, while Distribute allows you to save passwords from other providers in Splunk
+Provides password (and token!) rotation and distribution support for Splunk. Rotation allows for Splunk account
+passwords/tokens to be rotated, while Distribute allows you to save passwords from other providers in Splunk
 apps, like Qualys or AWS.
 
 Rotation can be done on only one Splunk instance at a time.
 
-Rotation generates a new 32 character password (using AWS Secrets Manager) and changes the Splunk password
+When rotating passwords, a new 32 character password is generated (using AWS Secrets Manager) and the provider changes the Splunk password
 for the account corresponding to the "key" value in the secret. This change is made on the Splunk host defined within the "config" section of the secret.
+
+For Splunk Tokens, the current token for that user is used to create a new token, and delete the old. No additional configuration
+is required - the provider auto detects the type of "password" being rotated, and acts accordingly.
 
 An example secret spec to rotate a Splunk user password and store in AWS Secrets Manager:
 
