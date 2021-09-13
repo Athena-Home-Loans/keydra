@@ -283,16 +283,18 @@ class SplunkClient(object):
 
         return tokens
 
-    def rotate_token(self, username, lifetime='1d'):
+    def rotate_token(self, username, lifetime=None):
         url = 'https://{}:{}/services/authorization/tokens'.format(
             self.host,
             self.port,
         )
         postdata = {
             'name': username,
-            'audience': 'Managed by Keydra',
-            'expires_on': f'+{lifetime}'
+            'audience': 'Managed by Keydra'
         }
+        if lifetime is not None:
+            postdata['expires_on'] = f'+{lifetime}'
+
         resp = self._post(url, postdata)
         newtoken = resp['entry'][0]['content']['token']
         newtokenid = resp['entry'][0]['content']['id']
