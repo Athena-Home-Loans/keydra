@@ -45,7 +45,7 @@ SUCCESS = [
             'action': 'rotate_secret',
             'value': {
                 'provider': 'iam',
-                'key': 'AKIAWZVM3HTIRM5XSNF3',
+                'key': 'BKIAWZVM3HTTESTVALUE',
                 'secret': '***'
             }
         },
@@ -92,7 +92,7 @@ PARTIAL_SUCCESS = [
             'action': 'rotate_secret',
             'value': {
                 'provider': 'iam',
-                'key': 'AKIAWZVM3HTIRM5XSNF3',
+                'key': 'BKIAWZVM3HTTESTVALUE',
                 'secret': '***'
             }
         },
@@ -128,7 +128,7 @@ FAIL = [
             'action': 'rotate_secret',
             'value': {
                 'provider': 'iam',
-                'key': 'AKIAWZVM3HTIRM5XSNF3',
+                'key': 'BKIAWZVM3HTTESTVALUE',
                 'secret': '***'
             }
         },
