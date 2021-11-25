@@ -6,7 +6,7 @@ Next level Secrets Management, without the price tag!
 
 Keydra allows you to automatically rotate your secrets on a schedule you define. Since it's all automated, it's easy to rotate your service account and API keys much more frequently than you do today. Like, everyday!
 
-This significanty decreases the period of time an attacker has to use compromised credentials, and lowers the risk for your organisation. Security FTW!
+This significantly decreases the period of time an attacker has to use compromised credentials, and lowers the risk for your organisation. Security FTW!
 
 It runs as a Lambda function in AWS, and has two main functions:
 1. Rotate: Change a secret 

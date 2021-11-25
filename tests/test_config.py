@@ -321,3 +321,75 @@ class TestConfig(unittest.TestCase):
                 mk_bc.assert_called_once_with(ENV_CONFIG['provider'], None)
                 mk_fba.assert_called()
                 mk_vc.assert_called()
+
+    def test__filter_no_batch_size(self):
+        all_secrets = {}
+        envs = {'dev': {'secrets': []}}
+
+        for i in range(1, 11):
+            secret_id = 'secret' + str(i)
+            all_secrets[secret_id] = {
+                'key': 'km_secret',
+                'provider': 'IAM',
+                'rotate': 'nightly'
+            }
+            envs['dev']['secrets'].append(str(secret_id))
+
+        with patch.object(
+            self.client, '_guess_current_environment'
+        ) as mk_gce:
+            mk_gce.return_value = 'dev'
+
+            filtered_secrets = self.client._filter(envs, all_secrets, rotate='nightly')
+
+            assert len(filtered_secrets) == len(all_secrets)
+
+    def test__filter_nightly_with_batch_size(self):
+        all_secrets = {}
+        envs = {'dev': {'secrets': []}}
+
+        for i in range(1, 5):
+            secret_id = 'secret' + str(i)
+            all_secrets[secret_id] = {
+                'key': 'km_secret',
+                'provider': 'IAM',
+                'rotate': 'nightly'
+            }
+            all_secrets[secret_id][secret_id] = 'for assertion'
+            envs['dev']['secrets'].append(str(secret_id))
+
+        with patch.object(
+            self.client, '_guess_current_environment'
+        ) as mk_gce:
+            mk_gce.return_value = 'dev'
+            filtered_secrets = self.client._filter(
+                envs, all_secrets, rotate='nightly', batch_size=3)
+
+            assert len(filtered_secrets) == 3
+            assert 'secret1' in filtered_secrets[0]
+            assert 'secret2' in filtered_secrets[1]
+            assert 'secret3' in filtered_secrets[2]
+
+    def test__filter_nightly_secondary_with_batch_size(self):
+        all_secrets = {}
+        envs = {'dev': {'secrets': []}}
+
+        for i in range(1, 5):
+            secret_id = 'secret' + str(i)
+            all_secrets[secret_id] = {
+                'key': secret_id,
+                'provider': 'IAM',
+                'rotate': 'nightly'
+            }
+            all_secrets[secret_id][secret_id] = 'for assertion'
+            envs['dev']['secrets'].append(str(secret_id))
+
+        with patch.object(
+            self.client, '_guess_current_environment'
+        ) as mk_gce:
+            mk_gce.return_value = 'dev'
+            filtered_secrets = self.client._filter(
+                envs, all_secrets, rotate='nightly-secondary', batch_size=3)
+
+            assert len(filtered_secrets) == 1
+            assert 'secret4' in filtered_secrets[0]
