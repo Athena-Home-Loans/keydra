@@ -112,7 +112,7 @@ class KeydraConfig(object):
                               .format(account_id))
 
     def _filter(self, environments, specs, rotate='adhoc',
-                requested_secrets=None):
+                requested_secrets=None, batch_size=None):
         filtered_secrets = []
         current_env_name = self._guess_current_environment(environments)
         current_env = environments[current_env_name]
@@ -122,7 +122,18 @@ class KeydraConfig(object):
 
             return filtered_secrets
 
-        for sid, secret in specs.items():
+        candidate_secrets = specs
+
+        if batch_size:
+            if rotate == 'nightly':
+                # Only rotate the first batch of secrets
+                candidate_secrets = dict((k, v) for k, v in list(candidate_secrets.items())[:batch_size])
+            elif rotate == 'nightly-secondary':
+                # Rotate the second batch of secrets, skipping the first batch
+                candidate_secrets = dict((k, v) for k, v in list(candidate_secrets.items())[batch_size:])
+                rotate = 'nightly' # Pick up secrets marked for nightly rotation
+
+        for sid, secret in candidate_secrets.items():
             if requested_secrets and sid not in requested_secrets:
                 LOGGER.debug(
                     'Skipping {} as it was not included in the request ({})'
@@ -131,8 +142,8 @@ class KeydraConfig(object):
 
             if sid not in current_env['secrets']:
                 LOGGER.debug(
-                    'Skipping {} as it is not listed for environment {}'
-                    .format(secret, current_env['secrets']))
+                    'Skipping {} as it is not listed for environment: {}'
+                    .format(sid, current_env_name))
                 continue
 
             if secret.get('rotate', 'adhoc') != rotate and rotate != 'adhoc':
@@ -208,6 +219,7 @@ class KeydraConfig(object):
 
         return self._filter(
             *config,
+            batch_size=50 if self._config.get('batch_nightly_secrets', False) else None,
             rotate=rotate,
             requested_secrets=secrets
         )
