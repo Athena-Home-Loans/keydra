@@ -127,11 +127,13 @@ class KeydraConfig(object):
         if batch_size:
             if rotate == 'nightly':
                 # Only rotate the first batch of secrets
-                candidate_secrets = dict((k, v) for k, v in list(candidate_secrets.items())[:batch_size])
+                candidate_secrets = dict((k, v) for k, v in
+                                         list(candidate_secrets.items())[:batch_size])
             elif rotate == 'nightly-secondary':
                 # Rotate the second batch of secrets, skipping the first batch
-                candidate_secrets = dict((k, v) for k, v in list(candidate_secrets.items())[batch_size:])
-                rotate = 'nightly' # Pick up secrets marked for nightly rotation
+                candidate_secrets = dict((k, v) for k, v in
+                                         list(candidate_secrets.items())[batch_size:])
+                rotate = 'nightly'  # Pick up secrets marked for nightly rotation
 
         for sid, secret in candidate_secrets.items():
             if requested_secrets and sid not in requested_secrets:
