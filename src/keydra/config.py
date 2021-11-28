@@ -231,9 +231,9 @@ class KeydraConfig(object):
         return self._filter(
             *config,
             batch_size=50
-            if self._config.get('batch_nightly_secrets', False) else None,
-            rotate=rotate,
-            requested_secrets=secrets)
+            if self._config.get('batch_nightly_secrets', False)
+            else None,
+            rotate=rotate, requested_secrets=secrets)
 
     def get_accountusername(self):
         '''
