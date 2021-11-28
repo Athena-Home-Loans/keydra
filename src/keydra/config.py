@@ -20,7 +20,8 @@ ENV_TYPE_SPEC = {
 SECRETS_SPEC = ['key', 'provider']
 SECRET_ENV_SPEC = ['key', 'provider', 'source', 'envs']
 
-ALLOWED_ROTATION_SCHEDULES = ['nightly', 'weekly', 'monthly', 'adhoc', 'canaries']
+ALLOWED_ROTATION_SCHEDULES = ['nightly',
+                              'weekly', 'monthly', 'adhoc', 'canaries']
 
 LOGGER = get_logger()
 
@@ -127,12 +128,17 @@ class KeydraConfig(object):
         if batch_size:
             if rotate == 'nightly':
                 # Only rotate the first batch of secrets
-                candidate_secrets = dict((k, v) for k, v in
-                                         list(candidate_secrets.items())[:batch_size])
+                LOGGER.info(
+                    'Batching the first {} secrets for nightly rotation'.format(batch_size))
+                candidate_secrets = dict((k, v) for k, v in list(
+                    candidate_secrets.items())[:batch_size])
             elif rotate == 'nightly-secondary':
+                LOGGER.info('Skipping the first {} secrets and taking '
+                            'the rest for secondary nightly rotation'.
+                            format(batch_size))
                 # Rotate the second batch of secrets, skipping the first batch
-                candidate_secrets = dict((k, v) for k, v in
-                                         list(candidate_secrets.items())[batch_size:])
+                candidate_secrets = dict((k, v) for k, v in list(
+                    candidate_secrets.items())[batch_size:])
                 rotate = 'nightly'  # Pick up secrets marked for nightly rotation
 
         for sid, secret in candidate_secrets.items():
@@ -220,11 +226,9 @@ class KeydraConfig(object):
         self._validate_spec(*config)
 
         return self._filter(
-            *config,
-            batch_size=50 if self._config.get('batch_nightly_secrets', False) else None,
-            rotate=rotate,
-            requested_secrets=secrets
-        )
+            *config, batch_size=50
+            if self._config.get('batch_nightly_secrets', False) else None,
+            rotate=rotate, requested_secrets=secrets)
 
     def get_accountusername(self):
         '''
