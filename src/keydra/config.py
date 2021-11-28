@@ -231,7 +231,7 @@ class KeydraConfig(object):
         return self._filter(
             *config,
             batch_size=50
-            if self._config.get('batch_nightly_secrets', False)
+            if self._config.get('batch-nightly-secrets', False)
             else None,
             rotate=rotate, requested_secrets=secrets)
 
