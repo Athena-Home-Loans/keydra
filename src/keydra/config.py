@@ -21,7 +21,10 @@ SECRETS_SPEC = ['key', 'provider']
 SECRET_ENV_SPEC = ['key', 'provider', 'source', 'envs']
 
 ALLOWED_ROTATION_SCHEDULES = ['nightly',
-                              'weekly', 'monthly', 'adhoc', 'canaries']
+                              'weekly',
+                              'monthly',
+                              'adhoc',
+                              'canaries']
 
 LOGGER = get_logger()
 
@@ -226,9 +229,11 @@ class KeydraConfig(object):
         self._validate_spec(*config)
 
         return self._filter(
-            *config, batch_size=50
+            *config,
+            batch_size=50
             if self._config.get('batch_nightly_secrets', False) else None,
-            rotate=rotate, requested_secrets=secrets)
+            rotate=rotate,
+            requested_secrets=secrets)
 
     def get_accountusername(self):
         '''
