@@ -190,8 +190,6 @@ class SplunkClient(object):
         :returns: Resulting HTTP status code of the operation
         :rtype: :class:`int`
         '''
-        if not realm:
-            realm = ''
 
         # First check the app is actually installed!
         if self.app_exists(app) is not True:
@@ -203,39 +201,48 @@ class SplunkClient(object):
                 )
             )
 
-        post_data = {
-            'name': username,
-            'password': password,
-            'realm': realm
-        }
+        if not realm:
+            storepass = username
+        else:
+            storepass = "{}:{}:".format(realm, username)
 
-        # Craft our URL based on whether the password already exists
+        # See if this storage password exists already
         try:
             self._service.get(
-                '/servicesNS/nobody/{}/'
-                'storage/passwords/{}'.format(app, username)
+                    '/servicesNS/nobody/{}/'
+                    'storage/passwords/{}'.format(app, storepass)
             )
-            url = '/servicesNS/nobody/{}/storage/passwords/{}'.format(
-                app,
-                username
+            exists = True
+
+        except HTTPError as e:
+            if e.status == 404:
+                # A 404 response means the storepass does not exist
+                exists = False
+            else:
+                # We have another error, re-raise it
+                raise(e)
+
+        if exists:
+            # Storage password already exists, we'll update
+            post_data = {
+                'password': password,
+            }
+            attempt = self._service.post(
+                '/servicesNS/nobody/{}/storage/passwords/{}'.format(app, storepass),
+                **post_data
             )
-            post_data.pop('name', None)
-            post_data.pop('realm', None)
+        else:
+            # Storage password does not exist, we'll create
+            post_data = {
+                'name': username,
+                'password': password,
+            }
+            if realm:
+                post_data['realm'] = realm
 
-        except HTTPError:
-            url = '/servicesNS/nobody/{}/storage/passwords'.format(app)
-
-        try:
-            attempt = self._service.post(url, **post_data)
-
-        except HTTPError as error:
-            raise Exception(
-                'Error updating Splunk app {} on '
-                'host {}: {}'.format(
-                    app,
-                    self._service.host,
-                    error
-                )
+            attempt = self._service.post(
+                '/servicesNS/nobody/{}/storage/passwords'.format(app),
+                **post_data
             )
 
         return attempt.status
