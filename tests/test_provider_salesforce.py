@@ -306,7 +306,7 @@ class TestProviderSalesforce(unittest.TestCase):
         cli._rotate_secret(spec=SF_CREDS)
 
         cli._smclient.generate_random_password.assert_called_once_with(
-            IncludeSpace=True,
+            IncludeSpace=False,
             length=32,
             ExcludeCharacters='!"%&\'()*+,-./:;<=>?[\\]^_`{|}~$'
         )
