@@ -46,7 +46,7 @@ class Client(BaseProvider):
         # https://trailblazer.salesforce.com/issues_view?id=a1p3A000000AT9rQAG
         passwd = self._smclient.generate_random_password(
             length=length,
-            IncludeSpace=True,
+            IncludeSpace=False,
             ExcludeCharacters='!"%&\'()*+,-./:;<=>?[\\]^_`{|}~$'
         )
 
