@@ -1,5 +1,4 @@
 import unittest
-import json
 from keydra.clients.aws.secretsmanager import SecretsManagerClient
 from keydra.clients.salesforce_marketing_cloud import SalesforceMarketingCloudClient
 
@@ -52,6 +51,7 @@ SFMC_SPEC = {
     ]
 }
 
+
 class TestProviderSalesforce(unittest.TestCase):
 
     @classmethod
@@ -95,7 +95,6 @@ class TestProviderSalesforce(unittest.TestCase):
         self.assertEqual(result['mid'], SFMC_CREDS['mid'])
         self.assertEqual(result['business_unit'], SFMC_CREDS['business_unit'])
 
-
     @patch.object(SecretsManagerClient, 'generate_random_password')
     @patch.object(SalesforceMarketingCloudClient, 'change_passwd')
     @patch.object(SalesforceMarketingCloudClient, '__init__')
@@ -107,9 +106,11 @@ class TestProviderSalesforce(unittest.TestCase):
             'SF_BUSINESUNIT': 123456789,
             'SF_MID': 987654321
         }
-        self.cli = salesforce_marketing_cloud.Client(credentials=orig_secret,
-                        session=MagicMock(),
-                        region_name='ap-southeast-2')
+        self.cli = salesforce_marketing_cloud.Client(
+            credentials=orig_secret,
+            session=MagicMock(),
+            region_name='ap-southeast-2'
+        )
 
         sfmc_init.return_value = None
         new_pass = 'a' * 32
@@ -141,9 +142,11 @@ class TestProviderSalesforce(unittest.TestCase):
             'SF_BUSINESUNIT': 123456789,
             'SF_MID': 987654321
         }
-        self.cli = salesforce_marketing_cloud.Client(credentials=orig_secret,
-                        session=MagicMock(),
-                        region_name='ap-southeast-2')
+        self.cli = salesforce_marketing_cloud.Client(
+            credentials=orig_secret,
+            session=MagicMock(),
+            region_name='ap-southeast-2'
+        )
 
         sfmc_init.return_value = None
         sfmc_cp.side_effect = Exception('Boom!')
@@ -195,7 +198,10 @@ class TestProviderSalesforce(unittest.TestCase):
             }
         }
 
-        redacted = salesforce_marketing_cloud.Client.redact_result(result, {**SFMC_CREDS, 'config': SFMC_CFG})
+        redacted = salesforce_marketing_cloud.Client.redact_result(
+            result,
+            {**SFMC_CREDS, 'config': SFMC_CFG}
+        )
 
         self.assertEqual(redacted['value']['SF_USERNAME'], 'tester')
         self.assertEqual(redacted['value']['SF_PASSWORD'], '***')
@@ -219,9 +225,12 @@ class TestProviderSalesforce(unittest.TestCase):
         self.assertEqual(r_result_1, (True, 'It is valid!'))
 
     def test__validate_invalid_spec_no_config(self):
-        r_result_1 = salesforce_marketing_cloud.Client.validate_spec({'desc':'test'})
+        r_result_1 = salesforce_marketing_cloud.Client.validate_spec({'desc': 'test'})
 
-        self.assertEqual(r_result_1, (False, 'Invalid spec. Missing keys: provider, key for {\n  "desc": "test"\n}'))
+        self.assertEqual(
+            r_result_1,
+            (False, 'Invalid spec. Missing keys: provider, key for {\n  "desc": "test"\n}')
+        )
 
     def test__validate_spec_known_config_fields(self):
         result = salesforce_marketing_cloud.Client.validate_spec({**SFMC_SPEC, 'config': SFMC_CFG})

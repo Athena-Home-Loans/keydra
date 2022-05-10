@@ -5,6 +5,7 @@ from zeep.wsse.username import UsernameToken
 from zeep import helpers
 from requests import Session
 
+
 class SalesforceMarketingCloudClient(object):
     def __init__(self, username, password, subdomain, mid, businessUnit):
         '''
@@ -14,27 +15,28 @@ class SalesforceMarketingCloudClient(object):
         :type username: :class:`string`
         :param password: Password used to connect
         :type password: :class:`passwd`
-        :param subdomain: The subdomain to use. (From https://{SUB-DOMAIN}.soap.marketingcloudapis.com/ETFramework.wsdl)
+        :param subdomain: The subdomain to use.
+        (From https://{SUB-DOMAIN}.soap.marketingcloudapis.com/ETFramework.wsdl)
         :type subdomain: :class:`string`
         :param mid: The target Account MID in the SFMC instance (multi-orgs only)
         :type mid: :class:`int`
         :param businessUnit: The target Business Unit MID in the SFMC instance (multi-orgs only)
         :type businessUnit: :class:`int`
         '''
-        self._mid=mid
-        self._businessUnit=businessUnit
-        self._headers = {'SOAPAction': 'Update','Content-Type': 'text/xml'}
-        wsdl="https://{}.soap.marketingcloudapis.com/ETFramework.wsdl".format(subdomain)
+        self._mid = mid
+        self._businessUnit = businessUnit
+        self._headers = {'SOAPAction': 'Update', 'Content-Type': 'text/xml'}
+        wsdl = "https://{}.soap.marketingcloudapis.com/ETFramework.wsdl".format(subdomain)
 
         # Set headers & Cache wsdl
         session = Session()
-        session.headers.update({'SOAPAction': 'Update','Content-Type': 'text/xml'})
+        session.headers.update({'SOAPAction': 'Update', 'Content-Type': 'text/xml'})
         transport = Transport(cache=SqliteCache(), session=session)
 
         # Init Zeep Client to SFMC
         self._client = Client(
             wsdl,
-            transport=transport, 
+            transport=transport,
             wsse=UsernameToken(username, password)
         )
 
@@ -68,7 +70,7 @@ class SalesforceMarketingCloudClient(object):
         account_user_obj = self._client.get_type('ns0:AccountUser')
         sfmc_client_obj = self._client.get_type('ns0:ClientID')
         options_obj = self._client.get_type('ns0:UpdateOptions')
-        
+
         # Construct User to update and Operation options
         user_options = options_obj()
         user = account_user_obj(
@@ -91,10 +93,13 @@ class SalesforceMarketingCloudClient(object):
         response = self._client.service.Update(Options=user_options, Objects=user)
         parsedResponse = helpers.serialize_object(response)['Results'][0]
 
-        # SFMC Soap response always responds StatusCode=200 unless server error. Actual error is in response 'results' body
+        # SFMC Soap response always responds StatusCode=200 unless server error.
+        # Actual error is in response 'results' body
         if (parsedResponse['StatusCode'] != 'OK'):
             raise Exception(
-                'Failed to change password. Error: {} {}'.format(parsedResponse['ErrorCode'], parsedResponse['StatusMessage'])
+                'Failed to change password. Error: {} {}'.format(
+                    parsedResponse['ErrorCode'], parsedResponse['StatusMessage']
+                )
             )
-        
+
         return True

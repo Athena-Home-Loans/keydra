@@ -17,6 +17,7 @@ TEST_DATA = {
     'statusOut': 'UnplannedOutage'
 }
 
+
 class TestSalesforceMarketingClient(unittest.TestCase):
 
     @classmethod
@@ -37,19 +38,24 @@ class TestSalesforceMarketingClient(unittest.TestCase):
         self.assertIsNotNone(self.sfmc_client)
         self.assertEqual(self.sfmc_client._businessUnit, TEST_DATA['businessunit'])
         self.assertEqual(self.sfmc_client._mid, TEST_DATA['mid'])
-        self.assertEqual(self.sfmc_client._headers, {'SOAPAction': 'Update', 'Content-Type': 'text/xml'})
+        self.assertEqual(self.sfmc_client._headers, {
+            'SOAPAction': 'Update', 'Content-Type': 'text/xml'
+        })
 
     def test__sfmc_get_status(self):
         self.sfmc_client._client = MagicMock()
         self.sfmc_client._client.service.GetSystemStatus.return_value = {'OverallStatus': 'OK'}
         self.assertEqual(self.sfmc_client.get_sfmc_status(), TEST_DATA['statusOk'])
 
-        self.sfmc_client._client.service.GetSystemStatus.return_value = {'OverallStatus': 'InMaintenance'}
+        self.sfmc_client._client.service.GetSystemStatus.return_value = {
+            'OverallStatus': 'InMaintenance'
+        }
         self.assertEqual(self.sfmc_client.get_sfmc_status(), TEST_DATA['statusMaint'])
 
-        self.sfmc_client._client.service.GetSystemStatus.return_value = {'OverallStatus': 'UnplannedOutage'}
+        self.sfmc_client._client.service.GetSystemStatus.return_value = {
+            'OverallStatus': 'UnplannedOutage'
+        }
         self.assertEqual(self.sfmc_client.get_sfmc_status(), TEST_DATA['statusOut'])
-
 
     @patch.object(SalesforceMarketingCloudClient, 'get_sfmc_status')
     def test__changepw_success(self, mk_status):
@@ -63,7 +69,7 @@ class TestSalesforceMarketingClient(unittest.TestCase):
                 TEST_DATA['newpass']
             )
         self.assertTrue(result)
-        
+
     @patch.object(SalesforceMarketingCloudClient, 'get_sfmc_status')
     def test__changepw_fail(self, mk_status):
         mk_status.return_value = TEST_DATA['statusOk']

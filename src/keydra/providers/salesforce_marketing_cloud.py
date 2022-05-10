@@ -18,6 +18,7 @@ LOGGER = get_logger()
 
 PASS_LENGTH = 32
 
+
 class Client(BaseProvider):
     class Options(NamedTuple):
         user_field: str = 'key'
@@ -135,7 +136,9 @@ class Client(BaseProvider):
         opts = Client.Options(**spec.get('config', {}))
 
         if 'value' in result:
-            for field in (opts.password_field, opts.business_unit_field, opts.mid_field, opts.subdomain_field):
+            for field in (
+                opts.password_field, opts.business_unit_field, opts.mid_field, opts.subdomain_field
+            ):
                 if field in result['value']:
                     result['value'][field] = '***'
 
