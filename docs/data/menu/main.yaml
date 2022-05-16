@@ -1,0 +1,34 @@
+---
+main:
+  - name: Getting Started
+    ref: "/gettingstarted"
+    sub:
+      - name: Github
+        ref: /getting_started/github
+      - name: Gitlab
+        ref: /getting_started/gitlab
+      - name: Bitbucket
+        ref: /getting_started/bitbucket
+  - name: Providers
+    ref: "/providers"
+  - name: Configuration Providers
+    ref: "/config_providers"
+  - name: Examples
+    sub:
+    - name: IAM User to ingest AWS Logs into Splunk
+      ref: "/examples/iamsplunk"
+    - name: Salesforce Service Account
+      ref: "/examples/salesforce"
+    - name: Github Actions AWS Deployment Credentials
+      ref: "/examples/githubactionsawsdeployment"
+    - name: Gitlab AWS Deployment Credentials
+      ref: "/examples/gitlabawsdeployment"
+  - name: Developing
+    ref: "/develop"
+    sub:
+      - name: Providers
+        ref: "/developing/providers"
+      - name: Clients
+        ref: "/developing/clients"
+      - name: Contributing
+        ref: "/developing/contrib"
