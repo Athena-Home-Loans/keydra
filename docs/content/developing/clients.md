@@ -10,4 +10,4 @@ directly from somewhere else, or have other aspirations... no judgement here.
 Anyway... *Clients* are nothing but SDKs to facilitate (keep the code clean,
 really) the development of *Providers*.
 
-See the [client documentation](clients) for more details on what's supported.
+See the [provider documentation](../providers) for more details on what's supported.
