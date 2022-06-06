@@ -7,4 +7,5 @@ nosetests flake8</description></item><item><title>Providers</title><link>https:/
 rotation (which depending on the provider, can also be used to provision secrets)
 distribution
 &amp;hellip; and implement the methods described in keydra.providers.base. See the provider documentation for more details on what&amp;rsquo;s supported out of the box.
-Rotation During the rotate phase, the provider will be invoked with a description (dict) of a secret.</description></item></channel></rss>
+Rotation During the rotate phase, the provider will be invoked with a description (dict) of a secret.
+So in the example below where secrets.</description></item></channel></rss>

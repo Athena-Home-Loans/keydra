@@ -7,4 +7,6 @@ git clone git@github.com:&amp;lt;your Github org or username&amp;gt;/keydraconfi
 Setup a configuration repository Create a new repository in Gitlab. Let&amp;rsquo;s call it KeydraConfiguration.
 Clone your new repo locally.
 Create a Personal Access Token Follow the instructions to create a personal access token. https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html
-Log into to the AWS Console and navigate to the Secrets Manager service.</description></item></channel></rss>
+Log into to the AWS Console and navigate to the Secrets Manager service.
+Click the orange Store a new secret button.
+Choose a secret type of Other type of secrets, and add a plaintext secret as follows (substituting your details).</description></item></channel></rss>
