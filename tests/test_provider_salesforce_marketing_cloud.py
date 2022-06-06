@@ -16,14 +16,14 @@ SFMC_CREDS = {
     "secret": "test",
     "subdomain": "abc@_!xyz",
     "mid": 123456789,
-    "business_unit": 987654321,
+    "businessUnit": 987654321,
 }
 
 SFMC_CFG = {
     'user_field': 'SF_USERNAME',
     'password_field': 'SF_PASSWORD',
     'subdomain_field': 'SF_SUBDOMAIN',
-    'business_unit_field': 'SF_BUSINESUNIT',
+    'businessUnit_field': 'SF_BUSINESUNIT',
     'mid_field': 'SF_MID'
 }
 
@@ -39,7 +39,7 @@ SFMC_SPEC = {
             'key': 'keydra/salesforce/sfmc_test_api',
             'subdomain': 'abc@_!xyz',
             'mid': 123456789,
-            'business_unit': 987654321,
+            'businessUnit': 987654321,
         },
         {
             'provider': 'bitbucket',
@@ -93,7 +93,7 @@ class TestProviderSalesforce(unittest.TestCase):
         self.assertEqual(result['secret'], new_pass)
         self.assertEqual(result['subdomain'], SFMC_CREDS['subdomain'])
         self.assertEqual(result['mid'], SFMC_CREDS['mid'])
-        self.assertEqual(result['business_unit'], SFMC_CREDS['business_unit'])
+        self.assertEqual(result['businessUnit'], SFMC_CREDS['businessUnit'])
 
     @patch.object(SecretsManagerClient, 'generate_random_password')
     @patch.object(SalesforceMarketingCloudClient, 'change_passwd')
@@ -174,7 +174,7 @@ class TestProviderSalesforce(unittest.TestCase):
                 'secret': 'THIS_IS_SECRET',
                 'subdomain': 'this is also secret',
                 'mid': 'this is also secret',
-                'business_unit': 'this is also secret'
+                'businessUnit': 'this is also secret'
             }
         }
 
@@ -183,7 +183,7 @@ class TestProviderSalesforce(unittest.TestCase):
         self.assertNotEqual(r_result['value']['secret'], 'THIS_IS_SECRET')
         self.assertNotEqual(r_result['value']['subdomain'], 'this is also secret')
         self.assertNotEqual(r_result['value']['mid'], 'this is also secret')
-        self.assertNotEqual(r_result['value']['business_unit'], 'this is also secret')
+        self.assertNotEqual(r_result['value']['businessUnit'], 'this is also secret')
 
     def test__redact_result_overriden_fields(self):
         result = {

@@ -24,7 +24,7 @@ class Client(BaseProvider):
         user_field: str = 'key'
         password_field: str = 'secret'
         subdomain_field: str = 'subdomain'
-        business_unit_field: int = 'business_unit'
+        businessUnit_field: int = 'businessUnit'
         mid_field: int = 'mid'
 
     def __init__(self, session=None, credentials: dict = None, region_name=None):
@@ -68,7 +68,7 @@ class Client(BaseProvider):
             password=self._orig_secret[opts.password_field],
             subdomain=self._orig_secret[opts.subdomain_field],
             mid=self._orig_secret[opts.mid_field],
-            business_unit=self._orig_secret[opts.business_unit_field]
+            businessUnit=self._orig_secret[opts.businessUnit_field]
         )
 
         # Generate new random password from SecretsManager
@@ -137,7 +137,7 @@ class Client(BaseProvider):
 
         if 'value' in result:
             for field in (
-                opts.password_field, opts.business_unit_field, opts.mid_field, opts.subdomain_field
+                opts.password_field, opts.businessUnit_field, opts.mid_field, opts.subdomain_field
             ):
                 if field in result['value']:
                     result['value'][field] = '***'
