@@ -1,16 +1,19 @@
-# Keydra #
+---
+title: Keydra - Secrets Management for Humans!
+---
+<img src="/keydra/media/keydra-transparent.png" alt="patterns" width="450" align="right" />
 
 Next level Secrets Management, without the price tag!
 
-<img src="docs/static/media/keydra-transparent.png" alt="patterns" width="450" align="right" />
-
 Keydra allows you to automatically rotate your secrets on a schedule you define. Since it's all automated, it's easy to rotate your service account and API keys much more frequently than you do today. Like, everyday!
 
-This significantly decreases the period of time an attacker has to use compromised credentials, and lowers the risk for your organisation. Security FTW!
+This significanty decreases the period of time an attacker has to use compromised credentials, and lowers the risk for your organisation.
 
-It runs as a Lambda function in AWS, and has two main functions:
-1. Rotate: Change a secret 
-2. Distribute: Store a secret 
+It runs as a Lambda function in AWS, and has two main functions.
+
+1.  Rotate: Change a secret 
+
+2.  Distribute: Store a secret 
 
 These functions are called against *providers*, which are modular integrations with technology platforms. For each defined secret, you rotate on a single provider, but distribute to multiple providers.
 
@@ -20,10 +23,4 @@ Use case examples;
 
 - Once a week, rotate/change a Salesforce user password, taking the current secret from AWS Secrets Manager and replacing with the new password once done. *(rotate: AWS SecretsManager, distribute: Salesforce, AWS SecretsManager)*
 
-See [the documentation](https://athena-home-loans.github.io/keydra/) for a list of providers currently supported (the list is growing all the time!).
-
-Need a new provider? It's easy to add one, cut a PR!
-
-## Documentation
-
-Check out the [documentation here](https://athena-home-loans.github.io/keydra/)!
+Check out the [supported providers](providers), the list is growing all the time!
