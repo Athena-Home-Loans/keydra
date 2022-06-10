@@ -84,7 +84,7 @@ class TestProviderSalesforce(unittest.TestCase):
 
         # Assert
         sfmc_cp.assert_called_once_with(
-            userid=SFMC_CREDS['key'],
+            username=SFMC_CREDS['key'],
             newpassword=new_pass
         )
 
@@ -121,7 +121,7 @@ class TestProviderSalesforce(unittest.TestCase):
 
         # Assert
         sfmc_cp.assert_called_once_with(
-            userid=orig_secret['SF_USERNAME'],
+            username=orig_secret['SF_USERNAME'],
             newpassword=new_pass
         )
 
