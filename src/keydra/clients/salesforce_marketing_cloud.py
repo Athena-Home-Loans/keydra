@@ -1,5 +1,4 @@
 from zeep import Client
-from zeep.cache import SqliteCache
 from zeep.transports import Transport
 from zeep.wsse.username import UsernameToken
 from zeep import helpers
