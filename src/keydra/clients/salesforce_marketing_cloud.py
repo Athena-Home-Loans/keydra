@@ -1,5 +1,4 @@
 from zeep import Client
-from zeep.cache import SqliteCache
 from zeep.transports import Transport
 from zeep.wsse.username import UsernameToken
 from zeep import helpers
@@ -31,7 +30,7 @@ class SalesforceMarketingCloudClient(object):
         # Set headers & Cache wsdl
         session = Session()
         session.headers.update({'SOAPAction': 'Update', 'Content-Type': 'text/xml'})
-        transport = Transport(cache=SqliteCache(), session=session)
+        transport = Transport(session=session)
 
         # Init Zeep Client to SFMC
         self._client = Client(
