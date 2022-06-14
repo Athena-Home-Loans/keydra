@@ -82,7 +82,7 @@ class Client(BaseProvider):
         # Change Salesforce Marketing Cloud password
         try:
             client.change_passwd(
-                userid=self._orig_secret[opts.user_field],
+                username=self._orig_secret[opts.user_field],
                 newpassword=new_passwd
             )
 
