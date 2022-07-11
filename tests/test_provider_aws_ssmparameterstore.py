@@ -253,6 +253,18 @@ class TestProviderAWSSSMParameterStore(unittest.TestCase):
         r_result = SSMParameterProvider.validate_spec(speci_valid)
         self.assertEqual(r_result[0], True)
 
+    def test_validate_spec_missing_required_config(self):
+        speci_valid = {
+            'provider': 'ssmparameterstore',
+            'key': 'abc',
+            'config': {
+                'length': 123
+            }
+        }
+
+        r_result = SSMParameterProvider.validate_spec(speci_valid)
+        self.assertEqual(r_result[0], False)
+
     def test_redact_result(self):
         result = {
             'status': 'success',
