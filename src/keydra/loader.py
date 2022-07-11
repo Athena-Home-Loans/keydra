@@ -28,14 +28,16 @@ LOCAL_PROVIDERS = {
     'appsync': 'aws_appsync',
     'firehose': 'aws_kinesisfirehose',
     'iam': 'aws_iam',
-    'secretsmanager': 'aws_secretsmanager'
+    'secretsmanager': 'aws_secretsmanager',
+    'ssmparameterstore': 'aws_ssmparameterstore'
 }
 
 LOCAL_CLIENTS = {
     'appsync': 'aws.appsync',
     'firehose': 'aws.kinesisfirehose',
     'iam': 'aws.iam',
-    'secretsmanager': 'aws.secretsmanager'
+    'secretsmanager': 'aws.secretsmanager',
+    'ssmparameterstore': 'aws.ssmparameterstore'
 }
 
 LOGGER = km_logging.get_logger()
