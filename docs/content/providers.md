@@ -91,16 +91,41 @@ Uses client `AWS Kinesis Firehose`.
 
 ## AWS Secrets Manager
 
-*AWS SecretsManager* (declared as `secretsmanager`): currently can only
-`distribute` secrets. `rotate` is only supported in conjunction with `bypass: true`
-for retrieval of existing secrets for the purposes of distribution to respective
-destinations.
+*AWS SecretsManager* (declared as `secretsmanager`): can `distribute` and/or `rotate` secrets.
+
+If `rotate`ing, a `config` section must be provided, with either `bypass: true` (pretend to 
+rotate, but don't really - just fetch the current password from the param) or `rotate_attribute: key` (specify the key in the JSON secret which holds the actual password value to rotate).
+
+Optionally, the `config` section can specify one or more of the following to control how new passwords are generated.
+   - length: int (32)
+   - exclude_char: str ('')
+   - exclude_num: bool (False)
+   - exclude_punct: bool (False)
+   - exclude_upper: bool (False)
+   - exclude_lower: bool (False)
+   - include_space: bool (False)
+   - require_each_type: bool (True)
 
 `secretsmanager` is _greedy_ in other words, it will take all that is provided
 by the `secret` and stick it into AWS SecretsManager. So no 1-1 mapping or
 cherry picking fragments.
 
 Uses client `AWS Secrets Manager`.
+
+## AWS Systems Manager Parameter Store
+
+*AWS SSM Parameter Store* (declared as `ssmparameterstore`): can `distribute` and/or `rotate` secrets. It
+exclusively uses SecureStrings to protect secrets, and currently only supports encryption using the default
+AWS Managed Key for Parameter Store.
+
+If `rotate`ing, a `config` section must be provided, with either `bypass: true` (pretend to 
+rotate, but don't really - just fetch the current password from the param) or `rotate_attribute: key` (specify the key in the JSON secret which holds the actual password value to rotate)
+
+Optionally, the `config` section can specify how new passwords are generated.
+
+Like `secretsmanager`, `ssmparameterstore` is _greedy_, and the `config` section can optionally specify how new passwords are generated. See above Secrets Manager section for details.
+
+Uses client `AWS SSM Parameter Store`.
 
 ## Bitbucket
 
