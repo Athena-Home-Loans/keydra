@@ -49,7 +49,7 @@ class QualysClient(object):
         }
 
         userlist = self._user_list()
-        if type(userlist) is not OrderedDict:
+        if type(userlist) not in [dict, OrderedDict]:
             raise ConnectionException(
                 'Connection test of fetching the accounts user list failed! '
                 'Check the API user permissions. Received response: {}'.format(

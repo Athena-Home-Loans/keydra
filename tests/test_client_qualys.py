@@ -79,7 +79,7 @@ class TestQualysClient(unittest.TestCase):
         mk_req.return_value = resp
 
         qualys.QualysClient._user_list = MagicMock()
-        qualys.QualysClient._user_list.return_value = {}
+        qualys.QualysClient._user_list.return_value = []
 
         with self.assertRaises(qualys.ConnectionException):
             qualys.QualysClient(
