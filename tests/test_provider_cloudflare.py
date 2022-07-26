@@ -18,11 +18,6 @@ CF_SECRET_ALL = {
     'provider': 'cloudflare',
 }
 
-CF_SECRET_ALL = {
-    'key': 'all',
-    'provider': 'cloudflare',
-}
-
 
 class TestProviderCloudflare(unittest.TestCase):
     def test_distribute(self):
