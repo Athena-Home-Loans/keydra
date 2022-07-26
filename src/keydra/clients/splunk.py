@@ -90,17 +90,12 @@ class SplunkClient(object):
         except ValueError:
             return resp.text
 
-    def _delete(self, url: str, data: dict):
+    def _delete(self, url: str, data: dict) -> None:
         params = {'output_mode': 'json'}
 
         resp = requests.delete(url, headers=self._auth_headers, params=params, data=data)
 
         resp.raise_for_status()
-
-        try:
-            return resp.json()
-        except ValueError:
-            return resp.text
 
     def update_app_config(self, app, path, obj, data):
         '''
@@ -260,15 +255,10 @@ class SplunkClient(object):
         return matching_apps > 0
 
     def delete_token(self, username, token):
-        url = 'https://{}:{}/services/authorization/tokens/{}'.format(
-            self.host,
-            self.port,
-            username
+        self._delete(
+            url='https://{}:{}/services/authorization/tokens/{}'.format(self.host, self.port, username),
+            data={'id': token}
         )
-        postdata = {
-            'id': token
-        }
-        self._delete(url, postdata)
 
     def list_tokens_by_user(self, username):
         url = 'https://{}:{}/services/authorization/tokens'.format(
