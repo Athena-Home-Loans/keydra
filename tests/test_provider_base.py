@@ -57,7 +57,10 @@ class TestBaseProvider(unittest.TestCase):
         )
 
     def test_redact_result_no_override(self):
-        class Dummy(BaseProvider):
+        class ProviderWithDefaultRedactImplementation(BaseProvider):
+            def load_config(self, config):
+                pass
+
             def rotate(self, spec):
                 pass
 
@@ -66,10 +69,13 @@ class TestBaseProvider(unittest.TestCase):
 
         result = {'result': 'stuff'}
 
-        self.assertEqual(result, Dummy().redact_result(result))
+        self.assertEqual(result, ProviderWithDefaultRedactImplementation().redact_result(result))
 
     def test_redact_result_override(self):
-        class Dummy(BaseProvider):
+        class ProviderThatRedactsResult(BaseProvider):
+            def load_config(self, config):
+                pass
+
             def rotate(self, spec):
                 pass
 
@@ -83,7 +89,7 @@ class TestBaseProvider(unittest.TestCase):
                 return result
 
         result = {'result': 'stuff'}
-        r_result = Dummy().redact_result(result)
+        r_result = ProviderThatRedactsResult().redact_result(result)
 
         self.assertNotEqual(r_result['result'], 'stuff')
 
