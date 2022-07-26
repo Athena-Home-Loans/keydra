@@ -98,48 +98,48 @@ class TestBaseProvider(unittest.TestCase):
             def rotate(self, spec):
                 pass
 
-            def distribute(self, spec):
+            def distribute(self, secret, key):
                 pass
 
-        dummyA = DummyA()
+            def load_config(self, config):
+                pass
 
-        valid, _ = dummyA.validate_spec(
-            {
-                'provider': 'provider',
-                'key': 'key'
-            }
-        )
-
+        dummy_a = DummyA()
+        valid, _ = dummy_a.validate_spec({'provider': 'provider', 'key': 'key'})
         self.assertTrue(valid)
-
-        invalid, msg = dummyA.validate_spec({})
-
+        invalid, msg = dummy_a.validate_spec({})
         self.assertFalse(invalid)
 
     def test_validate_spec_override(self):
         class DummyA(BaseProvider):
+            def load_config(self, config):
+                pass
+
             def rotate(self, spec):
                 pass
 
-            def distribute(self, spec):
+            def distribute(self, secret, key):
                 pass
 
             @classmethod
             def validate_spec(cls, spec):
                 return True, 'It is alive'
 
-        dummyA = DummyA()
-
-        _, msg = dummyA.validate_spec(None)
-
+        dummy_a = DummyA()
+        _, msg = dummy_a.validate_spec(None)
         self.assertEqual(msg, 'It is alive')
 
     def test_pre_process_bypass(self):
         class DummyA(BaseProvider):
-            pass
+            def rotate(self, key):
+                pass
 
-        secret = {'a': 'b'}
+            def distribute(self, secret, key):
+                pass
 
-        resp = DummyA.pre_process_spec(secret, {})
+            def load_config(self, config):
+                pass
 
-        self.assertEqual(secret, resp)
+        spec = {'a': 'b'}
+        resp = DummyA.pre_process_spec(spec, {})
+        self.assertEqual(spec, resp)
