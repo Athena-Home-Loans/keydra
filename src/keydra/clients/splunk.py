@@ -66,35 +66,19 @@ class SplunkClient(object):
 
         self._instance = host.split('.')[0]
 
-    def _get(self, url: str, params: dict):
+    def _get(self, url: str, params: dict) -> dict:
         params['output_mode'] = 'json'
-
         resp = requests.get(url, headers=self._auth_headers, params=params)
-
         resp.raise_for_status()
+        return resp.json()
 
-        try:
-            return resp.json()
-        except ValueError:
-            return resp.text
-
-    def _post(self, url: str, data: dict):
-        params = {'output_mode': 'json'}
-
-        resp = requests.post(url, headers=self._auth_headers, params=params, data=data)
-
+    def _post(self, url: str, data: dict) -> dict:
+        resp = requests.post(url, headers=self._auth_headers, params={'output_mode': 'json'}, data=data)
         resp.raise_for_status()
-
-        try:
-            return resp.json()
-        except ValueError:
-            return resp.text
+        return resp.json()
 
     def _delete(self, url: str, data: dict) -> None:
-        params = {'output_mode': 'json'}
-
-        resp = requests.delete(url, headers=self._auth_headers, params=params, data=data)
-
+        resp = requests.delete(url, headers=self._auth_headers, params={'output_mode': 'json'}, data=data)
         resp.raise_for_status()
 
     def update_app_config(self, app, path, obj, data):
