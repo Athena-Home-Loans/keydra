@@ -71,7 +71,7 @@ class BaseProvider(ABC):
         )
 
     @classmethod
-    def pre_process_spec(cls, spec, context={}):
+    def pre_process_spec(cls, spec, context: dict):
         return spec
 
     @classmethod

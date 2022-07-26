@@ -134,6 +134,6 @@ class TestBaseProvider(unittest.TestCase):
 
         secret = {'a': 'b'}
 
-        resp = DummyA.pre_process_spec(secret)
+        resp = DummyA.pre_process_spec(secret, {})
 
         self.assertEqual(secret, resp)
