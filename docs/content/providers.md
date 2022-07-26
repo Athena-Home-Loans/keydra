@@ -322,7 +322,7 @@ The provider will take an AWS Secrets Manager secret, located at `keydra/qualys/
    {
       "platform": "US3",
       "username": "apiuser",
-      "password": "Ssh.Secret!",
+      "password": "Ssh.Secret!"
    }
 ```
 
