@@ -17,7 +17,7 @@ SPLUNK_CREDS = {
 }
 
 
-class body():
+class Body:
     def __init__(self, text):
         self.text = text
 
@@ -25,7 +25,7 @@ class body():
         return self.text
 
 
-class response():
+class Response:
     def __init__(self, status, body, reason='', headers=''):
         self.status = status
         self.reason = reason
@@ -83,11 +83,11 @@ class TestSplunkClient(unittest.TestCase):
                 verify=False
             )
         sp_client._service.apps.list.return_value = ['app']
-        httpResponse = response(
-            status=200, reason="does not exist", body=body('does not exist')
+        httpResponse = Response(
+            status=200, reason="does not exist", body=Body('does not exist')
         )
-        httpResponse2 = response(
-            status=800, reason="does not exist", body=body('does not exist')
+        httpResponse2 = Response(
+            status=800, reason="does not exist", body=Body('does not exist')
         )
 
         sp_client._service.post(
@@ -109,7 +109,7 @@ class TestSplunkClient(unittest.TestCase):
                 verify=False
             )
         sp_client._service.apps.list.return_value = ['app']
-        httpResponse = response(status=404, body=body("wooty tooty"))
+        httpResponse = Response(status=404, body=Body("wooty tooty"))
         sp_client._service.post.side_effect = HTTPError(httpResponse)
 
         with self.assertRaises(Exception):
@@ -127,7 +127,7 @@ class TestSplunkClient(unittest.TestCase):
         sp_client._service.apps.list.return_value = ['app']
         sp_client._service.get.return_value.status = 200
 
-        httpResponse = response(status=200, reason="no!", body=body(''))
+        httpResponse = Response(status=200, reason="no!", body=Body(''))
         sp_client._service.post().side_effect = HTTPError(httpResponse)
 
         sp_client._service.post.return_value = None
@@ -169,7 +169,7 @@ class TestSplunkClient(unittest.TestCase):
                 verify=False
             )
         sp_client._service.apps.list.return_value = ['app']
-        httpResponse = response(status=200, reason="no!", body=body(''))
+        httpResponse = Response(status=200, reason="no!", body=Body(''))
         sp_client._service.post().side_effect = HTTPError(httpResponse)
         sp_client._service.post.return_value.status = 200
 
@@ -235,7 +235,7 @@ class TestSplunkClient(unittest.TestCase):
             )
         sp_client._service.apps.list.return_value = ['app']
 
-        httpResponse = response(status=200, reason="no!", body=body(''))
+        httpResponse = Response(status=200, reason="no!", body=Body(''))
         sp_client._service.post().side_effect = HTTPError(httpResponse)
 
         with self.assertRaises(Exception):
@@ -252,8 +252,8 @@ class TestSplunkClient(unittest.TestCase):
         sp_client._app_exists = MagicMock()
         sp_client._app_exists.return_value = True
 
-        httpResponse = response(
-            status=200, reason="no!", body=body('does not exist')
+        httpResponse = Response(
+            status=200, reason="no!", body=Body('does not exist')
         )
         sp_client._service.post().side_effect = HTTPError(httpResponse)
 
@@ -446,8 +446,8 @@ class TestSplunkClient(unittest.TestCase):
             )
 
         sp_client._get_last_splunkcloud_deploytask = MagicMock()
-        httpResponse = response(
-            status=400, reason="go away", body=body('does not exist')
+        httpResponse = Response(
+            status=400, reason="go away", body=Body('does not exist')
         )
         sp_client._service.post.side_effect = HTTPError(response=httpResponse)
 
@@ -464,8 +464,8 @@ class TestSplunkClient(unittest.TestCase):
             )
 
         sp_client._get_last_splunkcloud_deploytask = MagicMock()
-        httpResponse = response(
-            status=400, reason="go away", body=body('does not exist')
+        httpResponse = Response(
+            status=400, reason="go away", body=Body('does not exist')
         )
         sp_client._service.delete.side_effect = HTTPError(response=httpResponse)
 
