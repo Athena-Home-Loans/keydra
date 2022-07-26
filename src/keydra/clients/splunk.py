@@ -66,11 +66,8 @@ class SplunkClient(object):
 
         self._instance = host.split('.')[0]
 
-    def _get(self, url, params={}):
+    def _get(self, url: str, params: dict):
         params['output_mode'] = 'json'
-
-        if not params:
-            params = self.params
 
         resp = requests.get(url, headers=self._auth_headers, params=params)
 
@@ -81,8 +78,8 @@ class SplunkClient(object):
         except ValueError:
             return resp.text
 
-    def _post(self, url, data, params={}):
-        params['output_mode'] = 'json'
+    def _post(self, url: str, data: dict):
+        params = {'output_mode': 'json'}
 
         resp = requests.post(url, headers=self._auth_headers, params=params, data=data)
 
@@ -93,8 +90,8 @@ class SplunkClient(object):
         except ValueError:
             return resp.text
 
-    def _delete(self, url, data, params={}):
-        params['output_mode'] = 'json'
+    def _delete(self, url: str, data: dict):
+        params = {'output_mode': 'json'}
 
         resp = requests.delete(url, headers=self._auth_headers, params=params, data=data)
 
