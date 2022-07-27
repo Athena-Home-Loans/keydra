@@ -66,44 +66,20 @@ class SplunkClient(object):
 
         self._instance = host.split('.')[0]
 
-    def _get(self, url, params={}):
+    def _get(self, url: str, params: dict) -> dict:
         params['output_mode'] = 'json'
-
-        if not params:
-            params = self.params
-
         resp = requests.get(url, headers=self._auth_headers, params=params)
-
         resp.raise_for_status()
+        return resp.json()
 
-        try:
-            return resp.json()
-        except ValueError:
-            return resp.text
-
-    def _post(self, url, data, params={}):
-        params['output_mode'] = 'json'
-
-        resp = requests.post(url, headers=self._auth_headers, params=params, data=data)
-
+    def _post(self, url: str, data: dict) -> dict:
+        resp = requests.post(url, headers=self._auth_headers, params={'output_mode': 'json'}, data=data)
         resp.raise_for_status()
+        return resp.json()
 
-        try:
-            return resp.json()
-        except ValueError:
-            return resp.text
-
-    def _delete(self, url, data, params={}):
-        params['output_mode'] = 'json'
-
-        resp = requests.delete(url, headers=self._auth_headers, params=params, data=data)
-
+    def _delete(self, url: str, data: dict) -> None:
+        resp = requests.delete(url, headers=self._auth_headers, params={'output_mode': 'json'}, data=data)
         resp.raise_for_status()
-
-        try:
-            return resp.json()
-        except ValueError:
-            return resp.text
 
     def update_app_config(self, app, path, obj, data):
         '''
@@ -263,15 +239,10 @@ class SplunkClient(object):
         return matching_apps > 0
 
     def delete_token(self, username, token):
-        url = 'https://{}:{}/services/authorization/tokens/{}'.format(
-            self.host,
-            self.port,
-            username
+        self._delete(
+            url='https://{}:{}/services/authorization/tokens/{}'.format(self.host, self.port, username),
+            data={'id': token}
         )
-        postdata = {
-            'id': token
-        }
-        self._delete(url, postdata)
 
     def list_tokens_by_user(self, username):
         url = 'https://{}:{}/services/authorization/tokens'.format(

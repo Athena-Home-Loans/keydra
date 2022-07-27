@@ -322,7 +322,7 @@ The provider will take an AWS Secrets Manager secret, located at `keydra/qualys/
    {
       "platform": "US3",
       "username": "apiuser",
-      "password": "Ssh.Secret!",
+      "password": "Ssh.Secret!"
    }
 ```
 
@@ -437,24 +437,24 @@ storage passwords.
 The destination app must already be installed on the Splunk instance, though the config entry / storage password
 will be created if it doesn’t already exist.
 
-| Key | Type          | Value                                                                                         |
-|-----|---------------|-----------------------------------------------------------------------------------------------|
-| key | String        | The object to distribute to. Ignored/optional if we're saving to a Splunk storage password.   |
-| provider            | String | Always “splunk” for this provider.
-| provider_secret_key | String | The credentials that should be used to authenticate to the Splunk API. In the code, this value will be prepended with `keydra/splunk/` to form the secret name in AWS Secrets Manager where the creds are stored.
-| source | Dict | Used to pass through values from the secret being distributed - format is `splunk field`: `secret key`. In the example below, a field of "secret_key" will be used in the Splunk post, containing the value of the "secret" key.
-| config | Dict | See below for details.
-| env | List | Which environments to run Keydra from. Should match the environment where the secret is held in Secrets Manager.
+| Key                 | Type   | Value                                                                                                                                                                                                                            |
+|---------------------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| key                 | String | The object to distribute to. Ignored/optional if we're saving to a Splunk storage password.                                                                                                                                      |
+| provider            | String | Always “splunk” for this provider.                                                                                                                                                                                               |
+| provider_secret_key | String | The credentials that should be used to authenticate to the Splunk API. In the code, this value will be prepended with `keydra/splunk/` to form the secret name in AWS Secrets Manager where the creds are stored.                |
+| source              | Dict   | Used to pass through values from the secret being distributed - format is `splunk field`: `secret key`. In the example below, a field of "secret_key" will be used in the Splunk post, containing the value of the "secret" key. |
+| config              | Dict   | See below for details.                                                                                                                                                                                                           |
+| env                 | List   | Which environments to run Keydra from. Should match the environment where the secret is held in Secrets Manager.                                                                                                                 |
 
 In the `config` section:
 
-| Key | Type          | Value                                                                                         |
-|-----|---------------|-----------------------------------------------------------------------------------------------|
-| host | String | The Splunk host to configure. Only one destination host can be specified, if you need to distribute to more Splunk hosts you will need another distribution entry.
-| app | String | Splunk App context to deploy to.
-| appconfig | Dict | Used to add any values needed by this Add-On. All appconfig KV pairs will be passed to the Splunk call as is.
-| path | String | Optional. Specifies the (case sensitive!) URL path to the configuration section to update. Omit this key to save to a splunk storage password instead.
-| realm | String | Optional. If storage passwords are being used, the realm to use in the password. Defaults to blank.
+| Key       | Type   | Value                                                                                                                                                              |
+|-----------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| host      | String | The Splunk host to configure. Only one destination host can be specified, if you need to distribute to more Splunk hosts you will need another distribution entry. |
+| app       | String | Splunk App context to deploy to.                                                                                                                                   |
+| appconfig | Dict   | Used to add any values needed by this Add-On. All appconfig KV pairs will be passed to the Splunk call as is.                                                      |
+| path      | String | Optional. Specifies the (case sensitive!) URL path to the configuration section to update. Omit this key to save to a splunk storage password instead.             |
+| realm     | String | Optional. If storage passwords are being used, the realm to use in the password. Defaults to blank.                                                                |
 
 An example, to rotate an IAM user and distribute it into the AWS app/TA of a Splunk instance:
 

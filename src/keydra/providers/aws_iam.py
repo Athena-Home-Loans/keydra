@@ -307,7 +307,7 @@ class Client(BaseProvider):
 
                     keys_by_id.pop(r_candidate['AccessKeyId'])
 
-            # Let's make the current key inactive so it is the last one to go
+            # Let's make the current key inactive, so it is the last one to go
             if len(keys_by_id) == 1:
                 r_candidate = list(keys_by_id.values())[0]
 

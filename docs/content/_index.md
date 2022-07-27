@@ -5,7 +5,7 @@ title: Keydra - Secrets Management for Humans!
 
 Next level Secrets Management, without the price tag!
 
-Keydra allows you to automatically rotate your secrets on a schedule you define. Since it's all automated, it's easy to rotate your service account and API keys much more frequently than you do today. Like, everyday!
+Keydra allows you to automatically rotate your secrets on a schedule you define. Since it's all automated, it's easy to rotate your service account and API keys much more frequently than you do today. Like, every day!
 
 This significanty decreases the period of time an attacker has to use compromised credentials, and lowers the risk for your organisation.
 

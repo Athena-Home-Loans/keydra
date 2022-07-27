@@ -135,7 +135,7 @@ class Client(BaseProvider):
             return False, str(e)
 
     @ classmethod
-    def pre_process_spec(self, spec, context={}):
+    def pre_process_spec(self, spec, context: dict):
         specs = []
 
         target = copy.deepcopy(spec)
