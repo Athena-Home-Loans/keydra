@@ -19,6 +19,8 @@ main:
       ref: "/examples/iamsplunk"
     - name: Salesforce Service Account
       ref: "/examples/salesforce"
+    - name: Salesforce Marketing Cloud Service Account
+      ref: "/examples/salesforcemarketingcloud"
     - name: Github Actions AWS Deployment Credentials
       ref: "/examples/githubactionsawsdeployment"
     - name: Gitlab AWS Deployment Credentials
