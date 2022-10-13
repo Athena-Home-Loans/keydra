@@ -385,6 +385,68 @@ The field names can be customised via a `config` section in the spec, e.g.:
 
 Uses client `Salesforce`.
 
+## Salesforce Marketing Cloud
+
+*Salesforce Marketing Cloud* (declared as `salesforce_marketing_cloud`): currently can only `rotate` secrets.
+Please note that users need to be manually created in salesforce
+before added here, and be setup with the following roles:
+* Administration
+   * Users - Update (Allow)
+* Email
+   * Admin
+      * API Access
+         * WebService API (Allow)
+         * XML API (Allow)
+
+Sample secret spec:
+
+```yaml
+    salesforce_marketing_cloud_user:
+        key: sfuser-dev
+        description: Secret for break glass access to Salesforce Dev
+        custodians: sf_team
+        provider: salesforce_marketing_cloud
+        rotate: nightly
+        distribute:
+        -
+            key: keydra/salesforce/sfmc-user
+            provider: secretsmanager
+            source: secret
+            envs:
+                - dev
+```
+
+The Secrets Manager entry format is as follows:
+
+```yaml
+   {
+   "provider": "salesforce_marketing_cloud",
+   "SF_USERNAME": "my_sf_user",
+   "SF_PASSWORD": "my_sf_password",
+   "mid": "sfmc_instance_mid",
+   "businessUnit": "sfmc_instance_bu_id",
+   "subdomain": "sfmc_subdomain",
+   }
+```
+
+The field names can be customised via a `config` section in the spec, e.g.:
+
+```yaml
+   key: salesforce_marketing_cloud sample
+   description: Salesforce Marketing Cloud Example
+   provider: salesforce_marketing_cloud
+   config:
+      user_field: SF_USERNAME,
+      password_field: SF_PASSWORD,
+      subdomain_field: SF_SUBDOMAIN,
+      businessUnit_field: SF_BUSINESUNIT,
+      mid_field: SF_MID
+      
+   # ...
+```
+
+Uses client `Salesforce Marketing Cloud`.
+
 ## Splunk
 
 Provides password (and token!) rotation and distribution support for Splunk. Rotation allows for Splunk account
