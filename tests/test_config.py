@@ -344,52 +344,73 @@ class TestConfig(unittest.TestCase):
 
             assert len(filtered_secrets) == len(all_secrets)
 
-    def test__filter_nightly_with_batch_size(self):
-        all_secrets = {}
-        envs = {'dev': {'secrets': []}}
+    def test__filter_nightly_with_invalid_batch_input(self):
+        # test parameters are number of batches, batch number
+        batch_paramters = [
+            (0, 0),  # zero batches
+            (2, 2),  # 2 batches, trying to fetch batch number 2, batch number starts at 0
+            (2, 4),  # 2 batches, trying to fetch a batch number that is out pf range
+            (1, -1),  # negative batch number
+            (-1, 1),  # negative number of batches
+            (-1, -1),  # double negative
+            ("str", 0),  # string number of batches
+            (1, "str"),  # string batch number
+            ("str", "str2"),  # double string
+        ]
+        for (number_of_batches, batch_number) in batch_paramters:
+            with self.subTest(f'testing failure for number of batches {number_of_batches}, batch number {batch_number}'):
+                all_secrets = {}
+                envs = {'dev': {'secrets': []}}
 
-        for i in range(1, 5):
-            secret_id = 'secret' + str(i)
-            all_secrets[secret_id] = {
-                'key': 'km_secret',
-                'provider': 'IAM',
-                'rotate': 'nightly'
-            }
-            all_secrets[secret_id][secret_id] = 'for assertion'
-            envs['dev']['secrets'].append(str(secret_id))
+                for i in range(1, 10):
+                    secret_id = 'secret' + str(i)
+                    all_secrets[secret_id] = {
+                        'key': secret_id,
+                        'provider': 'IAM',
+                        'rotate': 'nightly'
+                    }
+                    all_secrets[secret_id][secret_id] = 'for assertion'
+                    envs['dev']['secrets'].append(str(secret_id))
 
-        with patch.object(
-            self.client, '_guess_current_environment'
-        ) as mk_gce:
-            mk_gce.return_value = 'dev'
-            filtered_secrets = self.client._filter(
-                envs, all_secrets, rotate='nightly', batch_size=3)
+                with patch.object(
+                        self.client, '_guess_current_environment'
+                ) as mk_gce:
+                    mk_gce.return_value = 'dev'
+                    with self.assertRaises(Exception) as context:
+                        filtered_secrets = self.client._filter(
+                            envs, all_secrets, rotate='nightly', batch_number=batch_number, number_of_batches=number_of_batches)
 
-            assert len(filtered_secrets) == 3
-            assert 'secret1' in filtered_secrets[0]
-            assert 'secret2' in filtered_secrets[1]
-            assert 'secret3' in filtered_secrets[2]
+    def test_batch_runs(self):
+        # test parameters are number of secrets, number of batches, batch number, expected number of filtered secrets, secret in first element
+        batch_paramters = [
+            (5, 1, 0, 5, 'secret1'),  # single batch
+            (4, 2, 0, 2, 'secret1'),  # 2 batches, even number of secrets
+            (5, 2, 1, 2, 'secret4'),  # 2 batches, odd number of secrets
+            (10, 3, 1, 4, 'secret5'),  # 3 batches, get middle batch
+            (10, 3, 0, 4, 'secret1'),  # 3 batches, get first batch
+            (10, 3, 2, 2, 'secret9'),  # 3 batches, get last batch
+        ]
+        for (number_of_secrets, number_of_batches, batch_number, filtered_secrets_len, expected_first_secret) in batch_paramters:
+            with self.subTest(f'testing for {number_of_secrets} secrets, number of batches {number_of_batches}, batch number {batch_number}'):
+                all_secrets = {}
+                envs = {'dev': {'secrets': []}}
 
-    def test__filter_nightly_secondary_with_batch_size(self):
-        all_secrets = {}
-        envs = {'dev': {'secrets': []}}
+                for i in range(1, number_of_secrets+1):
+                    secret_id = 'secret' + str(i)
+                    all_secrets[secret_id] = {
+                        'key': secret_id,
+                        'provider': 'IAM',
+                        'rotate': 'nightly'
+                    }
+                    all_secrets[secret_id][secret_id] = 'for assertion'
+                    envs['dev']['secrets'].append(str(secret_id))
 
-        for i in range(1, 5):
-            secret_id = 'secret' + str(i)
-            all_secrets[secret_id] = {
-                'key': secret_id,
-                'provider': 'IAM',
-                'rotate': 'nightly'
-            }
-            all_secrets[secret_id][secret_id] = 'for assertion'
-            envs['dev']['secrets'].append(str(secret_id))
-
-        with patch.object(
-            self.client, '_guess_current_environment'
-        ) as mk_gce:
-            mk_gce.return_value = 'dev'
-            filtered_secrets = self.client._filter(
-                envs, all_secrets, rotate='nightly-secondary', batch_size=3)
-
-            assert len(filtered_secrets) == 1
-            assert 'secret4' in filtered_secrets[0]
+                with patch.object(
+                        self.client, '_guess_current_environment'
+                ) as mk_gce:
+                    mk_gce.return_value = 'dev'
+                    filtered_secrets = self.client._filter(
+                        envs, all_secrets, rotate='nightly', batch_number=batch_number, number_of_batches=number_of_batches)
+                    # should be a 3 - 2 split so batch number 0 should have 3 and number 1 should have 2
+                    assert len(filtered_secrets) == filtered_secrets_len
+                    assert expected_first_secret in filtered_secrets[0]

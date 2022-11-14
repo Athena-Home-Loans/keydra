@@ -17,7 +17,7 @@ class Keydra(object):
         self._cfg = cfg
         self._cw = cw
 
-    def rotate_and_distribute(self, run_for_secrets, rotate):
+    def rotate_and_distribute(self, run_for_secrets, rotate, batch_number=None, number_of_batches=None):
         '''
         AWS Lambda handler
 
@@ -34,7 +34,7 @@ class Keydra(object):
 
         try:
             secrets = self._cfg.load_secrets(
-                secrets=run_for_secrets, rotate=rotate)
+                secrets=run_for_secrets, rotate=rotate, batch_number=batch_number, number_of_batches=number_of_batches)
         except ConfigException as e:
             LOGGER.error(e)
             return [self._fail(e)]
