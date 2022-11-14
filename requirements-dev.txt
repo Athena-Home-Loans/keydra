@@ -19,4 +19,3 @@ s3transfer==0.4.2
 six==1.14.0
 Sphinx==3.5.4
 sphinx-book-theme==0.1.0
-
