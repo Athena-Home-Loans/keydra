@@ -8,8 +8,6 @@ from keydra.exceptions import InvalidSecretProvider
 
 from keydra.logging import get_logger
 
-
-
 KEYDRA_CONFIG_REPO = 'keydra-config'
 
 REMOTE_CONFIG_ENVS = 'src/main/dist/environments.yaml'
@@ -118,7 +116,7 @@ class KeydraConfig(object):
                               .format(account_id))
 
     def _filter(self, environments, specs, rotate='adhoc',
-                requested_secrets=None, number_of_batches:int=None, batch_number:int=None):
+                requested_secrets=None, number_of_batches: int = None, batch_number: int = None):
         filtered_secrets = []
         current_env_name = self._guess_current_environment(environments)
         current_env = environments[current_env_name]
@@ -132,18 +130,20 @@ class KeydraConfig(object):
 
         if number_of_batches is not None and batch_number is not None:
             if not isinstance(number_of_batches, int) or not isinstance(batch_number, int):
-                raise Exception(f"batch number {batch_number} or number of batches {number_of_batches} is not an integer")
+                raise Exception(
+                    f"batch number {batch_number} or number of batches {number_of_batches} is not an integer")
 
             if batch_number >= number_of_batches or number_of_batches <= 0 or batch_number < 0:
                 raise Exception(f"batch number {batch_number} and number of batches {batch_number} is not valid")
-            batch_size = math.ceil(len(candidate_secrets)/number_of_batches)
-            starting_index = batch_size * batch_number # assumption that batch number starts from zero
+            batch_size = math.ceil(len(candidate_secrets) / number_of_batches)
+            starting_index = batch_size * batch_number  # assumption that batch number starts from zero
             if rotate == 'nightly':
                 # Only rotate the first batch of secrets
                 LOGGER.info(
-                    'Batching batch number %s, batch size of %s, number of batches %s, secrets for nightly rotation', batch_number, batch_size, number_of_batches)
+                    'Batching batch number %s, batch size of %s, number of batches %s, secrets for nightly rotation',
+                    batch_number, batch_size, number_of_batches)
                 candidate_secrets = dict((k, v) for k, v in list(
-                    candidate_secrets.items())[starting_index: starting_index+batch_size])
+                    candidate_secrets.items())[starting_index: starting_index + batch_size])
 
         for sid, secret in candidate_secrets.items():
             if requested_secrets and sid not in requested_secrets:
