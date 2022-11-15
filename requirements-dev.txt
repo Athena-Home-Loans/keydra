@@ -1,9 +1,9 @@
 Authlib==0.14.3
 boto3==1.17.85
 botocore==1.20.85
-cffi==1.14.0
+cffi==1.15.1
 coverage==5.0.4
-cryptography==3.3.2
+cryptography==38.0.3
 decorator==4.4.2
 docutils==0.16.0
 entrypoints==0.3
