@@ -138,7 +138,7 @@ class KeydraConfig(object):
             batch_size = math.ceil(len(candidate_secrets) / number_of_batches)
             starting_index = batch_size * batch_number  # assumption that batch number starts from zero
             LOGGER.info(
-                'Batching batch number %s, batch size of %s, number of batches %s, secrets for nightly rotation',
+                'Batching batch number %s, batch size of %s, number of batches %s, secrets for rotation',
                 batch_number, batch_size, number_of_batches)
             candidate_secrets = dict((k, v) for k, v in list(
                 candidate_secrets.items())[starting_index: starting_index + batch_size])
