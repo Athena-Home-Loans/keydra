@@ -272,15 +272,6 @@ class TestConfig(unittest.TestCase):
         all_secrets = {}
         envs = {"dev": {"secrets": []}}
 
-        for i in range(1, 11):
-            secret_id = "secret" + str(i)
-            all_secrets[secret_id] = {
-                "key": "km_secret",
-                "provider": "IAM",
-                "rotate": "nightly",
-            }
-            envs["dev"]["secrets"].append(str(secret_id))
-
         with patch.object(self.client, "_guess_current_environment") as mk_gce:
             mk_gce.return_value = "dev"
 
