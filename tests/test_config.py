@@ -247,9 +247,7 @@ class TestConfig(unittest.TestCase):
             self.assertEqual(filtered[0]["distribute"][0]["provider"], "secretsmanager")
 
             mk_gce.return_value = "dev"
-            filtered = self.client._filter(
-                ENVS, SECRETS_S, rotate="adhoc", requested_secrets=["splunk"]
-            )
+            filtered = self.client._filter(ENVS, SECRETS_S, rotate="adhoc", requested_secrets=["splunk"])
             self.assertEqual(len(filtered), 1)
             self.assertEqual(filtered[0]["key"], "splunk")
             self.assertEqual(filtered[0]["distribute"][0]["provider"], "secretsmanager")
@@ -292,11 +290,11 @@ class TestConfig(unittest.TestCase):
 
     def test_filter_nightly_with_invalid_batch_input(self):
         # test parameters are number of batches, batch number
-        invalid_integer_exception_regex = "batch number -?\d+ of number of batches -?\d+ are not valid numbers"
-        invalid_type_exception_regex = "batch number .* or number of batches .* is not an integer"
+        invalid_integer_exception_regex = r"batch number -?\d+ of number of batches -?\d+ are not valid numbers"
+        invalid_type_exception_regex = r"batch number .* or number of batches .* is not an integer"
         batch_parameters = [
             (0, 0, invalid_integer_exception_regex),  # zero batches
-            (2, 2, invalid_integer_exception_regex),  # 2 batches, trying to fetch batch number 2, batch number starts at 0
+            (2, 2, invalid_integer_exception_regex),  # 2 batches, trying to fetch batch number 2, only 0,1 are valid
             (2, 4, invalid_integer_exception_regex),  # 2 batches, trying to fetch a batch number that is out pf range
             (1, -1, invalid_integer_exception_regex),  # negative batch number
             (-1, 1, invalid_integer_exception_regex),  # negative number of batches
