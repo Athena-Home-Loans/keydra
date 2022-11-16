@@ -128,7 +128,7 @@ class KeydraConfig(object):
 
         candidate_secrets = specs
 
-        if number_of_batches is not None and batch_number is not None and rotate == 'nightly':
+        if number_of_batches is not None and batch_number is not None:
             if not isinstance(number_of_batches, int) or not isinstance(batch_number, int):
                 raise Exception(
                     f"batch number {batch_number} or number of batches {number_of_batches} is not an integer")
