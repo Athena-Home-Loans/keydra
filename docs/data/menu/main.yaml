@@ -25,6 +25,8 @@ main:
       ref: "/examples/githubactionsawsdeployment"
     - name: Gitlab AWS Deployment Credentials
       ref: "/examples/gitlabawsdeployment"
+    - name: Batching Keydra Runs to avoid lambda timeout
+      ref: "/examples/batchingruns"
   - name: Developing
     ref: "/develop"
     sub:

@@ -1,4 +1,5 @@
 import copy
+import math
 
 from keydra import loader
 
@@ -6,7 +7,6 @@ from keydra.exceptions import ConfigException
 from keydra.exceptions import InvalidSecretProvider
 
 from keydra.logging import get_logger
-
 
 KEYDRA_CONFIG_REPO = 'keydra-config'
 
@@ -116,7 +116,7 @@ class KeydraConfig(object):
                               .format(account_id))
 
     def _filter(self, environments, specs, rotate='adhoc',
-                requested_secrets=None, batch_size=None):
+                requested_secrets=None, number_of_batches: int = None, batch_number: int = None):
         filtered_secrets = []
         current_env_name = self._guess_current_environment(environments)
         current_env = environments[current_env_name]
@@ -128,21 +128,20 @@ class KeydraConfig(object):
 
         candidate_secrets = specs
 
-        if batch_size:
-            if rotate == 'nightly':
-                # Only rotate the first batch of secrets
-                LOGGER.info(
-                    'Batching the first {} secrets for nightly rotation'.format(batch_size))
-                candidate_secrets = dict((k, v) for k, v in list(
-                    candidate_secrets.items())[:batch_size])
-            elif rotate == 'nightly-secondary':
-                LOGGER.info('Skipping the first {} secrets and taking '
-                            'the rest for secondary nightly rotation'.
-                            format(batch_size))
-                # Rotate the second batch of secrets, skipping the first batch
-                candidate_secrets = dict((k, v) for k, v in list(
-                    candidate_secrets.items())[batch_size:])
-                rotate = 'nightly'  # Pick up secrets marked for nightly rotation
+        if number_of_batches is not None and batch_number is not None:
+            if not isinstance(number_of_batches, int) or not isinstance(batch_number, int):
+                raise Exception(
+                    f"batch number {batch_number} or number of batches {number_of_batches} is not an integer")
+            if batch_number >= number_of_batches or number_of_batches <= 0 or batch_number < 0:
+                raise Exception(
+                    f"batch number {batch_number} of number of batches {batch_number} are not valid numbers")
+            batch_size = math.ceil(len(candidate_secrets) / number_of_batches)
+            starting_index = batch_size * batch_number  # assumption that batch number starts from zero
+            LOGGER.info(
+                'Batching batch number %s, batch size of %s, number of batches %s, secrets for rotation',
+                batch_number, batch_size, number_of_batches)
+            candidate_secrets = dict((k, v) for k, v in list(
+                candidate_secrets.items())[starting_index: starting_index + batch_size])
 
         for sid, secret in candidate_secrets.items():
             if requested_secrets and sid not in requested_secrets:
@@ -213,7 +212,7 @@ class KeydraConfig(object):
 
         return filtered_secrets
 
-    def load_secrets(self, rotate='nightly', secrets=None):
+    def load_secrets(self, rotate='nightly', secrets=None, batch_number=None, number_of_batches=None):
         LOGGER.info(
             'Attempting to load secrets ({}) from {}'.format(
                 ', '.join(secrets) if secrets else 'ALL',
@@ -230,10 +229,7 @@ class KeydraConfig(object):
 
         return self._filter(
             *config,
-            batch_size=50
-            if self._config.get('batchnightlysecrets', False)
-            else None,
-            rotate=rotate, requested_secrets=secrets)
+            rotate=rotate, requested_secrets=secrets, batch_number=batch_number, number_of_batches=number_of_batches)
 
     def get_accountusername(self):
         '''

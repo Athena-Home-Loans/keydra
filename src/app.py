@@ -125,6 +125,8 @@ def lambda_handler(event, context):
     trigger = event.get('trigger', 'nightly')
     run_for_secrets = event.get('secrets', None)
     debug_mode = event.get('debug', False)
+    batch_number = event.get('batch_number', None)
+    number_of_batches = event.get('number_of_batches', None)
 
     if debug_mode:
         LOGGER.setLevel(logging.DEBUG)
@@ -139,7 +141,7 @@ def lambda_handler(event, context):
     )
 
     resp = Keydra(_load_keydra_config(), CW).rotate_and_distribute(
-        run_for_secrets=run_for_secrets, rotate=trigger)
+        run_for_secrets=run_for_secrets, rotate=trigger, batch_number=batch_number, number_of_batches=number_of_batches)
 
     LOGGER.info(
         {

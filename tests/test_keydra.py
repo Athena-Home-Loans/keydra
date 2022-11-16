@@ -175,7 +175,7 @@ class TestKeydra(unittest.TestCase):
         self.assertEqual(result[0]['rotate_secret']['status'], 'success')
         self.assertEqual(result[0]['distribute_secret']['status'], 'success')
         self._cfg.load_secrets.assert_called_once_with(
-            secrets=CONFIG, rotate='nightly')
+            secrets=CONFIG, rotate='nightly', batch_number=None, number_of_batches=None)
 
     def test__distribute_secret_failure(self):
         result = self._kdra._distribute_secret({
