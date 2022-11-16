@@ -220,9 +220,7 @@ class TestConfig(unittest.TestCase):
             self.assertEqual(len(filtered[0]["distribute"]), 4)
 
             mk_gce.return_value = "dev"
-            filtered = self.client._filter(
-                ENVS, SECRETS, requested_secrets=[], rotate="nightly"
-            )
+            filtered = self.client._filter(ENVS, SECRETS, requested_secrets=[], rotate="nightly")
             self.assertEqual(len(filtered), 2)
             self.assertEqual(filtered[0]["key"], "km_managed_api_user")
             self.assertEqual(len(filtered[0]["distribute"]), 4)
@@ -292,23 +290,24 @@ class TestConfig(unittest.TestCase):
 
             assert len(filtered_secrets) == len(all_secrets)
 
-    def test__filter_nightly_with_invalid_batch_input(self):
+    def test_filter_nightly_with_invalid_batch_input(self):
         # test parameters are number of batches, batch number
-        batch_paramters = [
-            (0, 0),  # zero batches
-            (
-                2,
-                2,
-            ),  # 2 batches, trying to fetch batch number 2, batch number starts at 0
-            (2, 4),  # 2 batches, trying to fetch a batch number that is out pf range
-            (1, -1),  # negative batch number
-            (-1, 1),  # negative number of batches
-            (-1, -1),  # double negative
-            ("str", 0),  # string number of batches
-            (1, "str"),  # string batch number
-            ("str", "str2"),  # double string
+        invalid_integer_exception_regex = "batch number -?\d+ of number of batches -?\d+ are not valid numbers"
+        invalid_type_exception_regex = "batch number .* or number of batches .* is not an integer"
+        batch_parameters = [
+            (0, 0, invalid_integer_exception_regex),  # zero batches
+            (2, 2, invalid_integer_exception_regex),  # 2 batches, trying to fetch batch number 2, batch number starts at 0
+            (2, 4, invalid_integer_exception_regex),  # 2 batches, trying to fetch a batch number that is out pf range
+            (1, -1, invalid_integer_exception_regex),  # negative batch number
+            (-1, 1, invalid_integer_exception_regex),  # negative number of batches
+            (-1, -1, invalid_integer_exception_regex),  # double negative
+            ("str", 0, invalid_type_exception_regex),  # string number of batches
+            (1, "str", invalid_type_exception_regex),  # string batch number
+            ("str", "str2", invalid_type_exception_regex),  # double string
+            (0.234, 0, invalid_type_exception_regex),  # float number of batches
+            (3, 0.523, invalid_type_exception_regex),  # float batch number
         ]
-        for (number_of_batches, batch_number) in batch_paramters:
+        for (number_of_batches, batch_number, exception_regex) in batch_parameters:
             with self.subTest(
                 f"testing failure for number of batches {number_of_batches}, batch number {batch_number}"
             ):
@@ -322,12 +321,10 @@ class TestConfig(unittest.TestCase):
                         "provider": "IAM",
                         "rotate": "nightly",
                     }
-                    all_secrets[secret_id][secret_id] = "for assertion"
-                    envs["dev"]["secrets"].append(str(secret_id))
 
                 with patch.object(self.client, "_guess_current_environment") as mk_gce:
                     mk_gce.return_value = "dev"
-                    with self.assertRaises(Exception):
+                    with self.assertRaisesRegex(Exception, expected_regex=exception_regex):
                         self.client._filter(
                             envs,
                             all_secrets,
@@ -336,7 +333,7 @@ class TestConfig(unittest.TestCase):
                             number_of_batches=number_of_batches,
                         )
 
-    def test_batch_runs(self):
+    def test_filter_batch_runs(self):
         """
         test parameters in list
         number of secrets,
@@ -389,3 +386,29 @@ class TestConfig(unittest.TestCase):
                     # should be a 3 - 2 split so batch number 0 should have 3 and number 1 should have 2
                     assert len(filtered_secrets) == filtered_secrets_len
                     assert expected_first_secret in filtered_secrets[0]
+
+    def test_filter_no_secrets_run(self):
+        all_secrets = {}
+        envs = {"dev": {"secrets": []}}
+
+        with patch.object(self.client, "_guess_current_environment") as mk_gce:
+            mk_gce.return_value = "dev"
+            filtered_secrets = self.client._filter(envs, all_secrets, rotate="nightly")
+            assert len(filtered_secrets) == 0
+
+    def test_filter_no_secrets_batch_run(self):
+        number_of_batches = 2
+        batch_number = 0
+        all_secrets = {}
+        envs = {"dev": {"secrets": []}}
+
+        with patch.object(self.client, "_guess_current_environment") as mk_gce:
+            mk_gce.return_value = "dev"
+            filtered_secrets = self.client._filter(
+                envs,
+                all_secrets,
+                rotate="nightly",
+                batch_number=batch_number,
+                number_of_batches=number_of_batches,
+            )
+            assert len(filtered_secrets) == 0
