@@ -1,6 +1,6 @@
 ---
 title: "Batching Keydra Runs to avoid lambda timeout"
-date: 2022-11-16T14:03:08+11:00
+date: 2022-11-16T12:03:08+11:00
 draft: false
 ---
 
@@ -11,10 +11,15 @@ the batching option would be available to split the run into batches.
 
 The example below splits the scheduled run into 2 batches 
 and each schedule will run one half of the batch depending on which `batch_number` was given in the input.
-The batch number starts at 0 up to the `number_of_batches` - 1.
+
+`number_of_batches` represents the amount of groups the Keydra secrets will be split into
+
+`batch_number` represents the which group is run. `batch_number` starts at 0 up to `number_of_batches` - 1.
 
 I.e. If `number_of_batches: 2`, `batch_number: 0` will run the first half of the secrets 
 and `batch_number: 1` will run the second half
+
+
 
 ```yaml
 Resources:
