@@ -21,7 +21,7 @@ Resources:
       Description: Keydra - safe and lightweight management of secrets
       CodeUri: src/
       Handler: app.lambda_handler
-      Runtime: python3.7
+      Runtime: python3.9
       MemorySize: 256
       Role: !Sub "<IAM Role Arn>"
       Environment:
