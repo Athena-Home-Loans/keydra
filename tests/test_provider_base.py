@@ -69,7 +69,7 @@ class TestBaseProvider(unittest.TestCase):
 
         result = {'result': 'stuff'}
 
-        self.assertEqual(result, ProviderWithDefaultRedactImplementation().redact_result(result))
+        self.assertEqual(result, ProviderWithDefaultRedactImplementation().redact_result(result, {}))
 
     def test_redact_result_override(self):
         class ProviderThatRedactsResult(BaseProvider):
@@ -83,15 +83,15 @@ class TestBaseProvider(unittest.TestCase):
                 pass
 
             @classmethod
-            def redact_result(cls, result):
+            def redact_result(cls, result, spec):
                 result['result'] = '***'
 
                 return result
 
         result = {'result': 'stuff'}
-        r_result = ProviderThatRedactsResult().redact_result(result)
+        r_result = ProviderThatRedactsResult().redact_result(result, {})
 
-        self.assertNotEqual(r_result['result'], 'stuff')
+        self.assertEqual(r_result['result'], '***')
 
     def test_validate_spec_base(self):
         class DummyA(BaseProvider):

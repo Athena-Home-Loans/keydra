@@ -132,14 +132,6 @@ class Client(BaseProvider):
         return True, 'It is valid!'
 
     @classmethod
-    def redact_result(cls, result, spec):
+    def safe_to_log_keys(cls, spec) -> [str]:
         opts = Client.Options(**spec.get('config', {}))
-
-        if 'value' in result:
-            for field in (
-                opts.password_field, opts.businessUnit_field, opts.mid_field, opts.subdomain_field
-            ):
-                if field in result['value']:
-                    result['value'][field] = '***'
-
-        return result
+        return ['provider', opts.user_field]

@@ -145,8 +145,5 @@ class Client(BaseProvider):
         return True, 'It is valid!'
 
     @classmethod
-    def redact_result(cls, result, spec=None):
-        if 'value' in result and PW_FIELD in result['value']:
-            result['value'][PW_FIELD] = '***'
-
-        return result
+    def safe_to_log_keys(cls, spec) -> [str]:
+        return [USER_FIELD, SPLUNK_USER_FIELD, 'provider', 'key']

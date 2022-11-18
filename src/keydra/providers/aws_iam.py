@@ -333,11 +333,8 @@ class Client(BaseProvider):
         raise DistributionException('IAM does not support distribution')
 
     @classmethod
-    def redact_result(cls, result, spec=None):
-        if 'value' in result and PW_FIELD in result['value']:
-            result['value'][PW_FIELD] = '***'
-
-        return result
+    def safe_to_log_keys(cls, spec) -> [str]:
+        return ['provider', 'key']
 
     @classmethod
     def validate_spec(cls, spec):

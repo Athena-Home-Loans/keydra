@@ -97,15 +97,16 @@ class TestProviderQualys(unittest.TestCase):
             'action': 'rotate_secret',
             'value': {
                 'provider': 'qualys',
-                'key': 'KEY_ID',
+                'username': 'SOME_USERNAME',
                 'password': 'THIS_IS_SECRET'
             }
         }
 
-        r_result = qualys.Client.redact_result(result)
-        r_value = r_result['value']['password']
+        r_result = qualys.Client.redact_result(result, {})
 
-        self.assertNotEqual(r_value, 'THIS_IS_SECRET')
+        self.assertEqual(r_result['value']['provider'], 'qualys')
+        self.assertEqual(r_result['value']['username'], 'SOME_USERNAME')
+        self.assertEqual(r_result['value']['password'], '***')
 
     def test__redact_result_no_secret(self):
         result = {
@@ -113,7 +114,7 @@ class TestProviderQualys(unittest.TestCase):
             'action': 'rotate_secret'
         }
 
-        r_result = qualys.Client.redact_result(result)
+        r_result = qualys.Client.redact_result(result, {})
 
         self.assertEqual(r_result, result)
 

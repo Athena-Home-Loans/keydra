@@ -29,10 +29,11 @@ class TestProviderAWSAppSync(unittest.TestCase):
             }
         }
 
-        r_result = aws_appsync.Client.redact_result(result)
-        r_value = r_result['value']['secret']
+        r_result = aws_appsync.Client.redact_result(result, {})
 
-        self.assertNotEqual(r_value, 'THIS_IS_SECRET')
+        self.assertEqual(r_result['value']['provider'], 'appsync')
+        self.assertEqual(r_result['value']['key'], 'KEY_ID')
+        self.assertEqual(r_result['value']['secret'], '***')
 
     def test_validate_spec_valid(self):
         speci_valid = {

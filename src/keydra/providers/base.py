@@ -91,7 +91,24 @@ class BaseProvider(ABC):
         return True, 'All good!'
 
     @classmethod
-    def redact_result(self, result):
+    def safe_to_log_keys(cls, spec) -> [str]:
+        """
+        Extension point, override to define which keys within the result are safe to be logged.
+        Examples include "username", "endpoint", etc.
+        """
+        return []
+
+    @classmethod
+    def redact_result(cls, result, spec):
+        safe_keys = [key.lower() for key in cls.safe_to_log_keys(spec)]
+
+        # If we got a result
+        if 'value' in result:
+            for key in list(result['value'].keys()):
+                # redact all values except for the approved ones
+                if key.lower() not in safe_keys:
+                    result['value'][key] = '***'
+
         return result
 
     @classmethod

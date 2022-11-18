@@ -178,12 +178,14 @@ class TestProviderSalesforce(unittest.TestCase):
             }
         }
 
-        r_result = salesforce_marketing_cloud.Client.redact_result(result, SFMC_CREDS)
+        r_result = salesforce_marketing_cloud.Client.redact_result(result, SFMC_CFG)
 
-        self.assertNotEqual(r_result['value']['secret'], 'THIS_IS_SECRET')
-        self.assertNotEqual(r_result['value']['subdomain'], 'this is also secret')
-        self.assertNotEqual(r_result['value']['mid'], 'this is also secret')
-        self.assertNotEqual(r_result['value']['businessUnit'], 'this is also secret')
+        self.assertEqual(r_result['value']['provider'], 'salesforce_marketing_cloud')
+        self.assertEqual(r_result['value']['key'], 'KEY_ID')
+        self.assertEqual(r_result['value']['secret'], '***')
+        self.assertEqual(r_result['value']['subdomain'], '***')
+        self.assertEqual(r_result['value']['mid'], '***')
+        self.assertEqual(r_result['value']['businessUnit'], '***')
 
     def test__redact_result_overriden_fields(self):
         result = {
