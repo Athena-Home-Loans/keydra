@@ -7,7 +7,7 @@ from keydra.providers.base import BaseProvider
 from keydra.providers.base import exponential_backoff_retry
 
 
-@exponential_backoff_retry(1, delay=1)
+@exponential_backoff_retry(1, delay=0.1, max_random=0.01)
 def _failing_function():
     raise Exception('Boom')
 
@@ -18,11 +18,10 @@ def _passing_function():
 
 
 class Dummy(object):
-    @exponential_backoff_retry(1, delay=1)
+    @exponential_backoff_retry(1, delay=0.1, max_random=0.01)
     def fail(self):
         raise Exception('Boom')
 
-    @exponential_backoff_retry(1, delay=1)
     def success(self):
         return True
 
@@ -35,16 +34,17 @@ class TestBaseProvider(unittest.TestCase):
 
         self.assertEqual(dummy.success(), True)
 
-    def test_exponential_backoff_retry_failing_call(self):
+    def test_exponential_backoff_retry_failing_call_in_function(self):
         starttime = datetime.now()
 
         with self.assertRaises(Exception):
             _failing_function()
 
         self.assertGreaterEqual(
-            datetime.now() - starttime, timedelta(seconds=1)
+            datetime.now() - starttime, timedelta(seconds=0.1)
         )
 
+    def test_exponential_backoff_retry_failing_call_in_method(self):
         starttime = datetime.now()
 
         with self.assertRaises(Exception):
@@ -53,7 +53,7 @@ class TestBaseProvider(unittest.TestCase):
             dummy.fail()
 
         self.assertGreaterEqual(
-            datetime.now() - starttime, timedelta(seconds=1)
+            datetime.now() - starttime, timedelta(seconds=0.1)
         )
 
     def test_redact_result_no_override(self):
