@@ -56,20 +56,25 @@ class TestBaseProvider(unittest.TestCase):
             datetime.now() - starttime, timedelta(seconds=0.1)
         )
 
-    def test_redact_result_no_override(self):
-        class ProviderWithDefaultRedactImplementation(BaseProvider):
-            def load_config(self, config):
-                pass
-
-            def rotate(self, spec):
-                pass
-
-            def distribute(self, secret, dest):
-                pass
-
-        result = {'result': 'stuff'}
-
-        self.assertEqual(result, ProviderWithDefaultRedactImplementation().redact_result(result, {}))
+    def test_redact_result_default_keys_get_redacted(self):
+        original_result = {
+            'some_key': 'some_value',
+            'value': {
+                'provider': 'test-provider',
+                'key': 'test-key',
+                'secret': 'test-secret',
+                'password': 'test-password',
+            }
+        }
+        self.assertEqual({
+            'some_key': 'some_value',
+            'value': {
+                'provider': 'test-provider',
+                'key': 'test-key',
+                'secret': '***',
+                'password': '***',
+            }
+        }, BaseProvider.redact_result(original_result, {}))
 
     def test_validate_spec_base(self):
         class DummyA(BaseProvider):
