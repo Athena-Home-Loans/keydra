@@ -76,7 +76,3 @@ class Client(BaseProvider):
 
     def distribute(self, secret, destination):
         raise DistributionException('Contentful does not support distribution')
-
-    @classmethod
-    def safe_to_log_keys(cls, spec) -> [str]:
-        return ['key', 'provider']

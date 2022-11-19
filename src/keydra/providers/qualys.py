@@ -123,4 +123,4 @@ class Client(BaseProvider):
 
     @classmethod
     def safe_to_log_keys(cls, spec) -> [str]:
-        return [USER_FIELD, 'provider']
+        return BaseProvider.safe_to_log_keys(spec) + [USER_FIELD]

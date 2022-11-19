@@ -90,7 +90,3 @@ class Client(BaseProvider):
         raise DistributionException(
             'Cloudflare provider does not support distribution'
         )
-
-    @classmethod
-    def safe_to_log_keys(cls, spec) -> [str]:
-        return ['provider']

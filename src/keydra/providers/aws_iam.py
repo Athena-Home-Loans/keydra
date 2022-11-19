@@ -333,10 +333,6 @@ class Client(BaseProvider):
         raise DistributionException('IAM does not support distribution')
 
     @classmethod
-    def safe_to_log_keys(cls, spec) -> [str]:
-        return ['provider', 'key']
-
-    @classmethod
     def validate_spec(cls, spec):
         valid, msg = BaseProvider.validate_spec(spec)
         if not valid:

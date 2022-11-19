@@ -137,4 +137,4 @@ class Client(BaseProvider):
     @classmethod
     def safe_to_log_keys(cls, spec) -> [str]:
         opts = Client.Options(**spec.get('config', {}))
-        return [opts.user_field, opts.domain_field, 'provider']
+        return BaseProvider.safe_to_log_keys(spec) + [opts.user_field, opts.domain_field]

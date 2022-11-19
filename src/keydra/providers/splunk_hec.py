@@ -146,4 +146,4 @@ class Client(BaseProvider):
 
     @classmethod
     def safe_to_log_keys(cls, spec) -> [str]:
-        return [USER_FIELD, SPLUNK_USER_FIELD, 'provider', 'key']
+        return BaseProvider.safe_to_log_keys(spec) + [USER_FIELD, SPLUNK_USER_FIELD]

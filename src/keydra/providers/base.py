@@ -96,7 +96,7 @@ class BaseProvider(ABC):
         Extension point, override to define which keys within the result are safe to be logged.
         Examples include "username", "endpoint", etc.
         """
-        return []
+        return ['provider', 'key']
 
     @classmethod
     def redact_result(cls, result, spec):

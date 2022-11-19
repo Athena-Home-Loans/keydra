@@ -126,9 +126,5 @@ class Client(BaseProvider):
                 return False, 'Please provide a config specifying the api-id'
 
     @classmethod
-    def safe_to_log_keys(cls, spec) -> [str]:
-        return ['provider', 'key']
-
-    @classmethod
     def has_creds(cls):
         return False
