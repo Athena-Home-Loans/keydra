@@ -71,28 +71,6 @@ class TestBaseProvider(unittest.TestCase):
 
         self.assertEqual(result, ProviderWithDefaultRedactImplementation().redact_result(result, {}))
 
-    def test_redact_result_override(self):
-        class ProviderThatRedactsResult(BaseProvider):
-            def load_config(self, config):
-                pass
-
-            def rotate(self, spec):
-                pass
-
-            def distribute(self, secret, dest):
-                pass
-
-            @classmethod
-            def redact_result(cls, result: dict, spec: dict) -> dict:
-                result['result'] = '***'
-
-                return result
-
-        result = {'result': 'stuff'}
-        r_result = ProviderThatRedactsResult().redact_result(result, {})
-
-        self.assertEqual(r_result['result'], '***')
-
     def test_validate_spec_base(self):
         class DummyA(BaseProvider):
             def rotate(self, spec):
