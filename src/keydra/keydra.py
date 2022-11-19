@@ -10,7 +10,7 @@ LOGGER = km_logging.get_logger()
 
 
 class Keydra(object):
-    def __init__(self, cfg: KeydraConfig, cw: CloudwatchClient, **kwargs):
+    def __init__(self, cfg: KeydraConfig, cw: CloudwatchClient):
         self._cfg = cfg
         self._cw = cw
 
