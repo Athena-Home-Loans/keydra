@@ -44,8 +44,6 @@ LOGGER = km_logging.get_logger()
 
 
 def fetch_provider_creds(provider, key_name):
-    secret_value = None
-
     secret_id = '{}/{}'.format(KEYDRA_SECRETS_PREFIX, provider.lower())
 
     if key_name:
@@ -55,19 +53,15 @@ def fetch_provider_creds(provider, key_name):
         LOGGER.debug('Loading {} from Secrets Manager'.format(secret_id))
         secret_value = SECRETS_MANAGER.get_secret_value(secret_id)
     except ClientError as e:  # pragma: no cover
-        LOGGER.debug(
-            'Not able to read credentials for: {} -- {}'.format(provider, e))
-        raise ConfigException(
-            'Failed to read {} from Secrets Manager: {}'.format(
-                secret_id, e))
+        LOGGER.debug('Not able to read credentials for: {} -- {}'.format(provider, e))
+        raise ConfigException('Failed to read {} from Secrets Manager: {}'.format(secret_id, e))
 
     try:
         LOGGER.debug('Attempting to convert secret to JSON')
         return json.loads(secret_value)
     except Exception as e:
         LOGGER.debug('Failed converting {} to JSON: {}'.format(secret_id, e))
-        raise ConfigException(
-            'The value of {} is not valid JSON'.format(secret_id))
+        raise ConfigException('The value of {} is not valid JSON'.format(secret_id))
 
 
 def load_provider_client(secret_provider: str):
