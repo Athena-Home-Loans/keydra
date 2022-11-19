@@ -70,7 +70,7 @@ def fetch_provider_creds(provider, key_name):
             'The value of {} is not valid JSON'.format(secret_id))
 
 
-def load_provider_client(secret_provider):
+def load_provider_client(secret_provider: str):
     try:
         sanitized_provider = secret_provider.lower()
         module_name = 'keydra.providers.{}'.format(
