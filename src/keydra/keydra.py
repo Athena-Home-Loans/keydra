@@ -16,20 +16,6 @@ class Keydra(object):
         self._cw = cw
 
     def rotate_and_distribute(self, run_for_secrets, rotate, batch_number=None, number_of_batches=None):
-        '''
-        AWS Lambda handler
-
-        :param event: Event triggering this function
-        :type event: :class:`dict`
-        :param context: Lambda Context runtime methods and attributes
-        :type context: :class:`object`
-
-        `context` attributes
-        ------------------
-        '''
-
-        secrets = None
-
         try:
             secrets = self._cfg.load_secrets(
                 secrets=run_for_secrets, rotate=rotate, batch_number=batch_number, number_of_batches=number_of_batches)
