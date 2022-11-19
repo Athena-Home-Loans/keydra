@@ -18,7 +18,11 @@ class Keydra(object):
     def rotate_and_distribute(self, run_for_secrets, rotate, batch_number=None, number_of_batches=None):
         try:
             secrets = self._cfg.load_secrets(
-                secrets=run_for_secrets, rotate=rotate, batch_number=batch_number, number_of_batches=number_of_batches)
+                secrets=run_for_secrets,
+                rotate=rotate,
+                batch_number=batch_number,
+                number_of_batches=number_of_batches
+            )
         except ConfigException as e:
             LOGGER.error(e)
             return [self._fail(e)]
@@ -38,7 +42,7 @@ class Keydra(object):
             }
         )
 
-        resp = []
+        response: [dict] = []
 
         for secret in secrets:
             result = {}
@@ -56,12 +60,12 @@ class Keydra(object):
                 d_result = self._distribute_secret(secret, r_result['value'])
                 result[d_result.pop('action')] = d_result
 
-            resp.append(result)
+            response.append(result)
 
         if rotate != 'adhoc':
-            self._emit_result_metrics(resp)
+            self._emit_result_metrics(response)
 
-        return resp
+        return response
 
     @staticmethod
     def _redact_secrets(result: dict, spec: dict):
