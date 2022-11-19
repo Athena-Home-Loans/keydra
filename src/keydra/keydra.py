@@ -1,11 +1,10 @@
 from botocore.exceptions import ClientError
+
 from keydra import loader
-
 from keydra import logging as km_logging
-from keydra.config import KeydraConfig
-
-from keydra.exceptions import ConfigException, InvalidSecretProvider
 from keydra.clients.aws.cloudwatch import CloudwatchClient, timed
+from keydra.config import KeydraConfig
+from keydra.exceptions import ConfigException, InvalidSecretProvider
 
 LOGGER = km_logging.get_logger()
 
@@ -182,7 +181,8 @@ class Keydra(object):
             )
             return self._fail(e)
 
-    def _default_response(self, status, action=None, msg=None, value=None):
+    @staticmethod
+    def _default_response(status, action=None, msg=None, value=None):
         response = {
             'status': status,
         }
@@ -198,19 +198,17 @@ class Keydra(object):
 
         return response
 
-    def _fail(self, msg, action=None, value=None):
-        return self._default_response('fail',
-                                      action=action,
-                                      msg=str(msg),
-                                      value=value)
+    @staticmethod
+    def _fail(msg, action=None, value=None):
+        return Keydra._default_response('fail', action=action, value=value, msg=str(msg), )
 
-    def _success(self, value, action=None):
-        return self._default_response('success', action=action, value=value)
+    @staticmethod
+    def _success(value, action=None):
+        return Keydra._default_response('success', action=action, value=value)
 
-    def _partial_success(self, value, msg, action=None):
-        return self._default_response(
-            'partial_success', action=action, value=value, msg=msg
-        )
+    @staticmethod
+    def _partial_success(value, msg, action=None):
+        return Keydra._default_response('partial_success', action=action, value=value, msg=msg)
 
     # TODO: abstract these metrics functions to a class
     def _emit_spec_metrics(self, secrets):
@@ -264,8 +262,7 @@ class Keydra(object):
             elif result['rotate_secret']['status'] == 'fail':
                 failed_rotations += 1
 
-            for dresult in \
-                    result.get('distribute_secret', {}).get('value', []):
+            for dresult in result.get('distribute_secret', {}).get('value', []):
                 if dresult['status'] == 'success':
                     successful_distributions += 1
 
