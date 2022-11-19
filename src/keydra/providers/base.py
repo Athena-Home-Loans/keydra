@@ -1,3 +1,4 @@
+import copy
 import json
 import time
 import math
@@ -100,16 +101,17 @@ class BaseProvider(ABC):
 
     @classmethod
     def redact_result(cls, result: dict, spec: dict) -> dict:
+        redacted_result = copy.deepcopy(result)
         safe_keys = [key.lower() for key in cls.safe_to_log_keys(spec)]
 
         # If we got a result
-        if 'value' in result:
-            for key in list(result['value'].keys()):
+        if 'value' in redacted_result:
+            for key in list(redacted_result['value'].keys()):
                 # redact all values except for the approved ones
                 if key.lower() not in safe_keys:
-                    result['value'][key] = '***'
+                    redacted_result['value'][key] = '***'
 
-        return result
+        return redacted_result
 
     @classmethod
     def has_creds(cls):

@@ -1,5 +1,3 @@
-import copy
-
 from botocore.exceptions import ClientError
 from keydra import loader
 
@@ -81,13 +79,9 @@ class Keydra(object):
 
     @staticmethod
     def _redact_secrets(result: dict, spec: dict):
-        r_result = copy.deepcopy(result)
-        provider = spec['provider']
-
         LOGGER.debug('Redacting the value of {}::{}'.format(spec['provider'], spec['key']))
-
-        km_provider = loader.load_provider_client(provider)
-        return km_provider.redact_result(r_result, spec)
+        km_provider = loader.load_provider_client(spec['provider'])
+        return km_provider.redact_result(result, spec)
 
     @timed('rotation', specialise=True)
     def _rotate_secret(self, secret):

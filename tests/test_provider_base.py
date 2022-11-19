@@ -66,6 +66,8 @@ class TestBaseProvider(unittest.TestCase):
                 'password': 'test-password',
             }
         }
+        redacted_result = BaseProvider.redact_result(original_result, {})
+        self.assertNotEqual(redacted_result, original_result)
         self.assertEqual({
             'some_key': 'some_value',
             'value': {
@@ -74,7 +76,7 @@ class TestBaseProvider(unittest.TestCase):
                 'secret': '***',
                 'password': '***',
             }
-        }, BaseProvider.redact_result(original_result, {}))
+        }, redacted_result)
 
     def test_validate_spec_base(self):
         class DummyA(BaseProvider):
