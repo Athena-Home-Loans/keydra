@@ -83,7 +83,7 @@ class TestBaseProvider(unittest.TestCase):
                 pass
 
             @classmethod
-            def redact_result(cls, result, spec):
+            def redact_result(cls, result: dict, spec: dict) -> dict:
                 result['result'] = '***'
 
                 return result

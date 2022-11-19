@@ -181,7 +181,7 @@ class SecretsManagerProvider(BaseProvider):
         return True, 'All good!'
 
     @classmethod
-    def redact_result(cls, result, spec=None):
+    def redact_result(cls, result: dict, spec: dict) -> dict:
         if 'value' in result:
             for key, value in result['value'].items():
                 if key != 'provider':

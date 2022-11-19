@@ -99,7 +99,7 @@ class BaseProvider(ABC):
         return ['provider', 'key']
 
     @classmethod
-    def redact_result(cls, result, spec):
+    def redact_result(cls, result: dict, spec: dict) -> dict:
         safe_keys = [key.lower() for key in cls.safe_to_log_keys(spec)]
 
         # If we got a result

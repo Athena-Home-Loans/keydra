@@ -80,7 +80,7 @@ class Keydra(object):
 
         return resp
 
-    def _redact_secrets(self, result, spec):
+    def _redact_secrets(self, result: dict, spec: dict):
         r_result = copy.deepcopy(result)
         provider = spec['provider']
 
