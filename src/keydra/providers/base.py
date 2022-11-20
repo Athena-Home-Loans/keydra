@@ -1,3 +1,4 @@
+import copy
 import json
 import time
 import math
@@ -91,8 +92,26 @@ class BaseProvider(ABC):
         return True, 'All good!'
 
     @classmethod
-    def redact_result(self, result):
-        return result
+    def safe_to_log_keys(cls, spec) -> [str]:
+        """
+        Extension point, override to define which keys within the result are safe to be logged.
+        Examples include "username", "endpoint", etc.
+        """
+        return ['provider', 'key']
+
+    @classmethod
+    def redact_result(cls, result: dict, spec: dict) -> dict:
+        redacted_result = copy.deepcopy(result)
+        safe_keys = [key.lower() for key in cls.safe_to_log_keys(spec)]
+
+        # If we got a result
+        if 'value' in redacted_result:
+            for key in list(redacted_result['value'].keys()):
+                # redact all values except for the approved ones
+                if key.lower() not in safe_keys:
+                    redacted_result['value'][key] = '***'
+
+        return redacted_result
 
     @classmethod
     def has_creds(cls):

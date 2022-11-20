@@ -126,12 +126,5 @@ class Client(BaseProvider):
                 return False, 'Please provide a config specifying the api-id'
 
     @classmethod
-    def redact_result(cls, result, spec=None):
-        if 'value' in result and 'secret' in result['value']:
-            result['value']['secret'] = '***'
-
-        return result
-
-    @classmethod
     def has_creds(cls):
         return False

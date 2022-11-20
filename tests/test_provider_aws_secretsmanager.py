@@ -262,7 +262,8 @@ class TestProviderAWSSecretsManager(unittest.TestCase):
             }
         }
 
-        r_result = SecretsManagerProvider.redact_result(result)
+        r_result = SecretsManagerProvider.redact_result(result, {})
+
         self.assertEqual(r_result, {
             'status': 'success',
             'action': 'rotate_secret',

@@ -147,14 +147,17 @@ class TestProviderSplunkHEC(unittest.TestCase):
             'value': {
                 'provider': 'splunk',
                 'key': 'KEY_ID',
+                'hecInputName': 'INPUT_NAME',
                 f'{PW_FIELD}': 'THIS_IS_SECRET'
             }
         }
 
-        r_result = splunk_hec.Client.redact_result(result)
-        r_value = r_result['value'][PW_FIELD]
+        r_result = splunk_hec.Client.redact_result(result, {})
 
-        self.assertNotEqual(r_value, 'THIS_IS_SECRET')
+        self.assertEqual(r_result['value']['provider'], 'splunk')
+        self.assertEqual(r_result['value']['key'], 'KEY_ID')
+        self.assertEqual(r_result['value']['hecInputName'], 'INPUT_NAME')
+        self.assertEqual(r_result['value'][PW_FIELD], '***')
 
     def test__redact_result_no_secret(self):
         result = {
@@ -162,7 +165,7 @@ class TestProviderSplunkHEC(unittest.TestCase):
             'action': 'rotate_secret'
         }
 
-        r_result = splunk_hec.Client.redact_result(result)
+        r_result = splunk_hec.Client.redact_result(result, {})
 
         self.assertEqual(r_result, result)
 

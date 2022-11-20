@@ -1,40 +1,27 @@
-import copy
-
 from botocore.exceptions import ClientError
+
 from keydra import loader
-
 from keydra import logging as km_logging
-from keydra.config import KeydraConfig
-
-from keydra.exceptions import ConfigException, InvalidSecretProvider
 from keydra.clients.aws.cloudwatch import CloudwatchClient, timed
+from keydra.config import KeydraConfig
+from keydra.exceptions import ConfigException, InvalidSecretProvider
 
 LOGGER = km_logging.get_logger()
 
 
 class Keydra(object):
-    def __init__(self, cfg: KeydraConfig, cw: CloudwatchClient, **kwargs):
+    def __init__(self, cfg: KeydraConfig, cw: CloudwatchClient):
         self._cfg = cfg
         self._cw = cw
 
     def rotate_and_distribute(self, run_for_secrets, rotate, batch_number=None, number_of_batches=None):
-        '''
-        AWS Lambda handler
-
-        :param event: Event triggering this function
-        :type event: :class:`dict`
-        :param context: Lambda Context runtime methods and attributes
-        :type context: :class:`object`
-
-        `context` attributes
-        ------------------
-        '''
-
-        secrets = None
-
         try:
             secrets = self._cfg.load_secrets(
-                secrets=run_for_secrets, rotate=rotate, batch_number=batch_number, number_of_batches=number_of_batches)
+                secrets=run_for_secrets,
+                rotate=rotate,
+                batch_number=batch_number,
+                number_of_batches=number_of_batches
+            )
         except ConfigException as e:
             LOGGER.error(e)
             return [self._fail(e)]
@@ -54,7 +41,7 @@ class Keydra(object):
             }
         )
 
-        resp = []
+        response: [dict] = []
 
         for secret in secrets:
             result = {}
@@ -66,38 +53,24 @@ class Keydra(object):
             result['key'] = secret['key']
             result['provider'] = secret['provider']
 
-            result[r_result.pop('action')] = self._redact_secrets(
-                r_result, secret)
+            result[r_result.pop('action')] = self._redact_secrets(r_result, secret)
 
             if r_result['status'] == 'success' and 'distribute' in secret:
                 d_result = self._distribute_secret(secret, r_result['value'])
                 result[d_result.pop('action')] = d_result
 
-            resp.append(result)
+            response.append(result)
 
         if rotate != 'adhoc':
-            self._emit_result_metrics(resp)
+            self._emit_result_metrics(response)
 
-        return resp
+        return response
 
-    def _redact_secrets(self, result, spec):
-        r_result = copy.deepcopy(result)
-        provider = spec['provider']
-
-        LOGGER.debug(
-            'Redacting the value of {}::{}'.format(
-                spec['provider'],
-                spec['key']))
-
-        try:
-            km_provider = loader.load_provider_client(provider)
-
-            return km_provider.redact_result(r_result, spec)
-
-        except InvalidSecretProvider:
-            pass
-
-        return r_result
+    @staticmethod
+    def _redact_secrets(result: dict, spec: dict):
+        LOGGER.debug('Redacting the value of {}::{}'.format(spec['provider'], spec['key']))
+        km_provider = loader.load_provider_client(spec['provider'])
+        return km_provider.redact_result(result, spec)
 
     @timed('rotation', specialise=True)
     def _rotate_secret(self, secret):
@@ -208,7 +181,8 @@ class Keydra(object):
             )
             return self._fail(e)
 
-    def _default_response(self, status, action=None, msg=None, value=None):
+    @staticmethod
+    def _default_response(status, action=None, msg=None, value=None):
         response = {
             'status': status,
         }
@@ -224,19 +198,17 @@ class Keydra(object):
 
         return response
 
-    def _fail(self, msg, action=None, value=None):
-        return self._default_response('fail',
-                                      action=action,
-                                      msg=str(msg),
-                                      value=value)
+    @staticmethod
+    def _fail(msg, action=None, value=None):
+        return Keydra._default_response('fail', action=action, value=value, msg=str(msg), )
 
-    def _success(self, value, action=None):
-        return self._default_response('success', action=action, value=value)
+    @staticmethod
+    def _success(value, action=None):
+        return Keydra._default_response('success', action=action, value=value)
 
-    def _partial_success(self, value, msg, action=None):
-        return self._default_response(
-            'partial_success', action=action, value=value, msg=msg
-        )
+    @staticmethod
+    def _partial_success(value, msg, action=None):
+        return Keydra._default_response('partial_success', action=action, value=value, msg=msg)
 
     # TODO: abstract these metrics functions to a class
     def _emit_spec_metrics(self, secrets):
@@ -290,8 +262,7 @@ class Keydra(object):
             elif result['rotate_secret']['status'] == 'fail':
                 failed_rotations += 1
 
-            for dresult in \
-                    result.get('distribute_secret', {}).get('value', []):
+            for dresult in result.get('distribute_secret', {}).get('value', []):
                 if dresult['status'] == 'success':
                     successful_distributions += 1
 

@@ -187,8 +187,10 @@ class TestProviderCloudflare(unittest.TestCase):
             }
         }
 
-        r_result = cloudflare.Client.redact_result(result)
-        r_value = r_result['value']
+        r_result = cloudflare.Client.redact_result(result, {})
 
-        self.assertNotEqual(r_value['manage_tokens.secret'], 'SECRET_ONE')
-        self.assertNotEqual(r_value['manage_dns.secret'], 'SECRET_TWO')
+        self.assertEqual(r_result['value']['provider'], 'cloudflare')
+        self.assertEqual(r_result['value']['manage_dns.key'], '***')
+        self.assertEqual(r_result['value']['manage_dns.secret'], '***')
+        self.assertEqual(r_result['value']['manage_tokens.key'], '***')
+        self.assertEqual(r_result['value']['manage_tokens.secret'], '***')

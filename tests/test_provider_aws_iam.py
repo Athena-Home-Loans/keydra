@@ -38,7 +38,7 @@ class TestProviderAWSIAM(unittest.TestCase):
             }
         }
 
-        r_result = aws_iam.Client.redact_result(result)
+        r_result = aws_iam.Client.redact_result(result, {})
         r_value = r_result['value']['secret']
 
         self.assertNotEqual(r_value, 'THIS_IS_SECRET')

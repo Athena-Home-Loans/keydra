@@ -139,16 +139,18 @@ class TestProviderSalesforce(unittest.TestCase):
                 'provider': 'splunk',
                 'key': 'KEY_ID',
                 'secret': 'THIS_IS_SECRET',
-                'token': 'this is also secret'
+                'token': 'this is also secret',
+                'extra': 'this may as well also be secret',
             }
         }
 
         r_result = salesforce.Client.redact_result(result, SF_CREDS)
-        r_secret = r_result['value']['secret']
-        r_token = r_result['value']['token']
 
-        self.assertNotEqual(r_secret, 'THIS_IS_SECRET')
-        self.assertNotEqual(r_token, 'this is also secret')
+        self.assertEqual(r_result['value']['provider'], 'splunk')
+        self.assertEqual(r_result['value']['key'], 'KEY_ID')
+        self.assertEqual(r_result['value']['secret'], '***')
+        self.assertEqual(r_result['value']['token'], '***')
+        self.assertEqual(r_result['value']['extra'], '***')
 
     def test__redact_result_overriden_fields(self):
         result = {

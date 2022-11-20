@@ -61,10 +61,12 @@ class TestProviderContentful(unittest.TestCase):
             }
         }
 
-        r_result = contentful.Client.redact_result(result)
-        r_secret = r_result['value']['secret']
+        r_result = contentful.Client.redact_result(result, {})
 
-        self.assertNotEqual(r_secret, 'THIS_IS_SECRET')
+        self.assertEqual(r_result['value']['provider'], 'splunk')
+        self.assertEqual(r_result['value']['key'], 'KEY_ID')
+        self.assertEqual(r_result['value']['secret'], '***')
+        self.assertEqual(r_result['value']['token'], '***')
 
     def test__redact_result_no_secrets(self):
         result = {
@@ -72,7 +74,7 @@ class TestProviderContentful(unittest.TestCase):
             'action': 'rotate_secret'
         }
 
-        r_result = contentful.Client.redact_result(result)
+        r_result = contentful.Client.redact_result(result, {})
 
         self.assertEqual(r_result, result)
 

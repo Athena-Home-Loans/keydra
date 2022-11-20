@@ -90,12 +90,3 @@ class Client(BaseProvider):
         raise DistributionException(
             'Cloudflare provider does not support distribution'
         )
-
-    @classmethod
-    def redact_result(cls, result, spec=None):
-        if 'value' in result:
-            for key, value in result['value'].items():
-                if 'secret' in key:
-                    result['value'][key] = '***'
-
-        return result

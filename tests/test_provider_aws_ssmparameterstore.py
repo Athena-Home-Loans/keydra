@@ -276,7 +276,8 @@ class TestProviderAWSSSMParameterStore(unittest.TestCase):
             }
         }
 
-        r_result = SSMParameterProvider.redact_result(result)
+        r_result = SSMParameterProvider.redact_result(result, {})
+
         self.assertEqual(r_result, {
             'status': 'success',
             'action': 'rotate_secret',

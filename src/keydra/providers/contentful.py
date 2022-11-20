@@ -76,10 +76,3 @@ class Client(BaseProvider):
 
     def distribute(self, secret, destination):
         raise DistributionException('Contentful does not support distribution')
-
-    @classmethod
-    def redact_result(cls, result, spec=None):
-        if 'value' in result and PW_FIELD in result['value']:
-            result['value'][PW_FIELD] = '***'
-
-        return result

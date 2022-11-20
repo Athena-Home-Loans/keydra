@@ -181,13 +181,8 @@ class SecretsManagerProvider(BaseProvider):
         return True, 'All good!'
 
     @classmethod
-    def redact_result(cls, result, spec=None):
-        if 'value' in result:
-            for key, value in result['value'].items():
-                if key != 'provider':
-                    result['value'][key] = '***'
-
-        return result
+    def safe_to_log_keys(cls, spec) -> [str]:
+        return ['provider']  # call to superclass intentionally skipped
 
     @classmethod
     def has_creds(cls):
