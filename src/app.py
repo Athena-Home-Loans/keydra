@@ -83,7 +83,7 @@ def _load_env_config():
 def _load_keydra_config():
     return KeydraConfig(
         config=_load_env_config(),
-        session=SESSION
+        sts_client=SESSION.client('sts')
     )
 
 

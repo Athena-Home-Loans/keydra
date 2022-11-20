@@ -30,15 +30,15 @@ LOGGER = get_logger()
 
 
 class KeydraConfig(object):
-    def __init__(self, config, session=None, **kwargs):
+    def __init__(self, config: dict, sts_client: any):
         if 'provider' not in config:
             raise ConfigException('"provider" not present in config')
 
         if 'config' not in config:
             raise ConfigException('"config" not present in config')
 
-        self._sts = session.client('sts')
         self._config = config
+        self._sts = sts_client
 
     def _fetch_current_account(self):
         return self._sts.get_caller_identity()['Account']
