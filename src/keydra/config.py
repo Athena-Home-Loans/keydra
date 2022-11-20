@@ -2,10 +2,8 @@ import copy
 import math
 
 from keydra import loader
-
 from keydra.exceptions import ConfigException
 from keydra.exceptions import InvalidSecretProvider
-
 from keydra.logging import get_logger
 
 KEYDRA_CONFIG_REPO = 'keydra-config'
@@ -118,7 +116,7 @@ class KeydraConfig(object):
     def _filter(self,
                 environments,
                 specs,
-                rotate: str='adhoc',
+                rotate: str = 'adhoc',
                 requested_secrets=None,
                 number_of_batches: int = None,
                 batch_number: int = None) -> list[dict]:
@@ -217,7 +215,12 @@ class KeydraConfig(object):
 
         return filtered_secrets
 
-    def load_secrets(self, rotate: str='nightly', secrets=None, batch_number=None, number_of_batches=None) -> list[dict]:
+    def load_secrets(self,
+                     rotate: str = 'nightly',
+                     secrets=None,
+                     batch_number=None,
+                     number_of_batches=None
+                     ) -> list[dict]:
         LOGGER.info(
             'Attempting to load secrets ({}) from {}'.format(
                 ', '.join(secrets) if secrets else 'ALL',

@@ -140,8 +140,13 @@ def lambda_handler(event, context):
         )
     )
 
-    resp = Keydra(_load_keydra_config(), CW).rotate_and_distribute(
-        run_for_secrets=run_for_secrets, rotate=trigger, batch_number=batch_number, number_of_batches=number_of_batches)
+    keydra = Keydra(_load_keydra_config(), CW)
+    response = keydra.rotate_and_distribute(
+        run_for_secrets=run_for_secrets,
+        rotate=trigger,
+        batch_number=batch_number,
+        number_of_batches=number_of_batches
+    )
 
     LOGGER.info(
         {
@@ -150,12 +155,11 @@ def lambda_handler(event, context):
                 trigger.upper(),
                 ', '.join(run_for_secrets) if run_for_secrets else 'ALL'
             ),
-            'data': resp
+            'data': response
         }
     )
 
-    if any(r.get('rotate_secret') == 'fail' or
-           r.get('distribute_secret') == 'fail' for r in resp):
-        raise Exception(resp)
+    if any(r.get('rotate_secret') == 'fail' or r.get('distribute_secret') == 'fail' for r in response):
+        raise Exception(response)
 
-    return resp
+    return response

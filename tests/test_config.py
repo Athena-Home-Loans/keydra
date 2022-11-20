@@ -193,7 +193,7 @@ class TestConfig(unittest.TestCase):
             self.client._validate_spec(envs, secrets)
 
     def test__guess_current_environment(self):
-        sts_client_mock=MagicMock()
+        sts_client_mock = MagicMock()
         kc = KeydraConfig(config=ENV_CONFIG, sts_client=sts_client_mock)
 
         sts_client_mock.get_caller_identity.return_value = {'Account': 334455}
