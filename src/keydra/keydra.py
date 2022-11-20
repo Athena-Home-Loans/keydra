@@ -168,7 +168,7 @@ class Keydra(object):
                         target['provider']
                     )
                 )
-                km.accountusername = self._cfg.get_accountusername()
+                km.accountusername = self._cfg.get_account_username()
 
             return self._success(km.distribute(secret, target))
 

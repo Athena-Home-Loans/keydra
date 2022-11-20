@@ -115,8 +115,13 @@ class KeydraConfig(object):
         raise ConfigException('No environment is mapped to AWS account {}'
                               .format(account_id))
 
-    def _filter(self, environments, specs, rotate='adhoc',
-                requested_secrets=None, number_of_batches: int = None, batch_number: int = None):
+    def _filter(self,
+                environments,
+                specs,
+                rotate: str='adhoc',
+                requested_secrets=None,
+                number_of_batches: int = None,
+                batch_number: int = None) -> list[dict]:
         filtered_secrets = []
         current_env_name = self._guess_current_environment(environments)
         current_env = environments[current_env_name]
@@ -212,7 +217,7 @@ class KeydraConfig(object):
 
         return filtered_secrets
 
-    def load_secrets(self, rotate='nightly', secrets=None, batch_number=None, number_of_batches=None):
+    def load_secrets(self, rotate: str='nightly', secrets=None, batch_number=None, number_of_batches=None) -> list[dict]:
         LOGGER.info(
             'Attempting to load secrets ({}) from {}'.format(
                 ', '.join(secrets) if secrets else 'ALL',
@@ -229,13 +234,14 @@ class KeydraConfig(object):
 
         return self._filter(
             *config,
-            rotate=rotate, requested_secrets=secrets, batch_number=batch_number, number_of_batches=number_of_batches)
+            rotate=rotate,
+            requested_secrets=secrets,
+            batch_number=batch_number,
+            number_of_batches=number_of_batches
+        )
 
-    def get_accountusername(self):
-        '''
+    def get_account_username(self) -> str:
+        """
         Get the account or organisation name of our chosen config provider
-
-        :returns: Account or oganisation name from config provider
-        :rtype: :class:`str`
-        '''
+        """
         return self._config['config']['accountusername']
