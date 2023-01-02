@@ -1,22 +1,17 @@
+import logging
+import os
+from functools import reduce
 from typing import ItemsView
 
 import boto3
-import logging
-import os
-
-from functools import reduce
 
 from keydra import loader
 from keydra import logging as km_logging
-
 from keydra.clients.aws.cloudwatch import CloudwatchClient
-
 from keydra.config import KeydraConfig
-
 from keydra.keydra import Keydra
 
 km_logging.setup_logging(logging.INFO)
-
 
 # Global variables are reused across execution contexts (if available)
 SESSION = boto3.Session()
@@ -45,6 +40,10 @@ def _merge_dicts(a, b, path=None):
 
 
 def _load_env_config():
+    return _load_config(env_vars=os.environ.items())
+
+
+def _load_config(env_vars: ItemsView):
     '''
     Converts Keydra specific environment variables into a config dict.
 
@@ -62,25 +61,18 @@ def _load_env_config():
     {'first': {'a': 'firstA', 'b': 'firstB'}}
     ```
     '''
-    return _load_config(env_vars=os.environ.items())
-
-def _load_config(env_vars: ItemsView):
-
     config = {}
-    slicer = len(ENV_CONFIG_PREFIX)
+    prefix_length = len(ENV_CONFIG_PREFIX)
 
-    for var, value in env_vars:
-        if not var.startswith(ENV_CONFIG_PREFIX):
+    for key, value in env_vars:
+        if not key.startswith(ENV_CONFIG_PREFIX):
             continue
 
-        var = var[slicer:].lower()
-        segments = var.split('_')
-
-        segments.append(value)
+        segments = key[prefix_length:].lower().split('_') + [value]
 
         config = _merge_dicts(
             config,
-            reduce(lambda x, y: {y: x}, segments[::-1])
+            reduce(lambda x, y: {y: x}, segments[::-1])  # list to nested dictionary: [1, 2, 3, 4] => {1: {2: {3: 4}}}
         )
 
     return config
