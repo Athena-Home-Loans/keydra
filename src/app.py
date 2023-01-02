@@ -1,3 +1,5 @@
+from typing import ItemsView
+
 import boto3
 import logging
 import os
@@ -60,10 +62,14 @@ def _load_env_config():
     {'first': {'a': 'firstA', 'b': 'firstB'}}
     ```
     '''
+    return _load_config(env_vars=os.environ.items())
+
+def _load_config(env_vars: ItemsView):
+
     config = {}
     slicer = len(ENV_CONFIG_PREFIX) + 1
 
-    for var, value in os.environ.items():
+    for var, value in env_vars:
         if not var.startswith(ENV_CONFIG_PREFIX):
             continue
 
