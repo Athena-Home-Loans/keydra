@@ -12,6 +12,8 @@ class TestLoadEnvConfiguration(unittest.TestCase):
 
     def test_not_matching(self):
         self.assertDictEqual({}, app._load_config({'ABC': 'XYZ'}.items()))
+        self.assertDictEqual({}, app._load_config({'KEYDRA_CFGABC': 'XYZ'}.items()))
+        self.assertDictEqual({}, app._load_config({'X_KEYDRA_CFG_ABC': 'XYZ'}.items()))
 
     def test_single_level(self):
         self.assertDictEqual({'a': 'XYZ'}, app._load_config({'KEYDRA_CFG_A': 'XYZ'}.items()))

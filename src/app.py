@@ -21,7 +21,7 @@ km_logging.setup_logging(logging.INFO)
 # Global variables are reused across execution contexts (if available)
 SESSION = boto3.Session()
 
-ENV_CONFIG_PREFIX = 'KEYDRA_CFG'
+ENV_CONFIG_PREFIX = 'KEYDRA_CFG_'
 
 LOGGER = km_logging.get_logger()
 
@@ -67,7 +67,7 @@ def _load_env_config():
 def _load_config(env_vars: ItemsView):
 
     config = {}
-    slicer = len(ENV_CONFIG_PREFIX) + 1
+    slicer = len(ENV_CONFIG_PREFIX)
 
     for var, value in env_vars:
         if not var.startswith(ENV_CONFIG_PREFIX):
