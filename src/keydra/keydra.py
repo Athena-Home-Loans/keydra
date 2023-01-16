@@ -14,7 +14,7 @@ class Keydra(object):
         self._cfg = cfg
         self._cw = cw
 
-    def rotate_and_distribute(self, run_for_secrets, rotate, batch_number=None, number_of_batches=None):
+    def rotate_and_distribute(self, run_for_secrets, rotate, batch_number=None, number_of_batches=None) -> list[dict]:
         try:
             secrets = self._cfg.load_secrets(
                 secrets=run_for_secrets,
@@ -41,7 +41,7 @@ class Keydra(object):
             }
         )
 
-        response: [dict] = []
+        response: list[dict] = []
 
         for secret in secrets:
             result = {}
@@ -143,8 +143,6 @@ class Keydra(object):
 
     @timed('distribution', specialise=True)
     def _distribute_single_secret(self, target, secret):
-        km_provider = None
-
         LOGGER.debug(
             {'message': 'Distributing secret to target', 'data': target})
 
@@ -168,7 +166,7 @@ class Keydra(object):
                         target['provider']
                     )
                 )
-                km.accountusername = self._cfg.get_accountusername()
+                km.accountusername = self._cfg.get_account_username()
 
             return self._success(km.distribute(secret, target))
 

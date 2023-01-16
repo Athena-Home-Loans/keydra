@@ -2,10 +2,8 @@ import copy
 import math
 
 from keydra import loader
-
 from keydra.exceptions import ConfigException
 from keydra.exceptions import InvalidSecretProvider
-
 from keydra.logging import get_logger
 
 KEYDRA_CONFIG_REPO = 'keydra-config'
@@ -30,15 +28,15 @@ LOGGER = get_logger()
 
 
 class KeydraConfig(object):
-    def __init__(self, config, session=None, **kwargs):
+    def __init__(self, config: dict, sts_client: any):
         if 'provider' not in config:
             raise ConfigException('"provider" not present in config')
 
         if 'config' not in config:
             raise ConfigException('"config" not present in config')
 
-        self._sts = session.client('sts')
         self._config = config
+        self._sts = sts_client
 
     def _fetch_current_account(self):
         return self._sts.get_caller_identity()['Account']
@@ -115,8 +113,13 @@ class KeydraConfig(object):
         raise ConfigException('No environment is mapped to AWS account {}'
                               .format(account_id))
 
-    def _filter(self, environments, specs, rotate='adhoc',
-                requested_secrets=None, number_of_batches: int = None, batch_number: int = None):
+    def _filter(self,
+                environments,
+                specs,
+                rotate: str = 'adhoc',
+                requested_secrets=None,
+                number_of_batches: int = None,
+                batch_number: int = None) -> list[dict]:
         filtered_secrets = []
         current_env_name = self._guess_current_environment(environments)
         current_env = environments[current_env_name]
@@ -212,7 +215,12 @@ class KeydraConfig(object):
 
         return filtered_secrets
 
-    def load_secrets(self, rotate='nightly', secrets=None, batch_number=None, number_of_batches=None):
+    def load_secrets(self,
+                     rotate: str = 'nightly',
+                     secrets=None,
+                     batch_number=None,
+                     number_of_batches=None
+                     ) -> list[dict]:
         LOGGER.info(
             'Attempting to load secrets ({}) from {}'.format(
                 ', '.join(secrets) if secrets else 'ALL',
@@ -229,13 +237,14 @@ class KeydraConfig(object):
 
         return self._filter(
             *config,
-            rotate=rotate, requested_secrets=secrets, batch_number=batch_number, number_of_batches=number_of_batches)
+            rotate=rotate,
+            requested_secrets=secrets,
+            batch_number=batch_number,
+            number_of_batches=number_of_batches
+        )
 
-    def get_accountusername(self):
-        '''
+    def get_account_username(self) -> str:
+        """
         Get the account or organisation name of our chosen config provider
-
-        :returns: Account or oganisation name from config provider
-        :rtype: :class:`str`
-        '''
+        """
         return self._config['config']['accountusername']

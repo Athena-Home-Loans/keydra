@@ -1,25 +1,22 @@
-import boto3
 import logging
 import os
-
 from functools import reduce
+from typing import ItemsView
+
+import boto3
 
 from keydra import loader
 from keydra import logging as km_logging
-
 from keydra.clients.aws.cloudwatch import CloudwatchClient
-
 from keydra.config import KeydraConfig
-
 from keydra.keydra import Keydra
 
 km_logging.setup_logging(logging.INFO)
 
-
 # Global variables are reused across execution contexts (if available)
 SESSION = boto3.Session()
 
-ENV_CONFIG_PREFIX = 'KEYDRA_CFG'
+ENV_CONFIG_PREFIX = 'KEYDRA_CFG_'
 
 LOGGER = km_logging.get_logger()
 
@@ -43,6 +40,10 @@ def _merge_dicts(a, b, path=None):
 
 
 def _load_env_config():
+    return _load_config(env_vars=os.environ.items())
+
+
+def _load_config(env_vars: ItemsView):
     '''
     Converts Keydra specific environment variables into a config dict.
 
@@ -61,20 +62,17 @@ def _load_env_config():
     ```
     '''
     config = {}
-    slicer = len(ENV_CONFIG_PREFIX) + 1
+    prefix_length = len(ENV_CONFIG_PREFIX)
 
-    for var, value in os.environ.items():
-        if not var.startswith(ENV_CONFIG_PREFIX):
+    for key, value in env_vars:
+        if not key.startswith(ENV_CONFIG_PREFIX):
             continue
 
-        var = var[slicer:].lower()
-        segments = var.split('_')
-
-        segments.append(value)
+        segments = key[prefix_length:].lower().split('_') + [value]
 
         config = _merge_dicts(
             config,
-            reduce(lambda x, y: {y: x}, segments[::-1])
+            reduce(lambda x, y: {y: x}, segments[::-1])  # list to nested dictionary: [1, 2, 3, 4] => {1: {2: {3: 4}}}
         )
 
     return config
@@ -83,7 +81,7 @@ def _load_env_config():
 def _load_keydra_config():
     return KeydraConfig(
         config=_load_env_config(),
-        session=SESSION
+        sts_client=SESSION.client('sts')
     )
 
 
@@ -140,8 +138,13 @@ def lambda_handler(event, context):
         )
     )
 
-    resp = Keydra(_load_keydra_config(), CW).rotate_and_distribute(
-        run_for_secrets=run_for_secrets, rotate=trigger, batch_number=batch_number, number_of_batches=number_of_batches)
+    keydra = Keydra(_load_keydra_config(), CW)
+    response = keydra.rotate_and_distribute(
+        run_for_secrets=run_for_secrets,
+        rotate=trigger,
+        batch_number=batch_number,
+        number_of_batches=number_of_batches
+    )
 
     LOGGER.info(
         {
@@ -150,12 +153,11 @@ def lambda_handler(event, context):
                 trigger.upper(),
                 ', '.join(run_for_secrets) if run_for_secrets else 'ALL'
             ),
-            'data': resp
+            'data': response
         }
     )
 
-    if any(r.get('rotate_secret') == 'fail' or
-           r.get('distribute_secret') == 'fail' for r in resp):
-        raise Exception(resp)
+    if any(r.get('rotate_secret') == 'fail' or r.get('distribute_secret') == 'fail' for r in response):
+        raise Exception(response)
 
-    return resp
+    return response

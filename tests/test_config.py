@@ -134,15 +134,14 @@ ENV_CONFIG = {
 
 class TestConfig(unittest.TestCase):
     def setUp(self):
-        self.session = MagicMock()
-        self.client = KeydraConfig(session=self.session, config=ENV_CONFIG)
+        self.client = KeydraConfig(config=ENV_CONFIG, sts_client=MagicMock())
 
     def test__dodgy_config(self):
         with self.assertRaises(ConfigException):
-            KeydraConfig(session=MagicMock(), config={})
+            KeydraConfig(config={}, sts_client=MagicMock())
 
         with self.assertRaises(ConfigException):
-            KeydraConfig(session=MagicMock(), config={"provider": {}})
+            KeydraConfig(config={"provider": {}}, sts_client=MagicMock())
 
     def test__validate_spec_environments(self):
         envs = copy.deepcopy(ENVS)
@@ -194,16 +193,18 @@ class TestConfig(unittest.TestCase):
             self.client._validate_spec(envs, secrets)
 
     def test__guess_current_environment(self):
-        with patch.object(self.client, "_fetch_current_account") as mk_fca:
-            mk_fca.return_value = 334455
-            self.assertEquals(self.client._guess_current_environment(ENVS), "uat")
+        sts_client_mock = MagicMock()
+        kc = KeydraConfig(config=ENV_CONFIG, sts_client=sts_client_mock)
 
-            mk_fca.return_value = 667788
-            self.assertEquals(self.client._guess_current_environment(ENVS), "prod")
+        sts_client_mock.get_caller_identity.return_value = {'Account': 334455}
+        self.assertEquals(kc._guess_current_environment(ENVS), "uat")
 
-            mk_fca.return_value = 999999
-            with self.assertRaises(ConfigException):
-                self.client._guess_current_environment(ENVS)
+        sts_client_mock.get_caller_identity.return_value = {'Account': 667788}
+        self.assertEquals(kc._guess_current_environment(ENVS), "prod")
+
+        sts_client_mock.get_caller_identity.return_value = {'Account': 999999}
+        with self.assertRaisesRegex(ConfigException, 'No environment is mapped to AWS account 999999'):
+            kc._guess_current_environment(ENVS)
 
     def test__filter(self):
         with patch.object(self.client, "_guess_current_environment") as mk_gce:
